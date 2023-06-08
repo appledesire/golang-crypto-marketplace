@@ -1,0 +1,29 @@
+mixin staffCard($seller, $localization)
+  div.ui.card
+    div.image
+      img[src="/user-avatar/" + $seller.Username]
+    div.content
+      a.header[href="/user/"+$seller.Username] 
+        if $seller.IsOnline
+          i.icon.dark-green.circle
+        $lang=$seller.Language
+        i.flag[class=$lang]
+        | @#{$seller.Username}
+      div.header
+        if $seller.IsStaff
+          div.ui.label.tiny #{$localization.UserCard.Staff}
+        if $seller.IsAdmin
+          div.ui.label.red.tiny Admin
+      div.meta
+        div.date 
+          i.icon.wait
+          span #{$localization.UserCard.Registred} #{$seller.RegistrationDateStr}
+        div.date 
+          i.icon.wait
+          span #{$localization.UserCard.LastSeen} #{$seller.LastLoginDateStr}
+      if $seller.Description != ""
+        div.description #{$seller.Description}
+    div.extra.content
+      a.ui.button.dark-green.tiny[href="/messages/"+$seller.Username]
+        i.icon.comment
+        | #{$localization.LeftMenu.PM}

@@ -1,0 +1,62 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("messageboard")
+
+block content
+  div.ui.grid.centered.divided
+    div.twelve.wide.column
+      div.ui.segment
+        $l = Localization
+        if ViewThread.Uuid == ""
+          h2.ui.dividing.header #{Localization.Messageboard.NewThread}
+        else 
+          h2.ui.dividing.header #{Localization.Messageboard.EditThread}
+        form.ui.reply.form
+          [method="POST"]
+          [enctype="multipart/form-data"]
+          [class="error"] ? Error
+          div.ui.error.message
+            div.header Error
+            p #{Error}
+          div.required.field
+            label #{Localization.Messageboard.Section}
+            $u = User
+            $thread = ViewThread
+            select[name="section_id"]
+              each $section in MessageboardSections
+                if $u.Language == "ru"
+                  option[value=$section.ID]
+                    [selected] ? $section.ID == $thread.MessageboardSectionID
+                    | #{$section.NameRu}
+                else
+                  option[value=$section.ID]
+                    [selected] ? $section.ID == $thread.MessageboardSectionID
+                    | #{$section.NameEn}
+          div.ui.section.divider
+          div.required.field
+            label #{Localization.Messageboard.Title}
+            input[type="text"][name="title"][placeholder=Localization.Messageboard.Title][value=ViewThread.Title][required]
+          div.ui.section.divider
+          div.required.field
+            label #{Localization.Messageboard.Text}
+            textarea[name="text"][required] #{ViewThread.Text}
+          div.ui.section.divider
+          div.field
+            label #{Localization.Messageboard.Image}
+            div.ui.input
+              input[type="file"][name="image"][size="40"]
+          div.ui.section.divider
+          div.required.field
+            label #{Localization.Messageboard.Captcha}
+            div.ui.input
+              input[type="hidden"][name="captcha_id"][value=CaptchaId]
+              input[type="text"][name="captcha"][placeholder="captcha"][required]
+            div
+              img.ui.medium.image.captcha[width=300][height=100][src="/captcha/"+CaptchaId]
+          div.ui.section.divider
+          button.ui.dark-green.labeled.submit.icon.button[type="submit"][placeholder="text"]
+            i.icon.edit
+            |  #{Localization.Messageboard.Save}
+    div.four.wide.column.t-left-menu-items
+      a.ui.button.teal.fluid.tiny[href="/board/"] #{Localization.Messageboard.BackToAll}

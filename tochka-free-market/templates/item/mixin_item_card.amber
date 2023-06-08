@@ -1,0 +1,68 @@
+mixin itemCard($viewItem, $viewUser)
+  div.ui.card.secondary
+    if $viewItem.ScoreFloat > 0.0
+      div.ui.label.tag.score
+        .dark-green ? $viewItem.ScoreFloat >= 4
+        .red ? $viewItem.ScoreFloat < 3.5
+        .blue ? $viewItem.ScoreFloat >= 3.5 && $viewItem.ScoreFloat < 4
+        i.icon.thumbs
+          .up ? $viewItem.ScoreFloat >= 3.5
+          .down ? $viewItem.ScoreFloat < 3.5
+        span #{$viewItem.ScoreStr}
+    div.ui.image
+      a[href="/user/"+$viewItem.User.Username+"/item/"+$viewItem.Uuid]
+        img.ui.image[src="/item-image/"+$viewItem.Uuid+"?size=200x200"]
+    div.content
+      a.ui.dark-green.header[href="/user/"+$viewItem.User.Username+"/item/"+$viewItem.Uuid] #{$viewItem.Name}
+      if len($viewItem.Packages) == 0
+        div.subheader Out of stock
+      div.extra.content
+        if $viewUser.Currency == "USD"
+          div.description[style="margin-top: 5px"]
+            $link = "/user/" + $viewItem.User.Username + "/item/" + $viewItem.Uuid
+            if $viewItem.MinPriceBTCFloat != $viewItem.MaxPriceBTCFloat
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceUSDStr} – #{$viewItem.MaxPriceUSDStr} USD
+            else
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceUSDStr} USD
+        if $viewUser.Currency == "BTC"
+          div.description[style="margin-top: 5px"]
+            $link = "/user/" + $viewItem.User.Username + "/item/" + $viewItem.Uuid
+            if $viewItem.MinPriceBTCFloat != $viewItem.MaxPriceBTCFloat
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceBTCStr} – #{$viewItem.MaxPriceBTCStr} BTC
+            else
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceBTCStr} BTC
+        if $viewUser.Currency == "RUB"
+          div.description[style="margin-top: 5px"]
+            $link = "/user/" + $viewItem.User.Username + "/item/" + $viewItem.Uuid
+            if $viewItem.MinPriceBTCFloat != $viewItem.MaxPriceBTCFloat
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceRUBStr} – #{$viewItem.MaxPriceRUBStr} RUB
+            else
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceRUBStr} RUB
+        if $viewUser.Currency == "EUR"
+          div.description[style="margin-top: 5px"]
+            $link = "/user/" + $viewItem.User.Username + "/item/" + $viewItem.Uuid
+            if $viewItem.MinPriceBTCFloat != $viewItem.MaxPriceBTCFloat
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceEURStr} – #{$viewItem.MaxPriceEURStr} EUR
+            else
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceEURStr} EUR
+        if $viewUser.Currency == "AUD"
+          div.description[style="margin-top: 5px"]
+            $link = "/user/" + $viewItem.User.Username + "/item/" + $viewItem.Uuid
+            if $viewItem.MinPriceBTCFloat != $viewItem.MaxPriceBTCFloat
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceAUDStr} – #{$viewItem.MaxPriceAUDStr} AUD
+            else
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceAUDStr} AUD  
+        if $viewUser.Currency == "GBP"
+          div.description[style="margin-top: 5px"]
+            $link = "/user/" + $viewItem.User.Username + "/item/" + $viewItem.Uuid
+            if $viewItem.MinPriceBTCFloat != $viewItem.MaxPriceBTCFloat
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceGBPStr} – #{$viewItem.MaxPriceGBPStr} GBP
+            else
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceGBPStr} GBP  
+        if $viewUser.Currency == "ETH"
+          div.description[style="margin-top: 5px"]
+            $link = "/user/" + $viewItem.User.Username + "/item/" + $viewItem.Uuid
+            if $viewItem.MinPriceBTCFloat != $viewItem.MaxPriceBTCFloat
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceETHStr} – #{$viewItem.MaxPriceETHStr} ETH
+            else
+              a.ui.violet.button.tiny.fluid[href=$link] #{$viewItem.MinPriceETHStr} ETH  

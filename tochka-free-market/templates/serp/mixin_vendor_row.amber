@@ -1,0 +1,35 @@
+mixin vendorRow($seller, $localization)
+  div.ui.card.w100p
+    div.content.card-header
+      a.header[href="/store/"+$seller.Storename] 
+        if $seller.IsOnline
+          i.icon.teal.circle
+        | @#{$seller.Storename}
+    div.image
+      a[href="/store/"+$seller.Storename]
+        img.ui.centered[src="/user-avatar/" + $seller.Storename + "?size=230x230"]
+    div.content
+      div.meta
+        if $seller.IsGoldAccount
+          span.ui.tiny.label.orange Gold Account
+        if $seller.IsSilverAccount
+          span.ui.tiny.label.grey Silver Account
+        if $seller.IsBronzeAccount
+          span.ui.tiny.label.brown Bronze Account
+        if $seller.IsFreeAccount
+          span.ui.tiny.label Free Account  
+        span.ui.tiny.label.teal 
+          i.icon.level.up
+          | #{$seller.Level} lvl
+        if $seller.Score > 0
+          span.ui.tiny.label.dark-green 
+            i.icon.thumbs.up
+            | #{$seller.Score}
+      div.description #{$seller.ShortDescription}
+    div.extra.content
+      div.date 
+        i.icon.wait
+        span #{$localization.UserCard.Registred} #{$seller.RegistrationDateStr}
+      div.date 
+        i.icon.wait
+        span #{$localization.UserCard.LastSeen} #{$seller.LastLoginDateStr}

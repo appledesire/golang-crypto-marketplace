@@ -1,0 +1,31 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  $viewUser = ViewUser
+  $viewUserStore = ViewUserStore
+  $localization = Localization
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      $localization = Localization
+      +staffMenu($localization, "items")
+    div.thirteen.wide.column
+      if len(ViewItems) > 0
+        each $itm in ViewItems
+          import ./../item/mixin_item_row
+          $i = $itm
+          $u = $viewUser
+          $vs = $viewUserStore
+          +itemRow($i, $u, $vs, $localization)
+        if len(Pages) > 0
+          div.ui.section.divider   
+          div.ui.pagination.menu
+            $selected = SelectedPage
+            $section = SelectedSection
+            each $page in Pages
+              div.item 
+                .active ? $page == $selected
+                a[href="?page="+$page+"&section="+$section] #{$page}

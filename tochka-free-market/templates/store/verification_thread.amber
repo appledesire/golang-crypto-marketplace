@@ -1,0 +1,13 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+  import ./mixin_verification_menu.amber
+  $store = ViewUserStore
+  $localization = Localization
+  $section = "verification"
+  +verificationMenu($store, $localization, $section)
+  div.segment.ui
+    import ./../board/partial_thread.amber

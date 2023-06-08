@@ -1,0 +1,36 @@
+extends ./../layout
+
+block content
+  div.segment.ui
+    if Invitation.Uuid != ""
+      h2.ui.dividing.header Edit Invitation
+    else
+      h2.ui.dividing.header Add Invitation
+    form.ui.form
+      [method="POST"]
+      [enctype="multipart/form-data"]
+      [class="error"] ? Error
+      div.ui.error.message
+        div.header Error
+        p #{Error}
+      div.field.required
+        label Username
+        div.ui.input
+          input[type="text"][name="username"][placeholder="Username"][value=Invitation.Username][required]
+      div.field.required
+        label Invitation Text 
+        div.ui.input
+          textarea[type="text"][name="invitation_text"][placeholder="Description"][required] #{Invitation.InvitationText}
+      if Invitation.Uuid != ""
+        div.field
+          label Link
+          input[type="text"][readonly][value="http://tochka3evlj3sxdv.onion/landing/" + Invitation.Uuid]
+        div.field
+          label Is Activated
+          if Invitation.IsActivated
+            span.ui.label +
+          else
+            span.ui.label -
+      div.ui.section.divider
+      button.ui.teal.submit.button[type="submit"] Submit
+\

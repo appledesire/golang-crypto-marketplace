@@ -1,0 +1,30 @@
+extends ./../layout_basic
+
+block left_menu
+  +leftMenu("login")
+
+block content
+  form.ui.form.segment[method="POST"]
+    [class="error"] ? Error
+    input[type="hidden"][name="step"][value="1"]
+    h3.ui.dividing.header  Password Recovery Step 1/3
+    if Error
+      div.ui.error.message
+        div.header #{Localization.Auth.Error}
+        p #{Error}
+      div.ui.section.divider
+    div.required.field
+      label #{Localization.Auth.Username}
+      div.ui.icon.input
+        input[type="text"][name="username"][placeholder="username"][required]
+        i.user.icon
+    div.ui.section.divider
+    input[type="hidden"][name="captcha_id"][value=CaptchaId]
+    div.required.field
+      label #{Localization.Auth.Captcha}
+      div.ui.input
+        input[type="text"][name="captcha"][placeholder="captcha"][required]
+      div
+        img.ui.medium.image.captcha[width=300][height=100][src="/captcha/"+CaptchaId]
+    div.ui.section.divider
+    button.ui.dark-green.submit.button[type="submit"] #{Localization.Auth.Login}

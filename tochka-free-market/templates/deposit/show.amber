@@ -1,0 +1,51 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("deposit")
+
+block content
+  div.ui.segment
+    h3.ui.dividing.header Deposits
+    h4.ui.header Deposit policy
+    p Insurance deposits is a safety anti-scam mechanism that is required to keep marketplace transactions fair.
+    p 
+      | If you want to sell high-risk items in following categories:
+      strong financial transactions, counterfeit notes and counterfeit documents 
+      | then you are required to make a deposit equal to price of an item you want to sell. 
+      p Deposit will be refunded to you if you decide to close an account.
+    p In case if you violate marketplace rules, a penalty might be applied to a deposit.
+    div.ui.section.divider
+    h4.ui.header List of deposits
+    table.ui.very.basic.celled.table
+      thead
+        th Address
+        th Date
+        th Fiat Value
+        th Crypto Value
+        th
+      tbody
+        $storename = ViewUserStore.Storename
+        each $deposit in Deposits
+          tr
+            td #{$deposit.Address}
+            td #{$deposit.CreatedAt}
+            td #{$deposit.FiatValue} #{$deposit.Currency} 
+            td #{$deposit.CryptoValue} #{$deposit.Crypto}
+            td
+              if len($deposit.History) == 0
+                a.span.ui.red.button.tiny.fluid[href="/store-admin/"+$storename+"/deposits/"+$deposit.Address+"/withdraw"] Withdraw deposit
+              else
+                span.ui.black.button.tiny.fluid Deposit withdrawn
+    a.ui.button.dark-green[href="/store-admin/" + ViewUserStore.Storename + "/deposits/add"] Add Deposit
+    div.ui.section.divider
+    h4.ui.header Converted Total Value
+    table.ui.very.basic.celled.table
+      thead
+        each $currency, $value in DepositsSummary
+          if $value > 0
+            th #{$currency}
+      tbody
+        tr
+          each $currency, $value in DepositsSummary
+            if $value > 0
+              td #{$value}

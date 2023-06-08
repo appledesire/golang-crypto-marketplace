@@ -1,0 +1,46 @@
+#+TITLE: BlockAdd in waitgroup
+
+This could implement a simple goruntine pool.
+
+* API
++ create a waitgroup with 'size'
+#+BEGIN_SRC go
+waitgroup.Create(size int)
+#+END_SRC
+
++ push 'one' into the group. block, if the group is full.
+#+BEGIN_SRC go
+WaitGroup.BlockAdd()
+#+END_SRC
+
++ pop 'one' out the group.
+#+BEGIN_SRC go
+WaitGroup.Done()
+#+END_SRC
+
++ waiting the group empty
+#+BEGIN_SRC go
+WaitGroup.Wait()
+#+END_SRC
+
+* Example
+#+BEGIN_SRC go
+package main
+
+import (
+	"fmt"
+	"github.com/helloyi/go-waitgroup"
+)
+
+func main() {
+	wg := waitgroup.Create(3)
+	for i, v := range []int{1, 2, 3, 4, 5} {
+		wg.BlockAdd() // Block, If there are 3 goruntine runing, otherwise not.
+		go func(k, v int) {
+			fmt.Println(k, v)
+			wg.Done()
+		}(i, v)
+	}
+	wg.Wait()
+}
+#+END_SRC

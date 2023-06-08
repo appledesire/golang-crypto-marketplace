@@ -1,0 +1,49 @@
+# Overview
+1. Remaining anonymous (recommended)
+2. Buying behaviours (recommended)
+3. If you order large amounts or if you're in a country with strong anti-drug laws (advanced)
+
+## 1. Remaining anonymous
+
+* Seperate identities (recommended)
+  * Dont login to clearnet (regular web sites) sites with Tor Browser, this makes your tor connection tied to an account you access through clearnet browser.
+* Keeping Tor Browser secure (recommended)
+  * Never maximize the window
+  * Don't install extensions
+  * Regularly update Tor browser
+* Get onion adress for Tochka from trusted site (recommended)
+  * You can find our onion at our clearnet site https://www.tochkafreemarket.com/ (If you can't remember adress, Google: "tochka free market")
+* Don't communicate with vendors/users outside the platform, for example via wickr (recommended)
+* <a href="#vpn">Possibly use VPN</a> (advanced)
+* <a href="https://www.funkyspacemonkey.com/whonix-the-beginners-guide">Possibly use Whonix or Tails </a>(advanced)
+
+
+## 2. Buying behaviours
+* Never buy outside the Darknet Market
+  * If you buy outside Tochka, we don't hold the bitcoins until you recieve the products. Also, we and the vendor have a reputation to uphold within Tochka's grounds, which you immediately loose if you buy on the vendor's site or just transfer bitcoin's to his wallet.
+* Encrypt you communication with vendors
+  * <a href="https://darknetmarkets.org/guides/pgp-tutorial-for-newbs/">Guide how to encrypt messages, for windows users</a>
+  * <a href="https://darknetmarkets.org/guides/basic-guide-to-pgp-on-linux/">Guide how to encrypt messages, for linux users</a>
+* Buy from reputable vendors
+  * Even if we do our best to remove fraudelent vendors, some still get through. Always check the vendors reviews and which rating the vendor has to minimize risk. And most important of all, never finalize early i.e. don't release the payment before you have recived the product. If a vendor tries to push you to finalize early,  <a href="/support/new">report it to the staff</a>.
+  * If you don't recive your ordered product within 6 days, <a href="/support/new">make a dispute</a>.
+  * You can see how classify vendors <a href="/help/08_vendor_levels">here</a>
+
+### 3. Security beyond normal buying
+
+Some beginning tips for new users are laid out, here – some are from personal experiences and others from stories across the web:
+
+* Remember to use your biological name because nothing draws more attention than a fake name; however, use a drop system: this is where you employ a chain of houses through where the item travels after having been shipped or a P.O. Box which you can get for almost no money and even a faux name (be sure to have the forged documents to back your case up).
+* If you do end up deciding to use a faux name, ensure you’ve got real-looking document forgeries to back that up, should confrontation occur. Fake identification, plus utility-bill scans are mostly sufficient to open up a P.O. box under said faux name.
+* Be patient when you can, during the majority of the time. Tochka Free Market isn’t Amazon – things do often have totally unexpected delays; vendors usually mark ordered items as shipped immediately upon receiving the notification, even though they only ship the day after then. Weather and holidays can significantly delay otherwise-proper shipping/delivery time. The only time you should rebut an order’s shipment after not arriving, is once you have waited, in the least, 14 days after the failed expected delivery, or around when Auto-finalize is almost activated.
+* Encrypt all you can, including messages you send. It’s worth this small extra effort to avoid penitentiary time.
+* Should there be any negative experience with a vendor, try to message them, prior to giving a bad review. Chances are that the vendor will go to extreme lengths to make sure you get what you need, and have it all sorted sufficiently. Be as kind and polite as you can; it will move you farther in the process of getting stuff done.
+* No one should ever know you make purchases on DNMs. This includes not telling your friends or even close family.
+Anything in the market that looks too great to be true, is, in all probability, a scam.
+
+
+#### <span id="vpn">Using VPN Service</span>
+
+Every time you use your computer your IP address is shown which reveals your actual physical address which means you can be traced very easily. A VPN must be used along with Tor (Tor is the free browser explained below) to make your online activity anonymous. When using a VPN Service it will hide your identity and location while also encrypting all of you internet traffic from everyone including your internet service provider. This technology will also protect you from identity theft and hacking when using free wifi because everything is encrypted. Any time you are searching for music, movies to download, pirated content, drugs or anything illegal then you should be using a VPN to fly under the radar. The law is trying to monitor everything we do now so don’t make it easy for them, don’t end up like the original mastermind of Silk Road and get busted. This is a must have in your anonymous arsenal.
+
+Your first-ever step in buying something via any marketplace whatsoever, is properly setting-up your digital environment. Following below is a bare standard minimum in order to stay safe when buying personal items. After you are done, make sure you glance at the Security Tutorials section for several additional tips in security.

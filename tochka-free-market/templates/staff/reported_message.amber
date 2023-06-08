@@ -1,0 +1,36 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      $localization = Localization
+      +staffMenu($localization, "messages")
+    div.thirteen.wide.column
+      div.ui.segment
+        div.ui.comments
+          $message = ViewMessage
+          div.comment
+            if $message.SenderUser.Uuid != ""
+              a.avatar
+                img[src="/user-avatar/" + $message.SenderUser.Username]
+            else
+              span.avatar
+            div.content
+              a.author[href="/user/"+$message.SenderUser.Username] 
+                span @#{$message.SenderUser.Username}
+                if $message.SenderUser.IsAdmin
+                  div.ui.tiny.label.red Admin
+                else if $message.SenderUser.IsStaff
+                  div.ui.tiny.label.violet Staff
+                else
+                  span.ui.tiny.label Buyer
+              div.metadata
+                span.date #{$message.CreatedAtStr}
+              pre #{$message.Text}
+              if $message.HasImage
+                img.ui.large.image[src="/board/message/" + $message.Uuid + "/image"]
+                a[href="/board/message/" + $message.Uuid + "/image"][target="_blank"] view full-size image

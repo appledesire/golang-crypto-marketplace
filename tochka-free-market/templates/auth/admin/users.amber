@@ -1,0 +1,112 @@
+extends ./../../layout
+
+block left_menu
+  +leftMenu("")
+
+block content
+  div.ui.divided.grid.centered
+    div.twelve.wide.column
+      div.ui.segment
+        h3.ui.dividing.header Users
+        table.ui.table.striped
+          thead
+            th Username / ref
+            th Reg / Log
+            th # ref users
+            th BTC
+            th BCH
+            th ETH
+            th Lang
+          tbody
+            each $user in ExtendedUsers
+              tr
+                td 
+                  a[href="/user/"+$user.Username] @#{$user.Username}
+                  if $user.InviterUsername != ""
+                    br
+                    a[href="/user/"+$user.InviterUsername] @#{$user.InviterUsername}
+                td
+                  p #{$user.RegistrationDate}
+                  p #{$user.LastLoginDate}
+                td #{$user.InviterCount}
+                td #{$user.BitcoinBalance} / #{$user.BitcoinUnconfirmedBalance}
+                td #{$user.BitcoinCashBalance} / #{$user.BitcoinCashUnconfirmedBalance}
+                td #{$user.EthereumBalance}
+                td #{$user.Language}
+              tr
+                td[colspan="7"]
+                  table.ui.table.fluid[width="100%"]
+                    tr
+                      td
+                          form.ui.fluid[action="/auth/admin/users/"+$user.Username+"/login"][method="POST"]
+                            button.ui.mini.button.fluid[type="submit"] Login
+                      td
+                         form.ui.fluid[action="/auth/admin/users/"+$user.Username+"/ban"][method="POST"]
+                           if $user.Banned
+                             button.ui.mini.button.fluid.red[type="submit"] Ban
+                           else
+                             button.ui.mini.button.fluid[type="submit"] Ban
+                      td
+                         form[action="/auth/admin/users/"+$user.Username+"/staff"][method="POST"]
+                           if $user.IsStaff
+                             button.ui.mini.button.fluid.red.dark-green[type="submit"] Staff
+                           else
+                             button.ui.mini.button.fluid[type="submit"] Staff
+        div.ui.section.divider
+        div.ui.pagination.menu
+          $selected = SelectedPage
+          $sortby = SortBy
+          $query = Query
+          each $page in Pages
+            div.item 
+              .active ? $page == $selected
+              a[href="?page="+$page+"&sortby="+$sortby+"&query="+$query] #{$page}
+    div.four.wide.column.t-left-menu-items
+      h5.ui.dividing.header Filter by username
+      form.ui.input.icon.fluid[method="GET"]
+        input[type="hidden"][name="sortby"][value=SortBy]
+        input[type="text"][name="query"][placeholder="Search..."][value=Query]
+        i.icon.search
+      h5.ui.dividing.header Sort by
+      div.ui.fluid.buttons.small.vertical
+        a.ui.button.small[href="?sortby=registration_date&query="+Query] Registration date
+        a.ui.button.small[href="?sortby=last_login&query="+Query] Last login date
+        a.ui.button.small[href="?sortby=invited_users&query="+Query] Number of invited users
+        a.ui.button.small[href="?sortby=balance&query="+Query] Balance
+      h5.ui.dividing.header Stats
+      table.ui.table
+        thead
+          th Total number of users
+        tbody
+          tr
+            td #{NumberOfUsers}
+      table.ui.table
+        thead
+          th Number of new users (24h)
+        tbody
+          tr
+            td #{NumberOfNewUsers}
+      table.ui.table
+        thead
+          th Number of active users (1m)
+        tbody
+          tr
+            td #{NumberOfMonthlyActiveUsers}
+      table.ui.table
+        thead
+          th Number of active users (7d)
+        tbody
+          tr
+            td #{NumberOfWeeklyActiveUsers}
+      table.ui.table
+        thead
+          th Number of active users (1d)
+        tbody
+          tr
+            td #{NumberOfActiveUsers}
+      table.ui.table
+        thead
+          th Number of online users (1h)
+        tbody
+          tr
+            td #{NumberOfOnlineUsers}  

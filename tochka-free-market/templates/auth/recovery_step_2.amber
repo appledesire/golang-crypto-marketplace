@@ -1,0 +1,24 @@
+extends ./../layout_basic
+
+block left_menu
+  +leftMenu("login")
+
+block content
+  form.ui.form.segment[method="POST"]
+    [class="error"] ? Error
+    input[type="hidden"][name="step"][value="2"]
+    h3.ui.dividing.header Password Recovery Step 2/3
+    if Error
+      div.ui.error.message
+        div.header Error
+        p #{Error}
+    div.field
+      p Please decrypt following text
+      input[type="hidden"][name="pgp"][value=Pgp]
+      textarea[type="text"][readonly] #{SecretText}
+    div.field
+      label Please paste decrypted text
+      div.ui.icon.input
+        input[type="text"][name="secret_text"]
+    div.ui.section.divider
+    button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}

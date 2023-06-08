@@ -1,0 +1,24 @@
+extends ./../layout_basic
+
+block left_menu
+  +leftMenu("login")
+
+block content
+  form.ui.form.segment[method="POST"]
+    [class="error"] ? Error
+    input[type="hidden"][name="step"][value="3"]
+    h3.ui.dividing.header Password Recovery Step 3/3
+    if Error
+      div.ui.error.message
+        div.header Error
+        p #{Error}
+        div.ui.section.divider
+    div.required.field
+      label #{Localization.Auth.Passphrase}
+      p #{Localization.Auth.PassphraseDescription}
+      input[type="password"][name="passphrase"][required]
+    div.required.field
+      label #{Localization.Auth.RepeatPassphrase}
+      input[type="password"][name="passphrase_2"][required]
+    div.ui.section.divider
+    button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}

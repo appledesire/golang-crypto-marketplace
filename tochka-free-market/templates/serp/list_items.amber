@@ -1,0 +1,79 @@
+extends ./../layout
+
+block menu
+  +topMenu("items")
+
+block left_menu
+  +leftMenu("items")
+
+block content
+  $selectedPage = Page
+  $selectedCity = CityID
+  $selectedCategory = CategoryID
+  $selectedShippingTo = ShippingTo
+  $selectedShippingFrom = ShippingFrom
+  $viewUser = ViewUser
+  $sortby = SortBy
+  $account = Account
+  $l = Localization
+  div.ui.grid.divided
+    div.three.wide.column.t-left-menu-items
+      if EnableStoreStaffUI
+        if ViewUserStore.VerificationRequired
+          a.ui.button.red.fluid[href="/verification/encryption"] #{Localization.Auth.VerifyAccount}
+      if !HideAdvertisings
+        import ./../advertising/partial_advertising
+      import ./../mixin_right_menu
+        $SelectedPackageType = SelectedPackageType
+        $Localization = Localization
+        $ShippingFrom = ShippingFrom
+        $ShippingFromList = ShippingFromList
+        $ShippingTo = ShippingTo
+        $ShippingToList = ShippingToList
+        $electedPackageType = SelectedPackageType
+        $City = City
+        $GeoCities = GeoCities
+        $SortBy = SortBy
+        $Category = Category
+        $SubCategory = SubCategory 
+        $Query = Query
+        +RightMenu($SelectedPackageType, $Localization, $ShippingFrom, $ShippingFromList, $ShippingTo, $ShippingToList, $SelectedPackageType, $City, $GeoCities, $SortBy, $Category, $SubCategory, $Query)
+    div.thirteen.wide.column
+      div.ui.four.item.menu.secondary.pointing
+        a.item[href="/marketplace/"]
+          [class="active"] ? SelectedPackageType == "all"
+          i.icon.filter
+          | #{Localization.Items.AllTypes}
+        a.item[href="/marketplace/mail/"] 
+          [class="active"] ? SelectedPackageType == "mail"
+          i.icon.envelope.open.outline
+          | #{Localization.Items.Mail}
+        a.item[href="/marketplace/drop/"]
+          [class="active"] ? SelectedPackageType == "drop"
+          i.icon.sticky.note.outline
+          | #{Localization.Items.Drop}
+        a.item[href="/marketplace/drop preorder/"]
+          [class="active"] ? SelectedPackageType == "drop preorder"
+          i.icon.warehouse
+          | #{Localization.Items.DropPreorder}
+      if len(ViewSerpItems) > 0
+        div.ui.grid
+          each $item in ViewSerpItems
+            div.four.wide.column
+              import ./mixin_item_row
+                $i = $item
+                $u = $viewUser
+                +itemRow($i, $u, $l)
+      if len(ViewSerpItems) == 0
+        div.ui.icon.message
+          i.icon.cart
+          div.content
+            div.header #{Localization.Items.NoItems}
+      if len(Pages) > 1
+        $query = Query
+        div.ui.section.divider
+        div.ui.pagination.menu
+          each $page in Pages
+            div.item 
+              .active ? $page == $selectedPage
+              a[href="?page="+$page + "&city="+$selectedCity + "&category="+$selectedCategory + "&sortby="+$sortby + "&account="+$account + "&shipping-to="+$selectedShippingTo + "&shipping-from="+$selectedShippingFrom + "&query=" + $query] #{$page}

@@ -1,0 +1,28 @@
+extends ./../layout
+
+block content
+  div.segment.ui
+    h2.ui.dividing.header Invitations
+    table.ui.table.striped
+      thead
+        tr
+          th Username
+          th Is Activated
+          th
+          th
+      tbody
+        each $i in Invitations
+          tr
+            td #{$i.Username}
+            td #{$i.IsActivated}
+            td
+              a.ui.tiny.teal.button[href="/invitations/" + $i.Uuid] Edit 
+            td
+              form[method="POST"][action="/invitations/" + $i.Uuid + "/delete"]
+                button.ui.button.red[type="submit"]
+                  i.edit.remove.icon 
+                  |  Delete
+
+    div.ui.section.divider
+    a.ui.teal.button[href="/invitations/new"] Add New Invitation
+

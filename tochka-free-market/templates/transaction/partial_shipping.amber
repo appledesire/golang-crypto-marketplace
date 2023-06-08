@@ -1,0 +1,34 @@
+h3.ui.dividing.header #{Localization.Orders.ShippingDetails}
+div.ui.form
+  div.field
+    label #{Localization.Orders.CurrentStatus}
+    div.ui.label
+      | #{ViewTransaction.CurrentShippingStatus}
+  if len(ViewTransaction.ViewShippingStatus) > 0
+    div.ui.section.divider
+    div.field
+      label #{Localization.Orders.StatusHistory}
+      table.ui.table.segment.secondary
+        thead
+          tr
+            th #{Localization.Orders.Date}
+            th #{Localization.Orders.Status}
+        tbody
+          each $status in ViewTransaction.ViewShippingStatus
+            tr
+              td #{$status.Time}
+              td #{$status.Status}
+  if ViewTransaction.IsCompleted || ViewTransaction.IsReleased
+    if ViewUser.Uuid != ViewTransaction.BuyerUuid && !ViewTransaction.IsDispatched && !ViewTransaction.IsShipped
+      div.ui.section.divider
+      form[method="POST"][action="/payments/"+ViewTransaction.Uuid+"/shipping"][method="POST"]
+        input[type="hidden"][name="shipping_status"][value="DISPATCHED"]
+        button.ui.dark-green.button[type="sumbit"]
+          i.icon.bitcoin
+          | #{Localization.Orders.MarkDispatched}
+    if ViewUser.Uuid == ViewTransaction.BuyerUuid && ViewTransaction.IsDispatched
+      div.ui.section.divider
+      form[method="POST"][action="/payments/"+ViewTransaction.Uuid+"/shipping"][method="POST"]
+        input[type="hidden"][name="shipping_status"][value="SHIPPED"]
+        button.ui.dark-green.button[type="sumbit"]
+          | #{Localization.Orders.MarkShipped}

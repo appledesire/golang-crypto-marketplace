@@ -1,0 +1,60 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("feed")
+
+block content
+  $viewUser = ViewUser
+  $localization = Localization
+  import ./../dispute/mixin_dispute
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      $localization = Localization
+      +staffMenu($localization, "feed")
+    div.thirteen.wide.column
+      div.ui.feed
+        each $item in ViewFeedItems
+          div.event
+            div.label
+              img[src="/user-avatar/" + $item.ViewUser.Username + "?size=small"]
+            div.content
+              div.summary
+                a[href="/user/"+$item.ViewUser.Username] 
+                  if $item.ViewUser.IsOnline
+                    i.icon.dark-green.circle
+                  | @#{$item.ViewUser.Username}
+                strong.action #{$item.Action}
+                if $item.Type == "staff_support_reply"
+                  a[href="/user/"+$item.ViewOtherUser.Username] 
+                    if $item.ViewOtherUser.IsOnline
+                      i.icon.dark-green.circle
+                    | @#{$item.ViewOtherUser.Username}
+                if $item.Type == "staff_edit_item"
+                  each $itm in $item.ViewItems
+                    a[href="/user/"+$itm.User.Username+"/item/"+$itm.Uuid] #{$itm.Name}
+                    import ./../item/mixin_item_row
+                div.date #{$item.CreatedAt}
+              div 
+                if $item.Type == "staff_support_reply"
+                  div.ui.segment
+                    h2.ui.dividing.header #{$item.ViewThread.Title}
+                    div.ui.comments
+                      $ViewUser = ViewUser
+                      $ViewThread = $item.ViewThread
+                      each $message in $ViewThread.Messages
+                        if $message.Text != ""
+                          div.comment
+                            a.avatar
+                              img[src="/user-avatar/" + $message.SenderUser.Username]
+                            div.content
+                              a.author[href="/user/"+$message.SenderUser.Username] @#{$message.SenderUser.Username}
+                              div.metadata
+                                span.date #{$message.CreatedAtStr}
+                              pre #{$message.Text}
+                              if $message.HasImage
+                                img.ui.large.image[src="/board/message/" + $message.Uuid + "/image"]
+                else if $item.Type == "staff_resolve_dispute"
+                  $t=$item.ViewTransaction
+                  $l=$localization
+                  +disputeItem($t, $l)

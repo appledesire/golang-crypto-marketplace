@@ -1,0 +1,48 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("settings")
+
+block content
+  div.ui.divided.grid.centered
+    div.twelve.wide.column
+      div.ui.form.segment
+        [class="error"] ? Error
+        h3.ui.dividing.header PGP 1/2
+        if Error
+          div.ui.error.message
+            div.header Error
+            p #{Error}
+        form[method="POST"][enctype="multipart/form-data"]
+          div.field
+            label PGP public key
+            div.ui.icon.input
+              textarea[type="text"][name="pgp_public_key"][value=ViewUser.Pgp]
+          div.ui.section.divider
+          button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}
+    div.four.wide.column.t-left-menu-items
+      div.ui.vertical.fluid.menu.tiny.basic.secondary
+        a.item[href="/account"] 
+          i.icon.privacy
+          | #{Localization.Settings.Account}
+        a.item[href="/profile?section=profile"] 
+          [class="active"] ? SelectedSection == "profile"
+          i.icon.user
+          | #{Localization.Settings.Profile}
+        a.item[href="/profile?section=contacts"]
+          [class="active"] ? SelectedSection == "contacts"
+          i.icon.mail.square
+          | #{Localization.Settings.Contacts}
+        a.item[href="/profile?section=payments"]
+          [class="active"] ? SelectedSection == "payments"
+          i.icon.bitcoin
+          | #{Localization.Settings.Payments}
+        a.item.active[href="/profile?section=system"]
+          [class="active"] ? SelectedSection == "system"
+          i.icon.settings
+          | #{Localization.Settings.Encryption}
+        if ViewUser.IsSeller
+          a.item[href="/profile?section=vendor"]
+            [class="active"] ? SelectedSection == "vendor"
+            i.icon.cart
+            | #{Localization.Settings.VendorSettings}

@@ -1,0 +1,31 @@
+doctype 5
+html
+  head
+    link[rel="stylesheet"][type="text/css"][href="/css/semantic.css"]
+    link[rel="stylesheet"][type="text/css"][href="/css/tochka.css"]
+    link[rel="shortcut icon"][href="/img/favicon.ico"]
+    title #{SiteName}
+    meta[name="viewport"][content="width=device-width, initial-scale=1"]
+    block meta
+  body
+    div.ui.container
+      div.sixteen.wide.column
+        div.ui.grid
+          div.four.wide.column
+            div.ui.menu.tiny.vertical.secondary.fluid
+              a.item.header-logo.header[href="/"]
+                if Language == "ru" || ViewUser.Language == "ru"
+                  span Т
+                  span.dark-green.point •
+                  span ч
+                  span к
+                  span а
+                else
+                  span  P
+                  span.dark-green.point •
+                  span i
+                  span n
+                  span t
+          div.twelve.wide.column
+      block footer
+        import ./footer

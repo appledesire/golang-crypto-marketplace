@@ -1,0 +1,70 @@
+extends ./../layout
+
+
+block left_menu
+  +leftMenu("transactions")
+
+block meta
+  meta[http-equiv="refresh"][content="720"]
+
+block content
+  div.ui.grid.divided
+    div.three.wide.column.t-left-menu-items
+      div.ui.vertical.menu.tiny.basic.fluid.secondary
+        if !ViewUser.IsStaff
+          a.item.basic[href="?section=messages"] 
+            i.ui.icon.comments
+            span.right.floated.circular.tiny.ui.label #{ViewTransaction.NumberOfMessages-1}
+            | #{Localization.LeftMenu.PMs}
+            [class="active"] ? SelectedSection == "messages"
+        a.item.basic[href="?section=purchase"] 
+          i.ui.icon.cart
+          | #{Localization.Orders.PurchaseDetails}
+          [class="active"] ? SelectedSection == "purchase"
+        a.item.basic[href="?section=payment"] 
+          i.icon.bitcoin
+          | #{Localization.Orders.PaymentDetails}
+          [class="active"] ? SelectedSection == "payment"
+        a.item.basic[href="?section=shipping"]
+          i.ui.icon.shop
+          | #{Localization.Orders.ShippingDetails}
+          [class="active"] ? SelectedSection == "shipping"
+        if !ViewTransaction.IsPending && !ViewTransaction.IsFailed
+          a.item.basic[href="?section=review"]
+            i.icon.star
+            | #{Localization.Rating.Review}
+            [class="active"] ? SelectedSection == "review"
+        if (ViewTransaction.IsCompleted && !ViewTransaction.IsDisputed && (ViewUser.Uuid == ViewTransaction.BuyerUuid || ViewUser.IsAdmin)) || ViewUser.IsAdmin || ViewUser.IsStaff
+          a.item.basic[href="?section=dispute"]
+            i.icon.exclamation
+            | #{Localization.Dispute.Dispute}
+            [class="active"] ? SelectedSection == "dispute"
+      import ./partial_tx_info.amber
+    div.thirteen.wide.column
+      if ViewUser.IsAdmin || ViewUser.IsStaff
+        div.ui.segment
+          import ./admin/partial_admin.amber
+      if SelectedSection == "payment"
+        div.ui.segment
+          if ViewTransaction.Type == "bitcoin" || ViewTransaction.Type == "bitcoin_cash"
+            import ./partial_payment_bitcoin.amber
+          if ViewTransaction.Type == "ethereum"
+            import ./partial_payment_ethereum.amber
+      if SelectedSection == "shipping"
+        div.ui.segment
+          import ./partial_shipping.amber
+      if SelectedSection == "purchase"
+        div.ui.segment
+          import ./partial_purchase.amber
+      if SelectedSection == "dispute"
+        if (ViewTransaction.IsCompleted && !ViewTransaction.IsDisputed && (ViewUser.Uuid == ViewTransaction.BuyerUuid || ViewUser.IsAdmin)) || ViewUser.IsAdmin
+          div.ui.segment
+            import ./partial_dispute.amber
+      if SelectedSection == "messages"
+        if !ViewUser.IsStaff
+          div.ui.segment
+            import ./../board/partial_thread.amber
+      if SelectedSection == "review"
+        if !ViewTransaction.IsPending && !ViewTransaction.IsFailed
+          div.ui.segment
+            import ./partial_rate.amber

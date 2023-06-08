@@ -1,0 +1,35 @@
+extends ./layout_basic
+
+block left_menu
+  +leftMenu("")
+
+block content
+  div.stackable.ui.grid
+    div.row
+      div.three.wide.column
+        h1.ui.icon.header.center.aligned
+          i.icon.dark-green.circle
+      div.thirteen.wide.column
+        h2.ui.header #{Localization.Index.WelcomeToTochka}
+        p #{Localization.Index.WelcomeToTochkaDescription}
+    div.row
+      div.three.wide.column
+        h1.ui.icon.header.center.aligned
+          i.icon.green.exchange
+      div.thirteen.wide.column
+        h2.ui.header #{Localization.Index.Referrals}
+        p #{Localization.Index.ReferralsDescription}
+    div.row
+      div.three.wide.column
+        h1.ui.icon.header.center.aligned
+          i.icon.dark-green.bitcoin
+      div.thirteen.wide.column
+        h2.ui.header #{Localization.Index.EscrowAndMultisig}
+        p #{Localization.Index.EscrowAndMultisigDescription}
+    div.row
+      div.three.wide.column.centered
+        h1.ui.icon.header.center.aligned
+          i.icon.green.doctor
+      div.thirteen.wide.column
+        h2.ui.header #{Localization.Index.Support}
+        p #{Localization.Index.SupportDescription}

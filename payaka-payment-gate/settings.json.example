@@ -1,0 +1,9 @@
+{
+	"insight_api_url": "",
+	"etherium_api_url": "",
+	"btc_relay_fee": 0.0003,
+	"old_btc_relay_fee": 0.0001,
+	"btc_commission_wallet": "",
+	"pg_connection_string": "",
+	"etherscan_api_key": ""
+}

@@ -1,0 +1,28 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      $localization = Localization
+      +staffMenu($localization, "deposits")
+    div.thirteen.wide.column
+      table.ui.very.basic.celled.table
+        thead
+          th Store
+          th Address
+          th Date
+          th Fiat Value
+          th Crypto Value
+        tbody
+          each $deposit in Deposits
+            tr
+              td 
+                a[href="/store/"+$deposit.Store.Storename] @#{$deposit.Store.Storename}
+              td #{$deposit.Address}
+              td #{$deposit.CreatedAt}
+              td #{$deposit.FiatValue} #{$deposit.Currency} 
+              td #{$deposit.CryptoValue} #{$deposit.Crypto} 

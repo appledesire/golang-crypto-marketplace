@@ -1,0 +1,30 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+  import ./mixin_verification_menu.amber
+  $store = ViewUserStore
+  $localization = Localization
+  $section = "agreement"
+  +verificationMenu($store, $localization, $section)
+  div.segment.ui
+    h3.ui.dividing.header #{Localization.Verification.VendorshipAgreement}
+    p #{Localization.Verification.VendorshipAgreementInstructions}
+    form.ui.form[method="POST"]
+      [class="error"] ? Error
+        if Error
+          div.ui.error.message
+            div.header #{Localization.Auth.Error}
+            p #{Error}
+          div.ui.section.divider
+      div.field
+        label #{Localization.Verification.AgreementText}
+        pre #{Description}
+      div.ui.section.divider
+      div.field
+        label #{Localization.Verification.SignedAgreement}
+        textarea[type="text"][name="signed_agreement"] #{$store.VendorshipAgreementText}
+      div.ui.section.divider              
+      button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}

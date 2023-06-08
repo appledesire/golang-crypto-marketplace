@@ -1,0 +1,19 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("messages")
+
+block content
+  div.ui.two.column.grid.divided
+      div.three.wide.column.t-left-menu-items
+        import ./partial_messages
+      div.thirteen.wide.column
+          div.ui.menu.horizontal.secondary
+            a.item[href="/messages?section=inbox"] 
+              [class="active"] ? SelectedSection=="inbox"
+              | Inbox 
+              span.ui.tiny.teal.label.circular #{NumberOfUnreadPrivateMessages}
+            a.item[href="/messages?section=all"] 
+              [class="active"] ? SelectedSection=="all"
+              | All
+              span.ui.tiny.label.circular #{NumberOfPrivateMessages}

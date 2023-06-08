@@ -1,0 +1,47 @@
+mixin storeHeader($store, $localization, $section)
+  div.ui.grid.segment.store-header
+    div.four.wide.column
+      img.ui.image.rounded.avatar[src="/user-avatar/" + $store.Storename + "?size=200x200"]
+    div.nine.wide.column
+      h2 @#{$store.Storename}
+      p #{$store.ShortDescription}
+      div.date
+        i.icon.wait
+        span #{$localization.UserCard.Registred} #{$store.RegistrationDateStr}
+      div.date
+        i.icon.wait
+        span #{$localization.UserCard.LastSeen} #{$store.LastLoginDateStr}
+      br
+      if $store.IsGoldAccount
+        span.ui.label.orange Gold Account
+      if $store.IsSilverAccount
+        span.ui.label.grey Silver Account
+      if $store.IsBronzeAccount
+        span.ui.label.brown Bronze Account
+      if $store.IsFreeAccount
+        span.ui.label Free Account
+      if $store.IsTrusted
+        span.ui.label Trusted  
+      if $store.IsAllowedToSell
+        span.ui.label Verified 
+      span.ui.label.teal.dark-green
+        i.icon.level.up
+        | #{$store.Level} lvl
+      if $store.Score > 0
+        span.ui.label.dark-green
+          i.icon.thumbs.up
+          span #{$store.Score}
+      if $store.HasDeposits
+        span.ui.teal.label Insured
+    div.three.wide.column
+      a.ui.right.floated.big.dark-green.button[href="/messages/"+$store.Storename] #{$localization.LeftMenu.PM}
+      if ViewUser.IsAdmin || ViewUser.IsStaff
+        div[style="clear: both"]
+        div.ui.red.vertical.tiny.inverted.fluid.menu
+          span.item
+            strong Staff Menu
+          a.item[href="/staff/stores/"+$store.Storename+"/actions"] Admin Actions
+          a.item[href="/staff/stores/"+$store.Storename+"/payments"] Payments 
+    div.sixteen.wide.column
+      import ./mixin_store_menu
+      +storeMenu($store, $localization, $section)

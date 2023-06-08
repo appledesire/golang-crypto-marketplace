@@ -1,0 +1,27 @@
+extends ./../../layout
+
+block left_menu
+  +leftMenu("wallet")
+
+block content
+  div.ui.grid.centered.divided
+    div.thirteen.wide.column
+      div.ui.horizontal.fluid.menu.tiny.secondary
+        a.item[href="receive"]
+          i.icon.arrow.down
+          | #{Localization.Wallet.RecieveBitcoins}
+        a.item.active[href="send"]
+          i.icon.arrow.up
+          | #{Localization.Wallet.SendBitcoins}
+        a.item[href="actions"]
+          i.icon.arrow.feed
+          | #{Localization.Wallet.Actions}
+      form.ui.form.segment[method="post"]
+        [class="error"] ? Error
+        h3.ui.dividing.header #{Localization.Wallet.SendBitcoins}
+        import ./mixin_receipt
+        +paymentReceipt(BCHPaymentResult)
+    div.three.wide.column.t-left-menu-items
+      import ./../mixin_wallet_menu
+      $localization = Localization
+      +walletMenu($localization, "bitcoin_cash")

@@ -1,0 +1,40 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("sellers")
+
+block content
+  $l = Localization
+  $v = ViewStore
+  div.ui.grid.divided.top-aligned
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_store_card
+        div.user.info
+          +storeCard($v, $l)
+    div.thirteen.wide.column
+      import ./mixin_store_menu
+      +storeMenu($v, $l, "reviews")
+      if len(ViewStore.ViewRatingReviews) > 0
+        div.segment.ui
+          h3.ui.dividing.header #{Localization.LeftMenu.Reviews}
+          div.ui.comments
+            each $review in ViewStore.ViewRatingReviews
+              div.comment
+                span.ui.label.tiny.right.floated.dark-green
+                  i.icon.thumbs.up
+                  span #{$review.SellerScore}
+                if $review.TransactionAmount == "SMALL"
+                  span.ui.label.tiny.right.floated.red SMALL TRANSACTION
+                a.avatar[href="/user/"+$review.User.Username]
+                  img[src="/user-avatar/" + $review.User.Username + "?size=small"]
+                div.content
+                  a.author[href="/user/"+$review.User.Username] @#{$review.User.Username}
+                  div.metadata
+                    span.date #{$review.CreatedAtStr}
+                  div.text
+                    pre.text #{$review.SellerReview}
+      else
+        div.ui.icon.message
+          i.icon.cart
+          div.content
+            div.header #{Localization.Items.NoItems}

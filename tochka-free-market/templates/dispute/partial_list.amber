@@ -1,0 +1,4 @@
+import ./mixin_dispute
+$localization = Localization
+each $transaction in ViewTransactions
+  +disputeItem($transaction, $localization)

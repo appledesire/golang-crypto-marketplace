@@ -1,0 +1,20 @@
+mixin userMenu($user, $selectedSection, $localization)
+	div.ui.menu.tiny.fluid.vertical.red.inverted
+		span.item
+			strong Staff Menu
+		a.item[href="/staff/users/"+$user.Username + "/tickets"] 
+			i.icon.ticket
+			| Tickets
+			[class="active"] ? $selectedSection == "tickets"
+		a.item[href="/staff/users/"+$user.Username + "/payments"] 
+			i.ui.icon.bitcoin
+			| #{Localization.Settings.Payments}
+			[class="active"] ? $selectedSection == "payments"
+		a.item[href="/staff/users/"+$user.Username + "/actions"] 
+			i.ui.icon.plus
+			| Admin Actions
+			[class="active"] ? $selectedSection == "admin-actions"
+		a.item[href="/staff/users/"+$user.Username + "/finance"] 
+			i.ui.icon.visa
+			| Finance
+			[class="active"] ? $selectedSection == "finance"

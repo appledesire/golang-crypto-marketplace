@@ -1,0 +1,85 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  $selectedPage = Page
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      $localization = Localization
+      +staffMenu($localization, "item_categories")
+      h5.ui.dividing.header Actions
+      a.ui.button.fluid[href="/categories/admin/"] All Categories
+    div.thirteen.wide.column
+      div.ui.segment
+        h3.ui.dividing.header Edit Category
+        form.ui.segment.form
+          [method="POST"]
+          [class="error"] ? Error
+          div.ui.error.message
+            div.header #{Localization.Items.Error}
+            p #{Error}
+          div.field.required
+            label Name (En)
+            div.ui.input
+              input[type="text"][name="name_en"][placeholder="Name (En)"][value=ViewItemCategory.NameEn][required]
+          div.field.required
+            label Name (Ru)
+            div.ui.input
+              input[type="text"][name="name_ru"][placeholder="Name (Ru)"][value=ViewItemCategory.NameRu][required]
+          div.field.required
+            label Name (Es)
+            div.ui.input
+              input[type="text"][name="name_es"][placeholder="Name (Es)"][value=ViewItemCategory.NameEs][required]
+          div.field.required
+            label Name (Fr)
+            div.ui.input
+              input[type="text"][name="name_fr"][placeholder="Name (Fr)"][value=ViewItemCategory.NameFr][required]
+          div.field.required
+            label Name (De)
+            div.ui.input
+              input[type="text"][name="name_de"][placeholder="Name (De)"][value=ViewItemCategory.NameDe][required]
+          div.field.required
+            label Name (Rs)
+            div.ui.input
+              input[type="text"][name="name_rs"][placeholder="Name (Rs)"][value=ViewItemCategory.NameRs][required]
+          div.field.required
+            label Name (Tr)
+            div.ui.input
+              input[type="text"][name="name_tr"][placeholder="Name (Tr)"][value=ViewItemCategory.NameTr][required]
+          div.ui.section.divider
+          div.field
+            label Icon CSS Class
+            div.ui.input
+              input[type="text"][name="icon"][placeholder="icon"][value=ViewItemCategory.Icon]
+          div.ui.section.divider
+          div.field
+            label Hidden
+            div.grouped.inline.fields
+              div.field
+                div.ui.radio.checkbox
+                  input[name="hidden"][id="hidden1"][type="radio"][value="1"]
+                    [checked] ? ViewItemCategory.Hidden
+                  label[for="2fa1"] #{Localization.Settings.On}
+              div.field
+                div.ui.radio.checkbox
+                  input[name="hidden"][id="hidden2"][type="radio"][value="0"]
+                    [checked] ? !ViewItemCategory.Hidden
+                  label[for="2fa2"] #{Localization.Settings.Off}
+          div.ui.section.divider
+          div.field.required
+            label Parent Category
+            div.ui.input
+              select[name="parent_id"]
+                $selectedCategory = ViewItemCategory.ParentID
+                each $cat in ViewItemCategories
+                  option[value=$cat.ID] 
+                    [selected] ? $cat.ID == $selectedCategory
+                    |  #{$cat.Name}        
+          div.ui.section.divider
+          button.ui.teal.submit.button[type="submit"] #{Localization.Items.Save}
+        if ViewItemCategory.ID != 0
+          form.ui.segment.form[method="POST"][action="delete"]      
+            button.ui.red.submit.button[type="submit"] Delete

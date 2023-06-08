@@ -1,0 +1,90 @@
+mixin RightMenu($SelectedPackageType, $Localization, $ShippingFrom, $ShippingFromList, $ShippingTo, $ShippingToList, $SelectedPackageType, $City, $GeoCities, $SortBy, $Category, $SubCategory, $Query)
+  label.ui.button.fluid.menu.show-filters-label #{Localization.Items.Filters}
+  if $SelectedPackageType == "mail"
+    h5.ui.header #{Localization.Items.ShippingFrom}
+    div.ui.compact.menu.fluid.tiny
+      div.ui.simple.dropdown.item.fluid
+        i.icon.globe
+        if ShippingFrom != ""
+          | #{ShippingFrom}
+        else
+          | #{Localization.Items.AllCountries}
+        div.menu.fluid.fluid
+          a.item.fluid[href="/marketplace?category=" + $selectedCategory + "&sortby=" + $sortby + "&shipping-to=" + $selectedShippingTo + "&account=" + $account] #{Localization.Items.AllCountries}
+          each $loc in ShippingFromList
+            if $loc != ""
+              a.item.fluid[href="/marketplace?category="+$selectedCategory + "&shipping-from=" + $loc + "&shipping-to=" + $selectedShippingTo + "&sortby="+$sortby + "&account=" + $account] #{$loc}                   
+    h5.ui.header #{Localization.Items.ShippingTo}
+    div.ui.compact.menu.fluid.tiny
+      div.ui.simple.dropdown.item.fluid
+        i.icon.globe
+        if ShippingTo != ""
+          | #{ShippingTo}
+        else
+          | #{Localization.Items.AllCountries}
+        div.menu.fluid.fluid
+          a.item.fluid[href="/marketplace?category=" + $selectedCategory + "&sortby=" + $sortby + "&shipping-from=" + $selectedShippingFrom + "&account=" + $account] #{Localization.Items.AllCountries}
+          each $loc in ShippingToList
+            if $loc != ""
+              a.item.fluid[href="/marketplace?category="+$selectedCategory + "&shipping-to=" + $loc + "&shipping-from=" + $selectedShippingFrom + "&sortby="+$sortby + "&account=" + $account] #{$loc}  
+  if $SelectedPackageType == "drop" || $SelectedPackageType == "drop preorder" || $SelectedPackageType == "" || $SelectedPackageType == "all"
+    h5.ui.header #{Localization.Items.ShippingTo}
+    div.ui.compact.menu.fluid.tiny
+      div.ui.simple.dropdown.item.fluid
+        i.icon.globe
+        if ShippingTo != ""
+          | #{ShippingTo}
+        else
+          | #{Localization.Items.AllCountries}
+        div.menu.fluid.fluid
+          a.item.fluid[href="/marketplace?category=" + $selectedCategory + "&sortby=" + $sortby + "&account=" + $account] #{Localization.Items.AllCountries}
+          each $loc in ShippingToList
+            if $loc != ""
+              a.item.fluid[href="/marketplace?category="+$selectedCategory + "&shipping-to="+$loc + "&sortby="+$sortby + "&account=" + $account] #{$loc}                     
+  if SelectedPackageType == "drop" || SelectedPackageType == "drop preorder" && len(GeoCities) > 0
+    h5.ui.header #{Localization.Items.City}
+    div.ui.compact.menu.fluid.tiny
+      div.ui.simple.dropdown.item.fluid
+        i.icon.globe
+        | #{City}
+        div.menu.fluid.fluid
+          a.item.fluid[href="/marketplace?city-id="+ 0 + "&shipping-to=" + $selectedShippingTo + "&category=" + $selectedCategory + "&sortby=" + $sortby + "&account=" + $account] #{$l.Items.AllCountries}
+          each $loc in GeoCities
+            a.item.fluid[href="/marketplace?category="+$selectedCategory + "&city-id="+$loc.ID + "&sortby="+$sortby + "&account=" + $account] #{$loc.NameEn}  
+  h5.ui.header #{Localization.Items.Categories}
+  div.ui.vertical.fluid.menu.categories.tiny
+    import ./item/partial_categories.amber
+  h5.ui.header #{Localization.Items.SortBy}
+  div.ui.menu.fluid.tiny
+    div.ui.simple.dropdown.item.fluid
+      if SortBy == "date_logged_in"
+        i.icon.dark-green.circle
+        | Online
+      if SortBy == "popularity"
+        i.icon.area.chart
+        | #{Localization.Items.Popularity}
+      if SortBy == "date_added"
+        i.icon.calendar
+        | #{Localization.Items.DateAdded}
+      if SortBy == "rating"
+        i.icon.star
+        | #{Localization.Items.Rating}
+      if SortBy == "price"
+        i.icon.bitcoin
+        | #{Localization.Items.Price}
+      div.menu.fluid
+        a.item.flud[href="/marketplace?city-id=" + $selectedCity + "&category=" + $selectedCategory + "&sortby=date_logged_in" + "&account=" + $account+ "&shipping-from=" + $selectedShippingFrom + "&shipping-to=" + $selectedShippingTo] 
+          i.icon.dark-green.circle
+          | Online
+        a.item.fluid[href="/marketplace?city-id=" + $selectedCity + "&category=" + $selectedCategory + "&sortby=popularity" + "&account=" + $account+ "&shipping-from=" + $selectedShippingFrom + "&shipping-to=" + $selectedShippingTo]
+          i.icon.area.chart
+          | #{Localization.Items.Popularity}
+        a.item.fluid[href="/marketplace?city-id=" + $selectedCity + "&category=" + $selectedCategory + "&sortby=date_added" + "&account=" + $account+ "&shipping-from=" + $selectedShippingFrom + "&shipping-to=" + $selectedShippingTo] 
+          i.icon.calendar
+          | #{Localization.Items.DateAdded}
+        a.item.fluid[href="/marketplace?city-id=" + $selectedCity + "&category=" + $selectedCategory + "&sortby=rating" + "&account=" + $account+ "&shipping-from=" + $selectedShippingFrom + "&shipping-to=" + $selectedShippingTo]
+          i.icon.star
+          | #{Localization.Items.Rating}  
+        a.item.fluid[href="/marketplace?city-id=" + $selectedCity + "&category=" + $selectedCategory + "&sortby=price" + "&account=" + $account + "&shipping-from=" + $selectedShippingFrom + "&shipping-to=" + $selectedShippingTo] 
+          i.icon.bitcoin
+          | #{Localization.Items.Price}

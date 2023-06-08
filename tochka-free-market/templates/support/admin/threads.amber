@@ -1,0 +1,46 @@
+extends ./../../layout
+
+block left_menu
+  +leftMenu("")
+
+block content
+  div.ui.grid.divided
+    div.twelve.wide.column
+      div.ui.segment
+        h2.ui.dividing.header Support Threads
+        $user = ViewUser
+        if len(SupportThreads) > 0
+          div.ui.feed
+            each $ViewThread in SupportThreads
+              div.event
+                div.label
+                  img[src="/user-avatar/" + $ViewThread.SenderUsername]
+                div.content
+                  div.summary
+                    a[href="/support/"+$ViewThread.SenderUsername] 
+                      if $ViewThread.LastMessageByStaff
+                        i.plus.square.outline.teal.icon
+                      else
+                        i.minus.square.outline.red.icon
+                      @#{$ViewThread.SenderUsername}
+                    div.date #{$ViewThread.CreatedAt}
+                  div.meta
+                    span.like
+                      i.comments.icon 
+                      |  # of messages: #{$ViewThread.NumberOfMessages}
+                    span.date 
+                      i.icon.calendar
+                      | last message about #{$ViewThread.LastUpdatedAt} 
+        else
+          div.ui.icon.message
+            i.icon.users
+            div.content
+              div.header No support threads at the moment.
+    div.four.wide.column.t-left-menu-items
+      div.ui.vertical.menu.tiny.basic.fluid.secondary
+        a.item.basic[href="?section="] 
+          | All
+          [class="active"] ? SelectedSection == ""
+        a.item.basic[href="?section=unanswered"] 
+          | Unanswered
+          [class="active"] ? SelectedSection == "unanswered"

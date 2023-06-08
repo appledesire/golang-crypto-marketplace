@@ -1,0 +1,11 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("")
+
+block content
+  div.ui.icon.yellow.message
+    i.icon.cart
+    div.content
+      div.header Vendors accounts are for selling only. To purchase, create a buyer account.
+      p :P

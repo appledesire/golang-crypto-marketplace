@@ -1,0 +1,110 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("settings")
+
+block content
+  div.ui.divided.grid.centered
+    div.twelve.wide.column
+      div.ui.form.segment[method="POST"][enctype="multipart/form-data"]
+        [class="error"] ? Error
+        
+        if SelectedSection == "profile"
+          h3.ui.dividing.header #{Localization.Settings.Profile}
+        if SelectedSection == "advertising"
+          h3.ui.dividing.header Advertising
+        if SelectedSection == "vendor"
+          h3.ui.dividing.header #{Localization.Settings.VendorSettings}
+        
+        if Error
+          div.ui.error.message
+            div.header #{Localization.Settings.Error}
+            p #{Error}
+          div.ui.section.divider
+        
+        if SelectedSection == "profile"
+          form[method="POST"][enctype="multipart/form-data"]
+            div.field
+              label Username
+              input[type="text"][readonly][value=ViewUserStore.Storename]
+            div.ui.section.divider
+            div.field
+              label #{Localization.Settings.ShortDescription}
+              p #{Localization.Settings.ShortDescriptionDescription}
+              div.ui.icon.input
+                input[type="text"][name="description"][value=ViewUserStore.ShortDescription] 
+            div.ui.section.divider
+            div.field
+              label #{Localization.Settings.About}
+              p #{Localization.Settings.AboutDescription}
+              div.ui.icon.input
+                textarea[type="text"][name="long_description"] #{ViewUserStore.Description}
+            div.ui.section.divider
+            div.field
+              label #{Localization.Settings.Avatar}
+              p #{Localization.Settings.AvatarDescription}
+              div.ui.icon.input
+                input[type="file"][name="avatar_image"][size="40"]
+            div.ui.section.divider
+            button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}              
+        if SelectedSection == "vendor"
+          div.field
+            label #{Localization.AboutStore.ShippingOptions}
+            table.ui.table.striped.three.columns.mini
+              thead
+                th #{Localization.Settings.Name}
+                th #{Localization.Settings.Price} (USD)
+                th
+              tbody
+                $l = Localization
+                each $option in ViewUserStore.ShippingOptions
+                  tr
+                    td #{$option.Name}
+                    td #{$option.PriceUSD}
+                    td
+                      form[method="post"][action="/shipping/delete"]
+                        input[type="hidden"][name="id"][value=$option.ID]
+                        button.ui.button.red.mini.fluid[type="submit"]
+                          i.edit.remove.icon 
+                          | #{$l.Items.DeleteItem}
+            form.ui.form[method="post"][action="/shipping"]
+              div.two.fields
+                div.field
+                  label #{Localization.Settings.Name}
+                  input[type="text"][name="name"]
+                div.field
+                  label #{Localization.Settings.Price} (USD)
+                  input[type="text"][name="price"]
+              div.field
+                button.ui.button.tiny.dark-green.mini[type="submit"]
+                  i.icon.plus
+                  | #{Localization.Settings.Add}
+          div.ui.section.divider
+          div.field
+            form[method="POST"][enctype="multipart/form-data"]
+              div.field
+                label #{Localization.Settings.VacationMode}
+                p #{Localization.Settings.VacationModeDescription}
+                div.field
+                  div.ui.radio.checkbox
+                    input[name="vm"][id="vm1"][type="radio"][value="1"]
+                      [checked] ? ViewUserStore.IsOnVacation
+                    label[for="vm1"] #{Localization.Settings.On}
+                div.field
+                  div.ui.radio.checkbox
+                    input[name="vm"][id="vm2"][type="radio"][value="0"]
+                      [checked] ? !ViewUserStore.IsOnVacation
+                    label[for="vm2"] #{Localization.Settings.Off}
+              div.ui.section.divider
+              button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}
+    div.four.wide.column.t-left-menu-items
+      a.ui.fluid.teal.button[href="/verification/encryption"] #{Localization.Auth.VerifyAccount}
+      div.ui.vertical.fluid.menu.tiny.secondary
+        a.item[href="/settings/store?section=profile"] 
+          [class="active"] ? SelectedSection == "profile"
+          i.icon.user
+          | #{Localization.Settings.Profile}
+        a.item[href="/settings/store?section=vendor"]
+          [class="active"] ? SelectedSection == "vendor"
+          i.icon.cart
+          | #{Localization.Settings.VendorSettings}

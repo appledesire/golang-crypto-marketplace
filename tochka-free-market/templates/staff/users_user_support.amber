@@ -1,0 +1,17 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+  $localization = Localization
+  $seller = ViewMarketplaceUser
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      $l = Localization
+      $v = ViewMarketplaceUser
+      import ./../user/mixin_user_menu
+      +userMenu($v, $l, "staff")
+    div.thirteen.wide.column
+      div.segment.ui
+        import ./../board/partial_thread.amber

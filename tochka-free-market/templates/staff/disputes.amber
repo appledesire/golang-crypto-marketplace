@@ -1,0 +1,45 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  $viewUser = ViewUser
+  $localization = Localization
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      $localization = Localization
+      +staffMenu($localization, "disputes")
+    div.thirteen.wide.column
+      div.segment.ui
+        h3.ui.header.dividing #{Localization.Dispute.Disputes}
+        div.ui.horizontal.menu.tiny.basic.fluid.secondary
+          a.item.red[href="?status=open"]
+            [class="active"] ? SelectedStatus=="open"
+            | OPEN
+          a.item.teal[href="?status=closed"]
+            [class="active"] ? SelectedStatus=="closed"
+            | CLOSED
+          a.item.violet[href="?status=vendor"]
+            [class="active"] ? SelectedStatus=="vendor"
+            | RESOLVED TO VENDOR
+          a.item.dark-green[href="?status=buyer"]
+            [class="active"] ? SelectedStatus=="buyer"
+            | RESOLVED TO BUYER
+        if len(ViewTransactions) > 0
+          import ./../dispute/partial_list.amber
+          if len(Pages) > 0
+            div.ui.section.divider   
+            div.ui.pagination.menu
+              $selected = SelectedPage
+              each $page in Pages
+                div.item 
+                  .active ? $page == $selected
+                  a[href="?page="+$page] #{$page}
+        else
+          div.ui.icon.message
+            i.icon.payment
+            div.content
+              div.header #{Localization.Dispute.NoDisputes}
+              p #{Localization.Dispute.NoDisputesDescription}

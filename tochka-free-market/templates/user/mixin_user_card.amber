@@ -1,0 +1,33 @@
+mixin userCard($viewUser, $localization)
+  div.ui.card
+    div.content.card-header
+      a.header[href="/user/"+$viewUser.Username] @#{$viewUser.Username}
+    div.image
+      img[src="/user-avatar/" + $viewUser.Username]
+    div.content
+      if $viewUser.IsStore
+        a.ui.label.small.green[href="/store/"+$viewUser.ViewStore.Storename] 
+          | Store 
+          | @#{$viewUser.ViewStore.Storename}
+      if $viewUser.IsAdmin
+        span.ui.label.small Admin
+      else if $viewUser.IsStaff
+        span.ui.label.small Staff
+      if $viewUser.IsStaff || $viewUser.IsAdmin
+        span.ui.label.teal.dark-green.small
+          i.icon.level.up
+          | #{$viewUser.StaffLevel} lvl
+    if $viewUser.Description != ""
+      div.content
+        div.description #{$viewUser.Description}
+    div.extra.content
+      div.date 
+        i.icon.wait
+        span #{$localization.UserCard.Registred} #{$viewUser.RegistrationDateStr}
+      div.date 
+        i.icon.wait
+        span #{$localization.UserCard.LastSeen} #{$viewUser.LastLoginDateStr}
+    div.extra.content
+      a.ui.button.dark-green[href="/messages/"+$viewUser.Username]
+        i.icon.comment
+        | #{$localization.LeftMenu.PM}

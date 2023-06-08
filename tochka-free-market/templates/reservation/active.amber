@@ -1,0 +1,11 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("")
+
+block content
+  div.ui.icon.red.message
+    i.icon.cart
+    div.content
+      div.header You have pending reservation
+      p You can't buy more than three items simultaneously. Please wait until your pending reservations either confirmed or cancelled.

@@ -1,0 +1,123 @@
+if ViewThread.Type == "support"
+  h3.ui.dividing.header #{Localization.Messageboard.Support}
+else if ViewThread.Type == "transaction"
+  h3.ui.dividing.header #{Localization.Messageboard.Chat}
+else if ViewThread.Type == "private"
+  h3.ui.dividing.header PM @#{ViewThread.TitleUser.Username}
+else if ViewThread.Type != "dispute"
+  h3.ui.dividing.header #{ViewThread.Title}
+
+if len(ViewThread.Messages) == 0
+  div.ui.icon.yellow.message
+    i.icon.chat
+    div.content
+      div.header #{Localization.Messageboard.NoMessages}
+      p #{Localization.Messageboard.NoMessagesDescription}
+
+div.ui.comments
+  $ViewUser = ViewUser
+  $ViewThread = ViewThread
+  each $message in ViewThread.Messages
+    if $message.Text != ""
+      div.comment
+        if $message.ViewSenderUser.Uuid != ""
+          a.avatar
+            img[src="/user-avatar/" + $message.ViewSenderUser.Username]
+        else
+          span.avatar
+        div.content
+          if $ViewUser.Uuid == $message.ViewReceiverUser.Uuid && !$message.IsReported
+            form.right.floated
+              [method="POST"]
+              [action="/board/"+$message.Uuid+"/report"]
+              input[type="hidden"][name="message_id"][value=$message.Uuid]
+              button.ui.mini.yellow.label[type="submit"]
+                i.icon.exclamation
+                | Report Message
+          if $ViewUser.Uuid == $message.ViewReceiverUser.Uuid && $message.IsReported
+            form.right.floated
+              button.ui.mini.red.label
+                i.icon.exclamation
+                | Message reported
+          if $ViewUser.IsAdmin || $ViewUser.IsStaff
+            form.right.floated
+              [method="POST"]
+              [action="/board/"+$message.Uuid+"/delete"]
+              input[type="hidden"][name="message_id"][value=$message.Uuid]
+              button.ui.mini.red.label[type="submit"]
+                i.erase.icon
+                | Erase
+              a.ui.mini.teal.label[href="/board/thread/" + $message.Uuid + "/edit"]
+                i.edit.icon
+                | Edit
+          if $message.ViewSenderUser.Uuid != ""
+            a.author[href="/user/"+$message.ViewSenderUser.Username] 
+              span @#{$message.ViewSenderUser.Username}
+              if $message.ViewSenderUser.IsAdmin
+                div.ui.tiny.label.red Admin
+              else if $message.ViewSenderUser.IsStaff
+                div.ui.tiny.label.violet Staff
+              else if $message.ViewSenderUser.IsStore
+                span.ui.tiny.label.teal   
+                  | #{$message.ViewSenderUser.ViewStore.Storename}
+                if $message.ViewSenderUser.ViewStore.IsGoldAccount
+                  div.ui.tiny.label.teal Gold Account
+                if $message.ViewSenderUser.IsSilverAccount
+                  div.ui.tiny.label.teal Silver Account
+                if $message.ViewSenderUser.IsBronzeAccount
+                  div.ui.tiny.label.teal Bronze Account
+                if $message.ViewSenderUser.IsFreeAccount
+                  div.ui.tiny.label.teal Free Account
+              else
+                span.ui.tiny.label Buyer
+          div.metadata
+            span.date #{$message.CreatedAtStr}
+          pre #{$message.Text}
+          if $message.ViewSenderUser.Uuid != $ViewUser.Uuid
+            if $message.IsSuspicious
+              div.ui.red.message
+                div.header Warning
+                p This message is considered suspicious. Is someone asks you to transact coins directly to their address or contact them offsite please be extra cautious or report this user.
+          if $message.HasImage
+            img.ui.large.image[src="/board/message/" + $message.Uuid + "/image"]
+            a[href="/board/message/" + $message.Uuid + "/image"][target="_blank"] view full-size image
+  $selectedPage = Page
+  if len(Pages) > 1
+    div.ui.section.divider
+    div.ui.pagination.menu.mini
+      each $page in Pages
+        div.item 
+          .active ? $page == $selectedPage
+          a[href="?page="+$page] #{$page}
+  if ViewThread.Type != "news" || (ViewThread.Type == "news" && (ViewUser.IsAdmin || ViewUser.IsStaff))
+    div.ui.section.divider
+    form.ui.reply.form
+      [method="POST"]
+      [enctype="multipart/form-data"]
+      [class="error"] ? Error
+      if Error
+        div.ui.error.message
+          div.header #{Localization.Messageboard.Error}
+          p #{Error}
+        div.ui.section.divider
+      input[type="hidden"][name="thread_uuid"][value=ViewThread.Uuid]
+      div.field
+        label #{Localization.Messageboard.Message}
+        textarea[name="text"]
+      div.field
+        label #{Localization.Messageboard.Image}
+        div.ui.input
+          input[type="file"][name="image"][size="40"]
+      if !(ViewUser.IsStaff || ViewUser.IsAdmin)
+        div.ui.section.divider
+        div.required.field
+          label #{Localization.Messageboard.Captcha}
+          div.ui.input
+            input[type="hidden"][name="captcha_id"][value=CaptchaId]
+            input[type="text"][name="captcha"][placeholder=Localization.Messageboard.Captcha][required]
+          div
+            img.ui.medium.image.captcha[width=300][height=100][src="/captcha/"+CaptchaId]
+      div.ui.section.divider
+      button.ui.dark-green.labeled.submit.icon.button[type="sumbit"]
+        i.icon.edit
+        | #{Localization.Messageboard.Reply}

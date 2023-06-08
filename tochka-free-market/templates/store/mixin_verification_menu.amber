@@ -1,0 +1,20 @@
+mixin verificationMenu($store, $localization, $section)
+  div.ui.ordered.mini.fluid.steps.fluid
+    div.ui.step
+      [class="active"] ? $section == "encryption"
+      [class="completed"] ? $store.PGP != ""
+      div.content
+        a.title[href="/verification/encryption"] #{$localization.Verification.Encryption}
+        div.description #{$localization.Verification.EncryptionDescription}
+    div.ui.step
+      [class="active"] ? $section == "agreement"
+      [class="completed"] ? $store.HasSignedVendorshipAgreement
+      div.content
+        a.title[href="/verification/agreement"] #{$localization.Verification.VendorshipAgreement}
+        div.description #{$localization.Verification.VendorshipAgreementDescription}
+    div.ui.step
+      [class="active"] ? $section == "plans"
+      [class="completed"] ? $store.ActivatedAccount 
+      div.content
+        a.title[href="/verification/plan"] #{$localization.Verification.MembershipPlans}
+        div.description #{$localization.Verification.MembershipPlansDescription}

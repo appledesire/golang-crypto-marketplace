@@ -1,0 +1,30 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("sellers")
+
+block content
+  $l = Localization
+  $viewStore = ViewStore
+  $viewUser = ViewUser
+  $item = ViewItem
+  form.ui.form.segment[method="POST"][enctype="multipart/form-data"]
+    [class="error"] ? Error
+    h3.ui.dividing.header #{Localization.Items.EditPackages}
+    div.ui.error.message
+      div.header #{Localization.Items.Error} 
+      p #{Error}
+    div.field
+      label #{Localization.Items.Description}
+      div.ui.input
+        textarea[type="text"][name="description"][placeholder="Description"] #{ViewPackage.Description}
+    div.ui.section.divider
+    input[type="hidden"][name="type"][value=ViewPackage.Type]
+    input[type="hidden"][name="item_uuid"][value=ViewItem.Uuid]
+    input[type="hidden"][name="name"][value=ViewPackage.Name]
+    input[type="hidden"][name="step"][value="2"]
+    input[type="hidden"][name="currency"][value=PackageCurrency]
+    input[type="hidden"][name="price"][value=PackagePrice]
+    input[type="hidden"][name="quantity"][value=Quantity]
+    input[type="hidden"][name="step"][value="2"]
+    button.ui.blue.submit.button[type="submit"] #{Localization.Items.Save}

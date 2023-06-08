@@ -1,0 +1,27 @@
+extends ./../../layout
+
+block menu
+  +topMenu("reviews")
+
+block content
+  $selectedPage = Page
+  div.ui.page.grid.centered
+    div.four.wide.column.t-left-menu-items.t-left-menu
+      h5.ui.dividing.header Stats
+      table.ui.table
+        thead
+          th Number of reviews
+        tbody
+          tr
+            td #{len(Reviews)}
+    div.twelve.wide.column
+      h5.ui.dividing.header Reviews
+      table.ui.table
+        thead
+          th Score
+          th Review
+        tbody
+          each $review in Reviews
+            tr
+              td #{$review.PackageScore}
+              td #{$review.PackageReview}

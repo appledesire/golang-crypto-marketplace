@@ -1,0 +1,9 @@
+{
+  "name": "payaka",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "bitcoinjs-lib": "^2.3.0",
+    "optimist": "^0.6.1"
+  }
+}

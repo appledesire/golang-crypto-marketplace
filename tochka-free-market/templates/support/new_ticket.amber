@@ -1,0 +1,57 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+  div.ui.grid.divided
+    div.three.wide.column.t-left-menu-items
+      import ./partial_list_ticket.amber
+    div.thirteen.wide.column
+      div.segment.ui
+        h3.ui.dividing.header #{Localization.Messageboard.Support}
+        form.ui.reply.form
+          [method="POST"]
+          [enctype="multipart/form-data"]
+          div.ui.error.message
+            div.header Error
+            p #{Error}
+            div.ui.section.divider
+          div.required.fielddiv.required.field
+            label #{Localization.Messageboard.Title}
+            input[type="text"][name="title"][placeholder=Localization.Messageboard.Title][required]
+          div.required.field
+            label #{Localization.Items.Category}
+            div.ui.input
+              select[name="category"]
+                option[value="Market problems"] 
+                  [selected] 
+                  | Market problems
+                option[value="Status Problems"] 
+                  [selected] 
+                  | Status problems
+                option[value="Transaction problems"] 
+                  [selected] 
+                  | Transaction problems
+                option[value="Scam"] 
+                  [selected] 
+                  | Scam
+                option[value="Other Problems"] 
+                  [selected] 
+                  | Other problems
+          div.required.field
+            label #{Localization.Messageboard.Message}
+            textarea[name="text"]
+          div.ui.section.divider
+          div.required.field
+            label #{Localization.Messageboard.Captcha}
+            div.ui.input
+              input[type="hidden"][name="captcha_id"][value=CaptchaId]
+              input[type="text"][name="captcha"][placeholder=Localization.Messageboard.Captcha][required]
+            div
+              img.ui.medium.image.captcha[width=300][height=100][src="/captcha/"+CaptchaId]
+          div.ui.section.divider          
+          button.ui.dark-green.labeled.submit.icon.button[type="submit"]
+            i.icon.edit
+            | #{Localization.Messageboard.CreateNewThread}
+

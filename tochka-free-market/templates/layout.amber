@@ -1,0 +1,157 @@
+mixin leftMenu($section)
+  div.ui.menu.tiny.horizontal.ten.item.top-menu.inverted
+    a.item.header-logo[href="/"]
+      +logo()
+    a.item[href="/app/download"] 
+      i.icon.mobile
+      | Mobile App
+    a.item[href="/marketplace"]
+      [class="active"] ? $section == "items"
+      i.ui.icon.shop
+      | #{Localization.Layout.Marketplace}
+    a.item[href="/vendors"]
+      [class="active"] ? $section == "sellers"
+      i.ui.icon.users
+      | #{Localization.Layout.Vendors}
+    if ViewUser.Uuid != ""
+      if NumberOfDisputes > 0
+        a.item[href="/dispute"]
+          [class="active"] ? $section == "disputes"
+          | #{Localization.LeftMenu.Disputes}
+          span.ui.label.circular.tiny #{NumberOfDisputes}
+    else
+      a.item[href="/auth/register"]
+        [class="active"] ? SelectedSection == "register"
+        i.ui.icon.edit
+        | #{Localization.Layout.Register}
+      a.item[href="/auth/login"]
+        [class="active"] ? SelectedSection == "login"
+        i.ui.icon.sign.in
+        | #{Localization.Layout.Login}
+    a.item[href="/help"]
+      [class="active"] ? $section == "help"
+      i.ui.icon.info
+      | #{Localization.Layout.Help}
+    a.item[href="/messages?section=inbox"]
+      | #{Localization.LeftMenu.PMs}
+      if NumberOfUnreadPrivateMessages > 0
+        span.ui.label.tiny.circular.green #{NumberOfUnreadPrivateMessages}
+      else
+        span.ui.label.tiny.circular #{NumberOfPrivateMessages}
+    a.item[href="/payments"]
+      | #{Localization.LeftMenu.Orders}
+      span.ui.label.tiny.circular #{NumberOfTransactions}
+    a.item[href="/support"]
+      | #{Localization.LeftMenu.Support}
+      if NumberOfUnreadSupportMessages > 0
+        span.ui.label.tiny.circular.green #{NumberOfUnreadSupportMessages}
+      else
+        span.ui.label.tiny.circular #{NumberOfSupportMessages}
+    span.item
+      form.ui.input.icon.fluid[method="GET"][action="/marketplace"]
+        input[type="hidden"][name="category"][value=0]
+        input[type="hidden"][name="subcategory"][value=0]
+        input[type="text"][name="query"][placeholder=Localization.Items.LookingFor][value=Query]
+        i.icon.search
+    span.item @#{ViewUser.Username} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+mixin logo()
+  span T
+  span.dark-green.point •
+  span c
+  span h
+  span k
+  span a
+      
+doctype 5
+html
+  head
+    link[rel="stylesheet"][type="text/css"][href="/css/semantic.css"]
+    link[rel="stylesheet"][type="text/css"][href="/css/tochka.css"]
+    link[rel="shortcut icon"][href="/img/favicon.ico"]
+    title #{SiteName}
+    meta[name="viewport"][content="width=device-width, initial-scale=1"]
+    block meta
+  body
+    block landingpage_content
+      if ViewUser.IsAdmin
+        div.ui.inverted.red.menu.admin
+          a.item[href="/auth/admin/users"]
+            i.icon.users
+          a.item[href="/payments/admin/list"]
+            i.icon.payment
+          a.item[href="/referrals/admin"]
+            i.icon.bitcoin
+          a.item[href="/dispute/admin/list"]
+            i.icon.exclamation
+          a.item[href="/messages/admin"]
+            i.icon.chat
+      div.ui.container.grid
+        div.sixteen.wide.column.header-logo
+          block left_menu
+          div.account.user-menu-container
+            img.ui.image.circular[src="/user-avatar/" + ViewUser.Username + "?size=small"]
+            div.ui.segment.user-menu
+              div.ui.menu.tiny.vertical.secondary.fluid
+                span.item
+                  strong User
+                a.item[href="/user/"+ViewUser.Username]
+                  i.icon.user
+                  | #{Localization.Auth.MyAccount}
+                a.item[href="/settings/user"]
+                  i.ui.icon.settings
+                  | #{Localization.Layout.Settings}
+                a.item[href="/referrals"]
+                  i.icon.level.up
+                  | #{Localization.LeftMenu.Referrals}
+              if EnableStoreStaffUI
+                div.ui.section.divider
+                div.ui.menu.tiny.vertical.secondary.fluid
+                  span.item
+                    strong Store
+                  a.item[href="/store/"+ViewUserStore.Storename]
+                    i.icon.user
+                    | My Store
+                  a.item[href="/settings/store"]
+                    i.ui.icon.settings
+                    | Settings
+                  a.item[href="/store-admin/"+ViewUserStore.Storename+"/advertisings"]
+                    i.icon.adn
+                    | Advertisings
+                  a.item[href="/store-admin/"+ViewUserStore.Storename+"/deposits"]
+                    i.icon.dollar.sign
+                    | Deposits
+                  a.ui.button.teal.fluid[href="/store-admin/"+ViewUserStore.Storename+"/item/new/edit"]
+                    i.icon.plus
+                    | #{Localization.Items.AddItem}
+              div.ui.section.divider
+              div.ui.menu.tiny.vertical.secondary.fluid
+                span.item
+                  strong #{Localization.Layout.Wallet}
+                a.item[href="/wallet/bitcoin/receive"]
+                  | Bitcoin
+                  span.ui.label.tiny.dark-green #{UserBitcoinBalance.Balance} 
+                a.item[href="/wallet/ethereum/receive"]
+                  | Ethereum
+                  span.ui.label.tiny.dark-green #{UserEthereumBalance.Balance} 
+              div.ui.section.divider
+              form.ui.form[action="/auth/logout"][method="post"]
+                input[type="hidden"][name="csrf_token"][value=CSRFToken]
+                button.ui.button.red.fluid.tiny[type="submit"]
+                  i.icon.sign.out.fluid
+                  | #{Localization.LeftMenu.SignOut}   
+        block front_page_content
+          div.sixteen.wide.column
+            div.tochka-container.ui.grid.divided
+              div.sixteen.wide.column
+                if EnableStoreStaffUI
+                  if ViewUserStore.Stats.NumberOfRedWarnings > 0
+                    div.ui.divided.grid
+                      div.sixteen.wide.column.border-bottom
+                        div.ui.red.icon.message
+                          i.icon.exclamation
+                          div.content
+                            a.header[href="/store/" + ViewUserStore.Storename + "/warnings"] You have a RED warning
+                            div Until warning has been expired or removed your items are delisted from Marketplace and you are unable to withdraw funds
+                block content
+        block footer
+          import ./footer

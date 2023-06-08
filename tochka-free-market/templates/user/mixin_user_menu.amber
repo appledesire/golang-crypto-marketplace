@@ -1,0 +1,6 @@
+mixin userMenu($user, $localization, $menu_section)
+  import ./mixin_user_card
+  +userCard($user, $localization)
+  if ViewUser.IsStaff || ViewUser.IsAdmin
+    import ./../staff/mixin_user_menu
+    +userMenu($user, "", $localization)

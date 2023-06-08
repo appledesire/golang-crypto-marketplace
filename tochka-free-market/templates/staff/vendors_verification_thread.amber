@@ -1,0 +1,17 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  $viewUser = ViewUser
+  $localization = Localization
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      +staffMenu($localization, "vendors")
+    div.thirteen.wide.column 
+      form.ui.form.fluid[action="/staff/stores/"+ViewStore.Storename+"/allow_to_sell"][method="POST"]
+        button.ui.dark-green.button[type="submit"] Verify Vendor
+      div.segment.ui
+        import ./../board/partial_thread.amber

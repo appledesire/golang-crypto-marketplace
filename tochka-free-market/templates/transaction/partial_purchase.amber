@@ -1,0 +1,27 @@
+h3.ui.dividing.header #{Localization.Orders.PurchaseDetails}
+div.ui.form
+  div.field
+    label #{Localization.Orders.Item}
+    div.ui.left.input.icon
+      input[type="text"][readonly][value=ViewTransaction.Description]
+      i.icon.leaf
+  div.ui.section.divider
+  div.field
+    label #{Localization.Orders.Package}
+    div.ui.left.input.icon
+      input[type="text"][readonly][value=ViewPackage.Name]
+      i.icon.gift
+  if ViewTransaction.IsCompleted
+    if ViewPackage.Type == "drop" || ViewPackage.Type == "digital" || ViewPackage.Type == "drop preorder"
+      div.ui.section.divider
+      div.field
+        label #{Localization.Orders.Description}
+        div.ui.left.input.icon
+          textarea[readonly] #{ViewPackage.Description}
+    if ViewPackage.Type == "drop" || ViewPackage.Type == "drop preorder"
+      div.ui.section.divider
+      div.field
+        label #{Localization.Orders.DropCoordinates}
+        div.ui.left.input.icon
+          input[type="text"][readonly][value=ViewPackage.Coordinates]
+          i.icon.globe

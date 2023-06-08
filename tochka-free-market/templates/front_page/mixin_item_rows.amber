@@ -1,0 +1,83 @@
+mixin categories($viewItem)
+  div.offer-category
+    if $viewItem.ParentParentItemCategoryNameEn != ""
+      |
+      a.offer-main-category[href="/marketplace?category="+$viewItem.ParentParentItemCategoryId] #{$viewItem.ParentParentItemCategoryNameEn}
+      if $viewItem.ItemCategoryNameEn != ""
+        a.offer-sub-category[href="/marketplace?category="+$viewItem.ParentItemCategoryId]
+          > #{$viewItem.ItemCategoryNameEn}
+      else
+        a.offer-sub-category[href="/marketplace?category="+$viewItem.ParentItemCategoryId]
+          > #{$viewItem.ParentItemCategoryNameEn}
+    else if $viewItem.ParentItemCategoryNameEn != ""
+      |
+      a.offer-main-category[href="/marketplace?category="+$viewItem.ParentItemCategoryId] #{$viewItem.ParentItemCategoryNameEn}
+        a.offer-sub-category[href="/marketplace?category="+$viewItem.ItemCategoryId]
+          > #{$viewItem.ItemCategoryNameEn}
+
+
+mixin button($viewItem, $buttonType)
+  if $buttonType == "regular"
+    button.ui.primary.button
+      if $viewItem.PriceStr == ""
+        each $i, $price in $viewItem.PriceRangeStr
+          | 
+          if $i == 0
+            | BUY from #{$price}$
+      else
+        | BUY from #{$viewItem.PriceStr}$
+  else if $buttonType == "center"
+    if $viewItem.PriceStr == ""
+      each $i, $price in $viewItem.PriceRangeStr
+        | 
+        if $i == 0
+          | BUY from #{$price} #{$viewUser.Currency}
+    else
+      | BUY from #{$viewItem.PriceStr} #{$viewUser.Currency}
+
+  else
+    if $viewItem.PriceStr == "" || $viewItem.PriceStr == "0"
+        each $i, $price in $viewItem.PriceRangeStr
+          | 
+          if $i == 0
+            | BUY from #{$price}$
+    else
+      | BUY from #{$viewItem.PriceStr}$
+
+         
+mixin content($viewItem, $viewUser, $localization, $buttonType)
+    a[href="/store/"+$viewItem.Storename+"/item/"+$viewItem.ItemUuid]
+      div.content-container
+        div.content-header
+          p #{$viewItem.ItemName}
+      div.image
+        img.ui.centered[src="/item-image/" + $viewItem.ItemUuid + "?size=230x230"]
+      if $buttonType == "regular"
+        div.no-button.bottom
+          +categories($viewItem)
+          a[href="/store/" + $viewItem.Storename + "/item/" + $viewItem.ItemUuid]
+            +button($viewItem, $buttonType)
+
+      else if $buttonType == "center"
+        div.center.bottom
+          +categories($viewItem)
+          a.no-button[href="/store/" + $viewItem.Storename + "/item/" + $viewItem.ItemUuid]
+            +button($viewItem, $buttonType)
+      else
+        div.no-button.bottom
+          +categories($viewItem)
+          a.no-button[href="/store/" + $viewItem.Storename + "/item/" + $viewItem.ItemUuid]
+            +button($viewItem, $buttonType)
+
+
+
+mixin itemRowDefault($viewItem, $viewUser, $localization, $columnWidth, $buttonType)
+  if $columnWidth == "three-and-a-half"
+    div.three-and-a-half.wide.column.offer
+      +content($viewItem, $viewUser, $localization, $buttonType)
+  else if $columnWidth == "two-and-a-half"
+    div.two-and-a-half.wide.column.offer
+      +content($viewItem, $viewUser, $localization, $buttonType)
+  else
+    div.four-and-a-half.wide.column.offer
+      +content($viewItem, $viewUser, $localization, $buttonType)

@@ -1,0 +1,107 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("sellers")
+
+block content
+  $l = Localization
+  $viewUser = ViewUser
+  $user = ViewUser
+  $store = ViewStore
+  $v = ViewStore
+  div.ui.grid.divided.top-aligned
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_store_card
+        div.user.info
+          +storeCard($v, $l)
+    div.thirteen.wide.column
+      import ./mixin_store_menu
+      +storeMenu($v, $l, "warnings")
+      if len(ViewStoreWarnings) > 0
+        div.ui.grid
+          each $warning in ViewStoreWarnings
+            div.eight.wide.column
+              div.ui.card.w100p
+                div.content.card-header
+                  a.header[href="/user/"+$warning.Reporter.Username] @#{$warning.Reporter.Username}
+                  div.meta #{$warning.CreatedAtStr}
+                div.content.warning
+                  div.description
+                    pre #{$warning.Text}
+                div.extra.content
+                  if $warning.ExpiresIn != ""
+                    span.ui.large.right.floated.label 
+                      i.icon.clock
+                      | Expires
+                      | #{$warning.ExpiresIn}
+                  span.ui.large.label 
+                    [class="green"] ? $warning.Severety == "GREEN"
+                    [class="red"] ? $warning.Severety == "RED"
+                    [class="yellow"] ? $warning.Severety == "YELLOW"
+                    | #{$warning.Severety}
+                if $user.IsAdmin || $user.IsStaff
+                  div.extra.content
+                    form.ui.form.message
+                      [method="POST"]
+                      [action="/store/"+$store.Storename+"/warnings/"+$warning.Uuid]
+                      div.grouped.fields
+                        label[for="severety"] Status
+                        div.field
+                          div.ui.radio.checkbox
+                            input[type="radio"][name="severety"][value="GREEN"]
+                            label[for="green"] Green
+                        div.field
+                          div.ui.radio.checkbox
+                            input[type="radio"][name="severety"][value="YELLOW"]
+                            label[for="yellow"] Yellow
+                        div.field
+                          div.ui.radio.checkbox
+                            input[type="radio"][name="severety"][value="RED"]
+                            label[for="red"] Red
+                        div.field
+                          div.ui.radio.checkbox
+                            input[type="radio"][name="severety"][value="DISCARD"]
+                            label[for="discard"] Discard
+                      div.field
+                        button.ui.button[type="submit"] Update Status
+                if $user.Uuid==$warning.ReporterUuid
+                  div.extra.content
+                    form.ui.form.message
+                      [method="POST"]
+                      [action="/store/"+$store.Storename+"/warnings/"+$warning.Uuid]
+                      input[type="hidden"][name="severety"][value="DISCARD"]
+                      div.field
+                        button.ui.button[type="submit"] Delete Warning
+      else
+        div.ui.icon.message
+          i.icon.cart
+          div.content
+            div.header No Warnings                
+      if CanPostWarnings
+        form.ui.segment.form
+          [method="POST"]
+          [class="error"] ? Error
+          h3.ui.dividing.header Report User
+          if Error
+            div.ui.error.message
+              div.header #{Localization.Messageboard.Error}
+              p #{Error}
+            div.ui.section.divider
+          div.field
+            label #{Localization.Messageboard.Message}
+            textarea[name="text"]
+          div.ui.section.divider
+          div.required.field
+            label #{Localization.Messageboard.Captcha}
+            div.ui.input
+              input[type="hidden"][name="captcha_id"][value=CaptchaId]
+              input[type="text"][name="captcha"][placeholder=Localization.Messageboard.Captcha][required]
+            div
+              img.ui.medium.image.captcha[width=300][height=100][src="/captcha/"+CaptchaId]
+          div.ui.section.divider
+          button.ui.dark-green.labeled.submit.icon.button[type="sumbit"]
+            i.icon.edit
+            | #{Localization.Messageboard.Reply}
+      else
+        div.ui.message
+          p You can't report store you had no transactions with

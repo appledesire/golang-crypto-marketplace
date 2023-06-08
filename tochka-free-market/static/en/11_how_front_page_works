@@ -1,0 +1,29 @@
+## How the system decides which items to show on /front page
+We have implemented the /front page to reward all you good vendors, by increasing the chance that buyers stumble upon you and your products.
+
+**Here's how the system works for different folds and more general rules.**
+## General
+All items shown on /front page are switched rotated 15 minutes. Keep reading to understand how you can qualify to be listed on one of the folds.
+
+## Fold: Top deals
+For an item to be featured here, your item need to be within the 100 most popular item listings on the whole site. 
+
+More examplified: If you have a product that are within 100 most popular items, there's a 100/3 chance your item is shown, at each 15 minutes interval.
+
+## Fold: Top Sellers in Drugs and Top Sellers - Other categories
+To be featured on this fold, the individual item need to have recived on average at least a 4.5 score.
+
+## Fold: Top vendors
+The top 200 popular vendors get listed here, it's based on the vendors with store rating in the top 200. It's randomly selected from these 200 vendors each 15 minutes.
+
+## Fold: New arrivals
+As the title says, the most recently created item listings are featured here.
+
+## Fold: New vendors
+As the title says, it's rotated on the ten newest vendors. 
+
+### Your item's will be removed from /front page, if your account has
+* >1 red warning
+* >1 yellow warning
+* >1 green warning
+

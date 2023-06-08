@@ -1,0 +1,39 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("sellers")
+
+block content
+  div.ui.divided.grid
+    div.twelve.wide.column
+      div.ui.fluid.menu.secondary
+        a.item[href="?section=info"] 
+          [class="active"] ? SelectedSection=="info"
+          | #{Localization.AboutUser.About}
+        a.item[href="?section=contacts"] 
+          [class="active"] ? SelectedSection=="contacts"
+          | #{Localization.AboutUser.ContactInformation}
+      if SelectedSection=="info"
+        div.segment.ui
+          h3.ui.dividing.header #{Localization.AboutUser.About}
+          if SelectedSection=="info"
+            if ViewMarketplaceUser.LongDescriptionHTML != ""
+              div.ui.container #{ViewMarketplaceUser.LongDescriptionHTML}
+            else
+              div.ui.icon.message
+                i.icon.info
+                div.content
+                  div.header #{Localization.AboutUser.AboutEmpty}
+                  p #{Localization.AboutUser.AboutEmptyDescription}
+      if SelectedSection=="contacts"
+        div.ui.form.segment.contacts
+          h3.ui.dividing.header #{Localization.AboutUser.ContactInformation}
+          if ViewMarketplaceUser.Pgp != ""
+            div.field
+              label PGP
+              pre #{ViewMarketplaceUser.Pgp}
+    div.four.wide.column.t-left-menu-items
+      $l = Localization
+      $v = ViewMarketplaceUser
+      import ./mixin_user_menu
+      +userMenu($v, $l, "about")

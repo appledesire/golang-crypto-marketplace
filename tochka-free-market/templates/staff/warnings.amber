@@ -1,0 +1,57 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  $viewUser = ViewUser
+  $localization = Localization
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      +staffMenu($localization, "warnings")
+    div.thirteen.wide.column
+      div.ui.cards
+        $user = ViewUser
+        each $warning in ViewStoreWarnings
+          div.card
+            div.content
+              img.right.floated.mini.ui.image.circular[src="/user-avatar/"+$warning.ViewStore.Storename+"?size=small"]
+              a.header[href="/store/"+$warning.ViewStore.Storename] @#{$warning.ViewStore.Storename}
+            div.content
+              img.right.floated.mini.ui.image.circular[src="/user-avatar/"+$warning.Reporter.Username+"?size=small"]
+              span Reported by
+              a.header[href="/user/"+$warning.Reporter.Username] @#{$warning.Reporter.Username}
+              div.meta #{$warning.CreatedAtStr}
+              div.description
+                pre #{$warning.Text}
+            div.extra.content
+              span.ui.large.label 
+                [class="green"] ? $warning.Severety == "GREEN"
+                [class="red"] ? $warning.Severety == "RED"
+                [class="yellow"] ? $warning.Severety == "YELLOW"
+                | #{$warning.Severety}
+            div.extra.content
+              form.ui.form.message
+                [method="POST"]
+                [action="/store/"+$warning.ViewStore.Storename+"/warnings/"+$warning.Uuid]
+                div.grouped.fields
+                  label[for="severety"] Status
+                  div.field
+                    div.ui.radio.checkbox
+                      input[type="radio"][name="severety"][value="GREEN"]
+                      label[for="green"] Green
+                  div.field
+                    div.ui.radio.checkbox
+                      input[type="radio"][name="severety"][value="YELLOW"]
+                      label[for="yellow"] Yellow
+                  div.field
+                    div.ui.radio.checkbox
+                      input[type="radio"][name="severety"][value="RED"]
+                      label[for="red"] Red
+                  div.field
+                    div.ui.radio.checkbox
+                      input[type="radio"][name="severety"][value="DISCARD"]
+                      label[for="discard"] Discard
+                div.field
+                  button.ui.button[type="submit"] Update Status

@@ -1,0 +1,105 @@
+extends ./layout
+
+block left_menu
+  +leftMenu("feed")
+
+block content
+  $viewUser = ViewUser
+  $localization = Localization
+  $viewUserStore = ViewUserStore
+  div.ui.grid.divided
+    div.twelve.wide.column
+      div.ui.feed
+        each $item in ViewFeedItems
+          div.event
+            div.label
+              img[src="/user-avatar/" + $item.ViewUser.Username + "?size=small"]
+            div.content
+              div.summary
+                a[href="/user/"+$item.ViewUser.Username] 
+                  if $item.ViewUser.IsOnline
+                    i.icon.dark-green.circle
+                  | @#{$item.ViewUser.Username}
+                strong.action #{$item.Action}
+                div.date #{$item.CreatedAt}
+              div 
+                if $item.Type == "new_item"
+                  div.segment.review
+                    each $itm in $item.ViewItems
+                      import ./item/mixin_item_row
+                      $i = $itm
+                      $u = $viewUser
+                      $vs = $viewUserStore
+                      +itemRow($i, $u, $vs, $localization)
+                else if $item.Type == "new_review"
+                  div.review
+                    $review = $item.ViewRatingReview
+                    if $review.ViewItem.Name != ""
+                      import ./item/mixin_item_row
+                      $i = $review.ViewItem
+                      $u = $viewUser
+                      $vs = $viewUserStore
+                      +itemRow($i, $u, $vs, $localization)
+                      div.ui.segment
+                        span.ui.label.right.floated.dark-green 
+                          i.icon.thumbs.up
+                          | #{$review.ItemScore}
+                        pre.text #{$review.ItemReview}
+                else if $item.Type == "new_thread"
+                  div.ui.segment
+                    h3.ui.dividing.header #{$item.ViewThread.Title}
+                    div.ui.comments
+                      $ViewUser = ViewUser
+                      $ViewThread = $item.ViewThread
+                      each $message in $item.ViewThread.Messages
+                        if $message.Text != ""
+                          div.comment
+                            a.avatar
+                              img[src="/user-avatar/" + $message.SenderUser.Username]
+                            div.content
+                              a.author[href="/user/"+$message.SenderUser.Username] @#{$message.SenderUser.Username}
+                              div.metadata
+                                span.date #{$message.CreatedAtStr}
+                              pre #{$message.Text}
+                              if $message.HasImage
+                                img.ui.large.image[src="/board/message/" + $message.Uuid + "/image"]
+                      div.ui.section.divider
+                      a.ui.button.tiny[href="/board/thread/"+$item.ViewThread.Uuid] #{$localization.Feed.FullDiscussion}
+                else if $item.Type == "new_thread_reply"
+                  div.ui.segment
+                    h3.ui.dividing.header #{$item.ViewThread.Title}
+                    div.ui.comments
+                      $ViewUser = ViewUser
+                      $ViewThread = $item.ViewThread
+                      $message = $item.ViewMessage
+                      if $message.Text != ""
+                        div.comment
+                          a.avatar
+                            img[src="/user-avatar/" + $message.SenderUser.Username]
+                          div.content
+                            a.author[href="/user/"+$message.SenderUser.Username] @#{$message.SenderUser.Username}
+                            div.metadata
+                              span.date #{$message.CreatedAtStr}
+                            pre #{$message.Text}
+                            if $message.HasImage
+                              img.ui.large.image[src="/board/message/" + $message.Uuid + "/image"]
+                      div.ui.section.divider
+                      a.ui.button.tiny[href="/board/thread/"+$item.ViewThread.Uuid] #{$localization.Feed.FullDiscussion}
+    div.four.wide.column.t-left-menu-items
+      div.ui.vertical.menu.tiny.basic.fluid.secondary
+        a.item.basic[href="?section="] 
+          i.icon.filter
+          | #{$localization.Feed.All}
+          [class="active"] ? SelectedSection == ""
+        a.item.basic[href="?section=items"] 
+          i.ui.icon.shop
+          | #{$localization.LeftMenu.Items}
+          [class="active"] ? SelectedSection == "items"
+        a.item.basic[href="?section=reviews"]
+          i.icon.star
+          | #{$localization.LeftMenu.Reviews}
+          [class="active"] ? SelectedSection == "reviews"
+        a.item.basic[href="?section=reviews"]
+          i.icon.users
+          | #{Localization.LeftMenu.Board}
+          [class="active"] ? SelectedSection == "board"

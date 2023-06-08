@@ -1,0 +1,47 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("transactions")
+
+block content
+  div.ui.horizontal.menu.tiny.secondary
+    a.ui.item ALL
+      [href="?status="] 
+      [class="active"] ? SelectedStatus == "" && SelectedShippingStatus == ""
+    a.ui.item PENDING
+      [href="?status=PENDING"]     
+      [class="active"] ? SelectedStatus == "PENDING"
+    a.ui.item FAILED
+      [href="?status=FAILED"]   
+      [class="active"] ? SelectedStatus == "FAILED"    
+    a.ui.item COMPLETED
+      [href="?status=COMPLETED"] 
+      [class="active"] ? SelectedStatus == "COMPLETED"
+    a.ui.item RELEASED
+      [href="?status=RELEASED"]   
+      [class="active"] ? SelectedStatus == "RELEASED"
+    a.ui.item FROZEN
+      [href="?status=FROZEN"]       
+      [class="active"] ? SelectedStatus == "FROZEN"
+    a.ui.item CANCELLED
+      [href="?status=CANCELLED"] 
+      [class="active"] ? SelectedStatus == "CANCELLED"
+    a.ui.item DISPATCH PENDING
+      [href="?status=DISPATCH PENDING"] 
+      [class="active"] ? SelectedShippingStatus == "DISPATCH PENDING"
+  if len(ViewCurrentTransactionStatuses) > 0
+    import ./partial_list.amber
+    $selectedPage = Page
+    if len(Pages) > 1
+      div.ui.section.divider
+      div.ui.pagination.menu.mini
+        each $page in Pages
+          div.item 
+            .active ? $page == $selectedPage
+            a[href="?page="+$page] #{$page}
+  else
+    div.ui.icon.message
+      i.icon.payment
+      div.content
+        div.header #{Localization.Orders.NoOrders}
+        p #{Localization.Orders.NoOrdersDescription}

@@ -1,0 +1,18 @@
+h3.ui.dividing.header Administration
+if Error
+  div.ui.error.message
+  	p #{Error}
+form.inline[action="/payments/admin/"+ViewTransaction.Uuid+"/complete"][method="POST"]
+  button.ui.mini.button.completed[type="submit"] completed
+form.inline[action="/payments/admin/"+ViewTransaction.Uuid+"/fail"][method="POST"]
+  button.ui.mini.button.failed[type="submit"] failed
+form.inline[action="/payments/admin/"+ViewTransaction.Uuid+"/pending"][method="POST"]
+  button.ui.mini.button.pending[type="submit"] pending
+form.inline[action="/payments/admin/"+ViewTransaction.Uuid+"/cancel"][method="POST"]
+  button.ui.mini.button.cancel[type="submit"] cancelled
+form.inline[action="/payments/admin/"+ViewTransaction.Uuid+"/freeze"][method="POST"]
+  button.ui.mini.button.frozen[type="submit"] frozen
+form.inline[action="/payments/admin/"+ViewTransaction.Uuid+"/release"][method="POST"]
+  button.ui.mini.button.released[type="submit"] released
+form.inline[action="/payments/admin/"+ViewTransaction.Uuid+"/update"][method="POST"]
+  button.ui.button.mini.dark-green[type="submit"] update

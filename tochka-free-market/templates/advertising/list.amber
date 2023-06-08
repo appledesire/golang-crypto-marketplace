@@ -1,0 +1,69 @@
+extends ./../layout
+
+block menu
+  +topMenu("items")
+
+block left_menu
+  +leftMenu("items")
+
+block content
+  $store = ViewUserStore
+  div.ui.grid.divided
+    div.sixteen.wide.column
+      div.segment.ui
+        h3.ui.dividing.header Advertising
+        if len(Advertisings)>0
+          table.ui.table.striped
+            thead
+              th Items
+              th Comment
+              th All / Current count 
+              th Status
+            tbody                    
+              each $ad in Advertisings
+                tr
+                  td 
+                    a[href="/user/"+$store.Storename+"/item/"+$ad.Item.Uuid] #{$ad.Item.Name}
+                  td 
+                    #{$ad.Comment}
+                  td 
+                    #{$ad.CountImpressions} / #{$ad.CurrentCountImpressions}
+                  td
+                    if $ad.Status
+                      p Active
+                    else
+                      p Stop
+        else
+          div.ui.segment
+            p No previous advertisings
+        div.ui.segment
+          form.ui.reply.form
+            [method="POST"]
+            [enctype="multipart/form-data"]
+            [class="error"] ? Error
+            if Error
+              div.ui.error.message
+                div.header #{Localization.Messageboard.Error}
+                p #{Error}
+            div.required.field
+              label Item
+              div.ui.input.fluid
+                select[name="item"]
+                  each $item in ViewItems
+                    option[value=$item.Uuid] 
+                      [selected] 
+                      | #{$item.Name}
+            div.required.field
+              label Text
+              div.ui.input
+                input[type="text"][name="text"][size="50"][required]
+            div.field
+              div.grouped.inline.fields
+                div.field
+                  div.ui.radio.checkbox
+                    input[name="type"][id="type_1"][type="radio"][value="1000"][checked]
+                    label[for="type_1"] 1000 views  (#{AdvertisingCost}$ / #{AdvertisingCost/USDBTCRate} BTC)
+            div.ui.section.divider
+            button.ui.dark-green.labeled.submit.icon.button[type="submit"]
+              i.icon.bitcoin
+              | Purchase

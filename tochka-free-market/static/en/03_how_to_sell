@@ -1,0 +1,38 @@
+## Openning a vendor account
+
+Opening a vendor account on Tochka is free, but a free vendor account only grants limited privileges. To use the site at it's full potential, consider purchaing Premium or Premium+ accounts. 
+
+### Setting up your profile 
+
+1. Go to **settings/profile** page and fill in your store description, refund and shipping policies so that your customers will know you and your products
+* Go to **settings/contacts** page and fill in your contacts 
+* Go to **settings/payments** and set up your auto-withdrawal wallet address where the funds will land after each successful sale. Whether you choose not to fill out auto-withdrawal wallet funds will land on your on-site wallet. If you choose to use multisg make sure to fill in public key of your multisig signer wallet. 
+* Go to **settings/encryption** and set up a PGP public key. Buyers won't be able to send you encrypted messages if you don't set this up. It's a good idea to set up Two-Factor Authentication, or 2-FA for short. With this enabled, the market software will ask you to sign a short, random message every time you log in.
+
+### Listing items
+
+For every item you list, it's possible to define packages. A package is a certain configuration for an item, such as “12g of MDMA”. Packages are usually predetermined quantities of the given item.
+
+There are four kind of packages:
+
+* **Mail** Classic over-the-mail delivery
+* **Digital** Instant delivery for digital items
+* **Dead drop** Steath delivery method for local purchases
+* **Preoreder** Stealth delivery preordering
+* **Service** Jobs, Services, etc
+
+Use the appropriate package type for your item. Set your quantity and price.
+
+### How to accept orders
+
+YOu will see your orders on "Orders" page. Order can have one of following statuses:
+
+* **PENDING** buyer has initiated a purchase and marketplace is waiting for coins to land on escrow address.
+* **FAILED** buyer has initiated a purchase but haven't payed for it. PENDING orders are failed after 12 hours if not payed for.
+* **COMPLETED** buyer has payed for a purchase and coins are in escrow. Vendor is obligated to send a purchase at this point.
+* **RELEASED** coins are released from escrow. This is happens automatically after 7 days after purchase is made or if buyer releases coins via FE (only on PREMIUM and PREMIUM+ accounts).
+* **FROZEN** purchase is in dispute mode. You can freeze a purchase by contacting support and describing your situation.
+
+### Multisig orders
+
+Tochka does support 2-of-3 multisig orders for PREMIUM vendors at 0% commission. To accept multisig payments you have to have your multisig signer wallet public key filled in on your settings/payments page. When multisig order is finalized vendor gets market private key. If order is cancelled then buyer gets the key.

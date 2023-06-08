@@ -1,0 +1,14 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("disputes")
+
+block content
+  if len(ViewTransactions) > 0
+    import ./partial_list.amber
+  else
+    div.ui.icon.message
+      i.icon.payment
+      div.content
+        div.header #{Localization.Dispute.NoDisputes}
+        p #{Localization.Dispute.NoDisputesDescription}

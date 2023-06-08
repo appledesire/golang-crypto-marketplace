@@ -1,0 +1,24 @@
+extends ./../layout_basic
+
+block left_menu
+  +leftMenu("login")
+
+block content
+  form.ui.form.segment[method="POST"]
+    [class="error"] ? Error
+    h3.ui.dividing.header #{Localization.Auth.LoginWithPGP}
+    if Error
+      div.ui.error.message
+        div.header #{Localization.Auth.Error}
+        p #{Error}
+      div.ui.section.divider
+    div.field
+      label #{Localization.Auth.EncryptedMessage}
+      p #{Localization.Auth.EncryptedMessageDescription}
+      textarea[type="text"] #{SecretText}
+    div.ui.section.divider
+    div.required.field
+      label #{Localization.Auth.DecryptedMessage}
+      input[type="text"][name="decryptedmessage"]
+    div.ui.section.divider
+    button.ui.dark-green.submit.button[type="submit"] #{Localization.Auth.Login}

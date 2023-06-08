@@ -1,0 +1,18 @@
+if len(ViewSupportTickets) > 0
+  div.ui.vertical.menu.tiny.basic.fluid.secondary
+    each $supportticket in ViewSupportTickets
+      a.item[href="/support/"+$supportticket.Uuid]
+        span.ui.label.tiny #{$supportticket.CurrentStatus}
+        span
+            strong #{$supportticket.Title}
+            br 
+            italic #{$supportticket.CreatedAtStr}
+  div.ui.section.divider.left-menu
+a.ui.button.tiny.fluid.teal[href="/support/new"]
+  i.icon.plus
+  | Open Ticket
+div.ui.section.divider.left-menu
+div.ui.vertical.menu.tiny.secondary.basic.fluid
+  a.item[href="?section=faq"]
+    [class="active"] ? SelectedSection=="faq"
+    | FAQ

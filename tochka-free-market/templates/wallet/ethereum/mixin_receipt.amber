@@ -1,0 +1,36 @@
+mixin paymentReceipt($a)
+  div.ui.message
+    div.ui.form
+      div.field
+        label Tx Hash
+        pre.word-break #{$a.Hash}
+      div.ui.section.divider
+      div.field
+        label Raw TX
+        pre.word-break #{$a.RawTx}                          
+      div.ui.section.divider
+      div.field
+        label From
+        span.label.ui.bitcoin.id.tiny #{$a.WalletFrom}   
+      div.ui.section.divider
+      div.field
+        label To
+        span.label.ui.bitcoin.id.tiny #{$a.WalletTo}
+      if $a.Contract != ""
+        div.ui.section.divider
+        div.field
+          label Contract
+          span.label.ui.bitcoin.id.tiny #{$a.Contract}
+      if $a.ContractMethod != ""
+        div.ui.section.divider
+        div.field
+          label Contract Method
+          span.label.ui.bitcoin.id.tiny #{$a.ContractMethod}
+      div.ui.section.divider
+      div.field
+        label Amount
+        pre.word-break #{$a.Amount} 
+      div.ui.section.divider
+      div.field
+        label Fee
+        span #{$a.Cost}

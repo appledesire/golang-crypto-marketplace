@@ -1,0 +1,45 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("messageboard")
+
+block content
+  div.ui.grid.centered.divided
+    div.twelve.wide.column
+      div.ui.segment
+        $l = Localization
+        h3.ui.dividing.header #{Localization.Messageboard.NewThread}
+        form.ui.reply.form
+          [method="POST"]
+          [enctype="multipart/form-data"]
+          [class="error"] ? Error
+          div.ui.error.message
+            div.header Error
+            p #{Error}
+          div.required.field
+            label #{Localization.Messageboard.Title}
+            input[type="text"][name="title"][placeholder=Localization.Messageboard.Title][required]
+          div.ui.section.divider
+          div.required.field
+            label #{Localization.Messageboard.Text}
+            textarea[name="text"][required] 
+          div.ui.section.divider
+          div.field
+            label #{Localization.Messageboard.Image}
+            div.ui.input
+              input[type="file"][name="image"][size="40"]
+          div.ui.section.divider
+          div.required.field
+            label #{Localization.Messageboard.Captcha}
+            div.ui.input
+              input[type="hidden"][name="captcha_id"][value=CaptchaId]
+              input[type="text"][name="captcha"][placeholder="captcha"][required]
+            div
+              img.ui.medium.image.captcha[width=300][height=100][src="/captcha/"+CaptchaId]
+          div.ui.section.divider
+          input[type="hidden"][name="section_id"][value=SelectedSectionID]
+          button.ui.dark-green.labeled.submit.icon.button[type="submit"][placeholder="text"]
+            i.icon.edit
+            |  #{Localization.Messageboard.Save}
+    div.four.wide.column.t-left-menu-items
+      a.ui.button.teal.fluid.tiny[href="/board/"] #{Localization.Messageboard.BackToAll}

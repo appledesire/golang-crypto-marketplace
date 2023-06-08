@@ -1,0 +1,14 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      $localization = Localization
+      +staffMenu($localization, "news")
+    div.thirteen.wide.column
+      div.segment.ui
+        import ./../board/partial_thread.amber

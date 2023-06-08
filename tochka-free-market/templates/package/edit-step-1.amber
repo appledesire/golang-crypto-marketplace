@@ -1,0 +1,87 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("sellers")
+
+block content
+  $l = Localization
+  $viewStore = ViewStore
+  $viewUser = ViewUser
+  $item = ViewItem
+  form.ui.form.segment[method="POST"][enctype="multipart/form-data"]
+    [class="error"] ? Error
+    h3.ui.dividing.header #{Localization.Items.EditPackages}
+    input[type="hidden"][name="item_uuid"][value=ViewItem.Uuid]
+    div.ui.error.message
+      div.header #{Localization.Items.Error} 
+      p #{Error}
+    div.field
+      label #{Localization.Orders.Item}
+      div.ui.input
+        input[type="text"][readonly][value=ViewItem.Name]
+    div.ui.section.divider
+    div.field
+      label #{Localization.Items.Name}
+      div.ui.input
+        input[type="text"][name="name"][placeholder="10g"][value=ViewPackage.Name][required]
+    div.ui.section.divider
+    div.field
+      label #{Localization.Items.Type}
+      div.grouped.fields
+        div.field
+          div.ui.radio.checkbox
+            input[name="type"][id="drop"][type="radio"][value="drop"]
+              [checked] ? ViewPackage.Type == "drop"
+            label[for="drop"] #{Localization.Items.Drop}
+        div.field
+          div.ui.radio.checkbox
+            input[name="type"][id="drop_preorder"][type="radio"][value="drop preorder"]
+              [checked] ? ViewPackage.Type == "drop preorder"
+            label[for="drop_preorder"] #{Localization.Items.DropPreorder}
+        div.field
+          div.ui.radio.checkbox
+            input[name="type"][id="mail"][type="radio"][value="mail"]
+              [checked] ? ViewPackage.Type == "mail" || ViewPackage.Type == ""
+            label[for="mail"] #{Localization.Items.Mail}
+        div.field
+          div.ui.radio.checkbox
+            input[name="type"][id="digital"][type="radio"][value="digital"]
+              [checked] ? ViewPackage.Type == "digital" || ViewPackage.Type == ""
+            label[for="digital"] #{Localization.Items.Digital}
+    div.ui.section.divider
+    div.two.fields
+      div.field
+        label #{Localization.Items.Currency}
+        div.ui.input
+          select[name="currency"]
+            option[value="BTC"] 
+              [selected] ? ViewPackage.PackagePrice.Currency == "BTC"
+              | BTC
+            option[value="BCH"] 
+              [selected] ? ViewPackage.PackagePrice.Currency == "BCH"
+              | BTC
+            option[value="ETH"] 
+              [selected] ? ViewPackage.PackagePrice.Currency == "ETH"
+              | ETH
+            option[value="USD"] 
+              [selected] ? ViewPackage.PackagePrice.Currency == "USD"
+              | USD
+            option[value="RUB"] 
+              [selected] ? ViewPackage.PackagePrice.Currency == "RUB"
+              | RUB
+            option[value="AUD"] 
+              [selected] ? ViewPackage.PackagePrice.Currency == "AUD"
+              | AUD
+            option[value="GBP"] 
+              [selected] ? ViewPackage.PackagePrice.Currency == "GBP"
+              | GBP
+            option[value="EUR"] 
+              [selected] ? ViewPackage.PackagePrice.Currency == "EUR"
+              | EUR
+      div.field
+        label #{Localization.Items.Price}
+        div.ui.input
+          input[type="text"][name="price"][placeholder="0.005"][value=ViewPackage.PackagePrice.Price][required]
+    div.ui.section.divider
+    input[type="hidden"][name="step"][value="1"]
+    button.ui.blue.submit.button[type="submit"] #{Localization.Items.Next}

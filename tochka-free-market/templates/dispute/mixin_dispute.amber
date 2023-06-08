@@ -1,0 +1,48 @@
+mixin disputeItem($transaction, $localization)
+  table.ui.table.striped
+    tbody
+      tr
+        td[colspan=6]
+          a.ui.tiny.label.bitcoin.id[href="/dispute/"+$transaction.Dispute.Uuid] 
+            [class="red"] ? $transaction.Dispute.Status == "OPEN"
+            [class="green"] ? $transaction.Dispute.Status == "CLOSED"
+            [class="dark-green"] ? $transaction.Dispute.Status == "RESOLVED TO BUYER"
+            [class="violet"] ? $transaction.Dispute.Status == "RESOLVED TO VENDOR"
+            | #{$transaction.Uuid}
+            i.icon.bitcoin
+      tr
+        td[colspan=6]
+          pre #{$transaction.Description}
+      tr
+        td[width="16%"]
+          strong #{$localization.Orders.Vendor}
+        td[width="16%"]
+          strong #{$localization.Orders.Buyer}
+        td[width="16%"]
+          strong Resolver
+        td[width="16%"]
+          strong #{$localization.Orders.Amount}
+        td[width="16%"]
+          strong #{$localization.Orders.CreatedAt}
+        td[width="16%"]
+          strong #{$localization.Orders.Status}
+      tr
+        td[width="16%"]
+          a[href="/user/"+$transaction.Store.Storename] @#{$transaction.Store.Storename} 
+        td[width="16%"]
+          a[href="/user/"+$transaction.Buyer.Username] @#{$transaction.Buyer.Username}
+        td[width="16%"]
+          if $transaction.Dispute.ResolverUser.Uuid != ""
+            a[href="/user/"+$transaction.Dispute.ResolverUser.Username] @#{$transaction.Dispute.ResolverUser.Username}
+          else
+            span.author.admin T•chka
+        td[width="16%"]
+          | #{$transaction.Amount}
+        td[width="16%"]
+          | #{$transaction.Dispute.CreatedAt}
+        td[width="16%"]
+          a.ui.label.tiny[href="/dispute/"+$transaction.Dispute.Uuid] #{$transaction.Dispute.Status}
+            [class="red"] ? $transaction.Dispute.Status == "OPEN"
+            [class="green"] ? $transaction.Dispute.Status == "CLOSED"
+            [class="dark-green"] ? $transaction.Dispute.Status == "RESOLVED TO BUYER"
+            [class="violet"] ? $transaction.Dispute.Status == "RESOLVED TO VENDOR"

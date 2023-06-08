@@ -1,0 +1,33 @@
+if len(ItemCategories) > 0
+  $selectedCity = City
+  $selectedCategory = Category
+  $selectedSubcategory = SubCategory
+  $user = ViewUser
+  each $cat in ItemCategories
+    div.item.t-cat-item
+      span.header
+        a.cat[href="/sellers?city="+$selectedCity+"&category="+$cat.ID]
+          [class="active"] ? $cat.NameEn==$selectedCategory
+          [class="active"] ? $selectedCategory == "all"
+          if $user.Language == "ru"
+            span #{$cat.NameRu}
+          else
+            span #{$cat.NameEn}
+      if len($cat.Subcategories) > 0 
+        div.menu
+          [class="hidden"] ? $cat.NameEn!=$selectedCategory && ($selectedCategory != "all")
+          each $subcat in $cat.Subcategories
+            a.item[href="/sellers?city="+$selectedCity+"&category="+$subcat.ID]
+              [class="active"] ? $subcat.NameEn==$selectedSubcategory
+              if $user.Language == "ru"
+                span #{$subcat.NameRu}
+              else
+                span #{$subcat.NameEn}
+              if len($subcat.Subcategories) > 0
+                each $subsubcat in $subcat.Subcategories
+                  a.item.subsubcat[href="/sellers?city="+$selectedCity+"&category="+$subsubcat.ID]
+                    [class="active"] ? $subsubcat.NameEn==$selectedSubcategory
+                    if $user.Language == "ru"
+                      span #{$subsubcat.NameRu}
+                    else
+                      span #{$subsubcat.NameEn}

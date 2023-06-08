@@ -1,0 +1,1106 @@
+# Tochka Free Market REST API
+
+Rest API handles use same endpoints as regular site but with ?json=true added to query path.
+
+List of methods
+
+* Captcha
+* Login
+* Register
+* SERP (list items)
+* Store Info
+* Item Info
+* Transaction List
+* Transaction Info
+* Reply to Transaction Chat
+
+## Captcha
+
+### GET http://tochka3evlj3sxdv.onion/captcha/:captcha_id
+
+Use captcha_id from both responses to display captcha: 
+
+http://tochka3evlj3sxdv.onion/captcha/:captcha_id
+
+## Login 
+
+### GET http://tochka3evlj3sxdv.onion/api/auth/login
+
+Example:
+	
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/auth/login
+	
+	{
+		"captcha_id":"jVnRGZ9sQHzaJVPiv9mY"
+	}
+
+Captcha id must be used to obtain captcha image on /captcha/:captcha_id route
+
+### POST http://tochka3evlj3sxdv.onion/api/auth/login
+
+Parameters:
+
+* username
+* passphrase
+* captcha_id
+* captcha
+
+Example:
+	
+	> torsocks curl --data "username=test&passphrase=test&captcha_id=9mkx5dXi94QfSTmLbOTI&captcha=7005" http://tochka3evlj3sxdv.onion/api/auth/login
+	
+	{
+		"api_session": {
+			"token": "a6949a9fa5f24de272fbe1e0cab9cdf6",
+			"end_date": "2018-03-23T22",
+			"is_2fa_session": false,
+			"is_2fa_completed": false
+		}
+	}
+
+**All subsequent requests must include token get parameter**
+
+## Login 2FA
+
+### POST Response (1st Factor)
+
+Parameters:
+
+* username
+* passphrase
+* captcha_id
+* captcha
+
+Example:
+	
+	> torsocks curl --data "username=test&passphrase=test&captcha_id=9mkx5dXi94QfSTmLbOTI&captcha=7005" http://tochka3evlj3sxdv.onion/api/auth/login
+	
+	{
+		"api_session": {
+			"token": "a6949a9fa5f24de272fbe1e0cab9cdf6",
+			"end_date": "2018-03-23T22",
+			"is_2fa_session": true,
+			"is_2fa_completed": false
+		},
+		"secret_text": "xxx"
+	}
+
+### POST Response (2nd Factor)
+
+Parameters:
+
+* token
+* decryptedmessage
+
+Example:
+	
+	> torsocks curl --data "username=test_1&passphrase=test_1&token=a6949a9fa5f24de272fbe1e0cab9cdf6&decryptedmessage=xxx" http://tochka3evlj3sxdv.onion/api/auth/login
+	
+	{
+		"api_session": {
+			"token": "a6949a9fa5f24de272fbe1e0cab9cdf6",
+			"end_date": "2018-03-23T22",
+			"is_2fa_session": true,
+			"is_2fa_completed": true
+		}
+	}
+
+## Register
+
+### GET http://tochka3evlj3sxdv.onion/api/auth/register
+
+Example:
+	
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/auth/register
+	
+	{"captcha_id":"jVnRGZ9sQHzaJVPiv9mY"}
+
+Captcha id must be used to obtain captcha image on /captcha/:captcha_id route
+
+### POST http://tochka3evlj3sxdv.onion/api/auth/register
+
+Parameters:
+
+* username
+* passphrase_1
+* passphrase_2
+* captcha_id
+* captcha
+
+Example:
+	
+	> torsocks curl --data "username=test&passphrase_1=test&passphrase_2=test&role=seller&captcha_id=CumVFfRdnwEr7VPPbK6s&captcha=6207" http://tochka3evlj3sxdv.onion/auth/login?json=true
+	
+	{"captcha_id":"WxA3CXmhiUYs8CJnvSVe","error":"Invalid captcha"} 
+
+## Items Categories (Mobile App Version)
+
+### GET http://tochka3evlj3sxdv.onion/api/categories?token=:token
+
+Example
+
+	> curl http://tochka3evlj3sxdv.onion/api/categories?token=:to
+
+	{
+		"selected_package_type": "mail",
+		"item_categories": [
+			{
+				"id": 1,
+				"parent_id": 0,
+				"icon": "",
+				"price_en": "Drugs",
+				"name_ru": "Психоактивные вещества",
+				"name_de": "",
+				"name_es": "",
+				"name_fr": "",
+				"name_rs": "",
+				"name_tr": "",
+				"item_count": 0,
+				"user_count": 0,
+				"name": "Психоактивные вещества",
+				"subcategories": [
+					{
+						"id": 5,
+						"parent_id": 1,
+						"icon": "",
+						"price_en": "Stimulants",
+						"name_ru": "Стимуляторы",
+						"name_de": "",
+						"name_es": "",
+						"name_fr": "",
+						"name_rs": "",
+						"name_tr": "",
+						"item_count": 0,
+						"user_count": 0,
+						"name": "Стимуляторы",
+						"subcategories": [
+							{
+								"id": 116,
+								"parent_id": 5,
+								"icon": "",
+								"price_en": "Ephedrine",
+								"name_ru": "Эфедрин",
+								"name_de": "",
+								"name_es": "",
+								"name_fr": "",
+								"name_rs": "",
+								"name_tr": "",
+								"item_count": 0,
+								"user_count": 0,
+								"name": "Эфедрин",
+								"subcategories": null
+							},
+						]
+					}
+				]
+			}
+		],
+		"user": {},
+		"currency_rates": {}
+	}
+
+## Countries
+
+### GET http://tochka3evlj3sxdv.onion/api/countries?token=:token
+
+Example
+
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/countries?token=:token
+
+	{
+		"countries": [
+			{
+				"name_en": "Afghanistan"
+			},
+			...
+		]
+	}
+
+## Stores
+
+### GET http://tochka3evlj3sxdv.onion/api/stores?token=:token
+
+Example
+
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/stores?token=:token
+
+	{
+		"serp_stores": [
+			{
+				"storename": "cosmosnet",
+				"store_description": "us cvv fullz, carding hot-guides, dumps with pin, cc world mix, top bank accounts, mix stealer logs, paypal acc, vpn and any docs [upd 03/17/2019]",
+				"last_login_date": "2019-04-02T07:31:20.995659Z",
+				"registration_date": "2018-04-23T12:36:41.765697Z",
+				"vendor_score": 4.65,
+				"vendor_level": 409,
+				"vendor_is_free_account": false,
+				"vendor_is_gold_account": true,
+				"vendor_is_silver_account": false,
+				"vendor_is_bronze_account": false,
+				"vendor_is_trusted": false,
+				"categories_name_en": null,
+				"IsOnline": false,
+			},			
+			...
+		]
+	}
+
+
+## Items SERP
+
+### GET http://tochka3evlj3sxdv.onion/api/serp?token=:token
+
+Parameters:
+
+* category
+* shipping_to
+* shipping_from
+* domestic
+* page
+
+Example 
+
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/serp?token=:token
+	
+	{
+		"page": 1,
+		"number_of_pages": 214,
+		"sort_by": "popularity",
+		"city": "All countries",
+		"geo_cities": [
+			{
+				"geonameid": 3041732,
+				"name": "Mariehamn",
+				"country": "Aland Islands",
+				"subcountry": "Mariehamns stad"
+			}
+		],
+		"selected_package_type": "all",
+		"shipping_from_list": [
+			"",
+			"Afghanistan"
+		],
+		"shipping_to_list": [
+			"Afghanistan"
+			"Worldwide"
+		],
+		"account": "all",
+		"item_categories": [
+			{
+				"id": 1,
+				"parent_id": 0,
+				"icon": "",
+				"price_en": "Drugs",
+				"name_ru": "Психоактивные вещества",
+				"name_de": "",
+				"name_es": "",
+				"name_fr": "",
+				"name_rs": "",
+				"name_tr": "",
+				"item_count": 6570,
+				"user_count": 2242,
+				"Name": "Drugs",
+				"subcategories": [
+					{
+						"id": 2,
+						"parent_id": 1,
+						"icon": "",
+						"price_en": "Cannabis",
+						"name_ru": "Каннабис",
+						"name_de": "",
+						"name_es": "",
+						"name_fr": "",
+						"name_rs": "",
+						"name_tr": "",
+						"item_count": 2845,
+						"user_count": 572,
+						"subcategories": [
+							{
+								"id": 13,
+								"parent_id": 2,
+								"icon": "",
+								"price_en": "Buds",
+								"name_ru": "Соцветия",
+								"name_de": "",
+								"name_es": "",
+								"name_fr": "",
+								"name_rs": "",
+								"name_tr": "",
+								"item_count": 2165,
+								"user_count": 246
+							}
+						]
+					}
+				]
+			}
+		],
+		"user": {
+			"username": "test_user_1",
+			"registration_date": "2018-12-0",
+			"last_login_date": "2018-12-02T23",
+			"bitmessage": "",
+			"tox": "",
+			"email": "",
+			"pgp": "",
+			"description": "",
+			"long_description": "",
+			"is_admin": false,
+			"is_staff": false,
+			"vendor_level": 0,
+			"buyer_level": 1
+		},
+		"serp_items": [
+			{
+				"item_uuid": "a3db108d934242c45ecba330961e860f",
+				"storename": "dutch-christiana",
+				"store_description": "WE SHIP FROM FRANCE WORLDWIDE !!!",
+				"store_is_suspended": false,
+				"store_is_trusted": false,
+				"store_is_allowed_to_sell": true,
+				"store_is_free_account": false,
+				"store_is_bronze_account": false,
+				"store_is_silver_account": false,
+				"store_is_gold_account": true,
+				"store_last_login_date": "2018-11-26",
+				"store_registraion_date": "2017-08-2",
+				"number_of_red_warnings": 0,
+				"number_of_green_warnings": 0,
+				"number_of_yellow_warnings": 0,
+				"item_created_at": "2017-08-28",
+				"item_name": " ★COCAINE★ 90% PURITY UNCUT AAA+ HQ FRANCE SHIPPING",
+				"item_description": "HIGHEST RATED VENDOR OF THE 2 BIGGEST MARKETS EVER WITH MORE THEN 10 K OF POSITIVE FEEDBACK (ASK SUPPORT AND ADMIN WILL CONFIRM THIS! FOR PRIVACY REASONS I WILL NOT USE MY OLD PGP AND PROVIDE MY OLD ACCOUNTNAME (SO DONT ASK/GUESS FOR IT)\r\n\r\nSELECT THIS ORDER MULTIPLE TIMES IF YOU WANT MORE !\r\n\r\nSIMPLE PRICES IMPORTANT FOR BULK 100G+ HEROINE/COCAINE/KETAMINE/METH CONTACT ME FOR A BETTER PRICE.\r\n\r\n★MDMA 3.5 EURO A GRAM FROM 10 G +\r\n\r\n★MDMA 7.5 EURO A GRAM FROM 1 G TILL 10 G\r\n\r\n★XTC 1.5 EURO A PILL FOR 10 PILLS +\r\n\r\n★COCAINE 50 EURO A GRAM FROM 1 G +\r\n\r\n★HEROINE 35 EURO A GRAM FROM 1 G +\r\n\r\n★KETAMINE 20 EURO A GRAM FROM 1 G +\r\n\r\n★METH 35 EURO A GRAM FROM 1 G +\r\n\r\n★SPEED 2 EURO A GRAM FROM 10 G +\r\n\r\n★COMMERCE HASH 1.5 EURO A GRAM FROM 100 G +\r\n\r\n★AMNESIA HAZE 7 EURO A GRAM FROM 1 G +\r\n\r\n★AMNESIA HAZE 9 EURO A GRAM FROM 1 G TILL 10 G\r\n\r\nIMPORTANT TO KNOW FOR ALL LISTINGS:\r\n\r\n★ THE PICTURE CAN BE DIFFERENT THEN THE ACTUAL PRODUCT BUT THE QUALITY IS SIMILAIR!\r\n\r\n★ IF YOU WANT ONLY THAT SPECIFIC SHIPPING METHOD THEN PLEASE WRITE IT BELOW YOUR ADRESS!!\r\n\r\n★ IF THERE IS A PROBLEM CONTACT ME BEFORE YOU POST FEEDBACK OR ELSE YOU WILL RECEIVE NO REFUND/SOLUTION. THERE IS ALWAYS A SOLUTION, WE ARE PEOPLE NOT ANIMALS!\r\n\r\n★ WHEN SHOULD YOU BE WORRIED AFTER 14 DAYS (DOMESTIC) 30 DAYS (EU), AFTER 45 DAYS (OUTSIDE EU)\r\n\r\nPLEASE PROVIDE ME YOUR ADRESS THIS WAY:\r\n\r\n★ FIRST AND LASTNAME\r\n\r\n★ ADRESS + STREETNR\r\n\r\n★ POSTAL ZIPPCODE + CITY\r\n\r\n★ COUNTRY (DONT FORGET THIS ONE)\r\n\r\nRefunds:\r\n\r\n50% refund for non arrival if you make a new order of the same amount. This way you get what you paid for and we can compromise our lost with the profit of the new order.\r\n",
+				"item_category_id": 11,
+				"item_parent_category_id": 5,
+				"item_parent_parent_category_id": 1,
+				"max_price": 70,
+				"min_price": 4500,
+				"currency": "EUR",
+				"store_score": 4.56,
+				"item_score": 4.55,
+				"type": "mail",
+				"country_shipping_from": "France",
+				"country_shipping_to": "Worldwide",
+				"geoname_id": 0,
+				"store_level": 301,
+				"vendor_is_online": false,
+				"vendor_last_login_date": "6 days ago",
+				"vendor_registration_date": "1 year ago",
+				"price_range": [
+					"70",
+					"4500"
+				],
+				"price": ""
+			}
+		],
+		"api_session": {
+			"token": "d7cdd58c1bea40335073d29934aff57f",
+			"end_date": "2018-12-02",
+			"is_2fa_session": false,
+			"is_2fa_completed": false
+		}
+	}
+
+## Hot Deals
+
+### GET http://tochka3evlj3sxdv.onion/api/deals?token=:token
+
+Response is similar to SERP.
+
+## Store Info
+
+## GET http://tochka3evlj3sxdv.onion/api/store/:storename
+
+Example
+	
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/store/:storename
+
+	{
+		"items": [
+			{
+				"uuid": "9ce56941e0354dae76b9097b78e3e612",
+				"name": "Maroc Hash AAA+ High Quality ",
+				"description": "AAA+ high quality Maroccan Hash",
+				"category_id": 4,
+				"number_of_sales": 0,
+				"number_of_views": 0,
+				"description_html": "\u003cp\u003eAAA+ high quality Maroccan Hash\u003c/p\u003e\n",
+				"short_description_html": "\u003cp\u003eAAA+ high quality Maroccan Hash\u003c/p\u003e\n",
+				"packages": [
+					{
+						"package_name": "5 g hash aaa+ high quality",
+						"country_shipping_from": "Spain",
+						"country_shipping_to": "Worldwide",
+						"drop_city_id": 0,
+						"drop_city": {
+							"geonameid": 0,
+							"name": "",
+							"country": "",
+							"subcountry": ""
+						},
+						"metro_station": {
+							"uuid": "",
+							"city_id": 0,
+							"name_en": "",
+							"name_ru": ""
+						},
+						"price_aud": "45",
+						"price_btc": "45",
+						"price_bch": "45",
+						"price_eth": "45",
+						"price_eur": "45",
+						"price_gbp": "45",
+						"price_rub": "45",
+						"price_usd": "45",
+						"hash": "265ef8ef54",
+						"item_name": "",
+						"item_uuid": "",
+						"score": 0,
+						"type": "mail"
+					}
+				],
+				"rating_reviews": [
+					{
+						"uuid": "a8420804a65540a455d62152ef8dada1",
+						"user_uuid": "87336fcdf10d4a92558b0409ee8723a8",
+						"store_uuid": "ba15479bb7c94e0b49b06993e1d72f62",
+						"item_uuid": "9ce56941e0354dae76b9097b78e3e612",
+						"item_score": 5,
+						"item_review": "Very nice hash. \r\nNice stealth. I am outside the EU.",
+						"seller_score": 5,
+						"seller_review": "I liked the stealth.\r\nDone only one order.\r\nI am outside EU. I am pleased.",
+						"marketplace_score": 5,
+						"marketplace_review": "",
+						"created_at": "2018-10-31"
+					}
+				],
+				"item_category": {
+					"id": 4,
+					"parent_id": 2,
+					"icon": "",
+					"price_en": "Hash",
+					"name_ru": "Гашиш",
+					"name_de": "",
+					"name_es": "",
+					"name_fr": "",
+					"name_rs": "",
+					"name_tr": "",
+					"item_count": 0,
+					"user_count": 0,
+					"subcategories": null,
+					"Name": "Hash",
+					"SubViewItemCategories": null
+				},
+				"score": 5
+			}
+		],
+		"store": {
+			"storename": "dutch-christiana",
+			"short_description": "WE SHIP FROM FRANCE WORLDWIDE !!!",
+			"long_description": "FRANCE, BELGIUM, HOLLAND AND SOON GERMANY SHIPPING\r\n\r\n! NO USA !\r\n\r\nHIGHEST RATED VENDOR OF THE 2 BIGGEST MARKETS EVER WITH MORE THEN 10 K OF POSITIVE FEEDBACK (ASK SUPPORT AND ADMIN WILL CONFIRM THIS! FOR PRIVACY REASONS I WILL NOT USE MY OLD PGP AND PROVIDE MY OLD ACCOUNTNAME (SO DONT ASK/GUESS FOR IT)\r\n\r\n-----------------------------------------------------------------------------------------------\r\n\r\nORDERPROCESS:\r\n\r\n* VACUUM\r\n\r\n* ANTISCAN BAG\r\n\r\n* CLEANING WITH ANTI SMELL\r\n\r\n* SPRAYING WITH ANTI DOG SMELL\r\n\r\n* HIGH QUALITY STEALTH\r\n\r\n-----------------------------------------------------------------------------------------------\r\n\r\nFOR BULK 100G+ HEROINE/COCAINE/KETAMINE/METH CONTACT ME FOR A BETTER PRICE.\r\n\r\n* MDMA \r\n* XTC \r\n* COCAINE \r\n* HEROINE \r\n* KETAMINE \r\n* METH \r\n* SPEED \r\n* COMMERCE HASH \r\n* AMNESIA HAZE\r\n* LSD \r\n-----------------------------------------------------------------------------------------------\r\n\r\nIMPORTANT TO KNOW FOR ALL LISTINGS:\r\n\r\n* THE PICTURE COULD BE DIFFERENT THEN THE ACTUAL PRODUCT BUT THE QUALITY IS SIMILAIR!\r\n\r\n* IF YOU WANT ONLY THAT SPECIFIC SHIPPING METHOD THEN PLEASE WRITE IT BELOW YOUR ADRESS!!\r\n\r\n* IF THERE IS A PROBLEM CONTACT ME BEFORE YOU POST FEEDBACK OR ELSE YOU WILL RECEIVE NO REFUND/SOLUTION. THERE IS ALWAYS A SOLUTION, WE ARE PEOPLE NOT ANIMALS!\r\n\r\n* WHEN SHOULD YOU BE WORRIED AFTER 14 DAYS (DOMESTIC) 30 DAYS (EU), AFTER 45 DAYS (OUTSIDE EU)\r\n\r\n-----------------------------------------------------------------------------------------------\r\n\r\nPLEASE PROVIDE ME YOUR ADRESS THIS WAY:\r\n\r\n* FIRST AND LASTNAME\r\n\r\n* ADRESS + STREETNR\r\n\r\n* POSTAL ZIPPCODE + CITY\r\n\r\n* COUNTRY (DONT FORGET THIS ONE)\r\n\r\n-----------------------------------------------------------------------------------------------\r\n\r\nRefunds:\r\n\r\n50% refund for non arrival if you make a new order of the same amount. This way you get what you paid for and we can compromise our lost with the profit of the new order.\r\n\r\nNO REFUND/RESHIP/NEGATIVE FEEBDACK FOR COUNTRIES OUTSIDE EU AND THE SCANDINAVIAN ISLANDS.\r\n",
+			"pgp": "-----BEGIN PGP PUBLIC KEY BLOCK-----\r\n\r\nmQENBFmnQi8BCADhzapuHSH9hZm2ydnZ7hE4OiQOu+eskxxKutzdlM6mRGlcdKNd\r\nCM7zjh4zhtGhiiLYYo4YNeI9xcTWEIC/9S5fftA3dGguzG+IS4TdJuetoKhqbqQE\r\nCYwgi0iabcfH5V0K+NGoEoZysVS8o5BRR0jvIRFvksNpzb3k1jFVhwXIoyC8Pn0s\r\nIjgFdNYtwLPrIhLDupZtJ8ZRyUEpo2VESMg4PZQZ79TwpT+n91SLYB9C78k74y84\r\nXNZ8NqTSuL7BcxcvY7Mli1g1HtunkhqAxlM/wewvTQ+L3zW5e25fwVb7hK/bP8h1\r\nre1sG5pB3dTfbehAYkEuUH/zmTrkivFMkfGlABEBAAG0Gk5FV0VTVCA8TkVXRVNU\r\nQE5FV0VTVC5DT0M+iQFOBBMBCgA4FiEEPUVLx5n3XMkPJr3SzOgi5by1ZQcFAlmn\r\nQi8CGwMFCwkIBwMFFQoJCAsFFgIDAQACHgECF4AACgkQzOgi5by1ZQeZzgf8CBhc\r\nhG2AlGmVn40OUC93eSrmJoCYiIikW1wCcIh4FOrhrfPOFEwYEp4L2nxUGygO2jZ+\r\nRk3Uy0wTPeiEqrF1RnGDt9lylcBsGJrNtLg1WS93EwflpZIU5P2eeaI8qlx5IzZi\r\nFGTMJt6OEhLVHJdGG4bvsdI88r5Xtu0o9wWu6Oz4Dsttbn3BmOy7oKA5nGt9ZJnv\r\ne1HDBsPi76HafYDuD6/ogQ2St1Wn6todxetSn+cjDM45+vkUbNeQCQL9rj/hKxYC\r\nPaTLQmB5hNLXmNqhcLvaYQ8FdFpn5A0pNOB5ChqHpsSvZb25Ih+rzly19oF59yya\r\nhxVbIOThD4ZVnRsDELkBDQRZp0IvAQgA2P2yN9IzzQbdAZtabd1C1M+NmVFfeU2W\r\nYHT/he49V9U3i7oraIe8ovcVpQ2I8GNUxm59isqsOzy8KCAIooaJps0tGGOGTEww\r\nPWdLBYgySbL22pRB7WH6kODkKOMlcTz7jXK3QD82ibRq/cHEGGtQs3L5cRa3r1ut\r\nShU3I8iRYq7LItBr8XvwKpIz+lVQ7D+tkEFovYon2eDEGXghPBtrWMgr81/ZE/2D\r\nuYL+EOPUv4fEMao77Q/DYtQEeNxxgW75unyxP2k2xfDtTYiCOwaYrvmnnK8AFcj8\r\nI5nnpEpRdjCHa9/12CZnL8iH2pOtkZfna6MH9OmxKGMO7U5qBAiYzwARAQABiQE2\r\nBBgBCgAgFiEEPUVLx5n3XMkPJr3SzOgi5by1ZQcFAlmnQi8CGwwACgkQzOgi5by1\r\nZQeIzwgAvEVuUKcitk2A0p3FOZuMH/fihvjsM9Pfp5s2CIP0ylVdQp6gNHmgMXDw\r\nj0V7ETY9Yjj/jtK43wHYsuzy6tuEaQnLDIkfHPZuBYEbdI5IKDCATVvUW5ul0UeF\r\nfv0UNQ5BL883qGkLHR70pEKP5+y53ccL2Yqgl4RyfekaJTemLeEj4OZdXXo6c9uK\r\n8WaqKIb9lRYTFua4Ws8bD9LR5Y1/D0kKQqql3q5+xHYwKZQSfcHonPy5tDtP44MP\r\nI3jL++MTowDmLAgdxfVxziAkzFvKk8b8wwayg9XBQLxO6puMwBow8Ag/qyYUNEI/\r\niGlw/xjBSlGBwERAyolShXMNkpN3uA==\r\n=ZAuS\r\n-----END PGP PUBLIC KEY BLOCK-----\r",
+			"is_suspended": false,
+			"is_trusted": true,
+			"is_allowed_to_sell": false,
+			"is_on_vacation": false,
+			"is_gold_account": true,
+			"is_bronze_account": false,
+			"is_silver_account": true,
+			"is_free_account": true,
+			"warnings": [
+				{
+					"severety": "NEW",
+					"text": "I made a request for $ 340 and I asked about 2 or 4 times for him if he had the request and he did not answer me if he had or not I then made the request and waited, after 2 days he answers me that he does not have in stock to cancel, so that bitcoin had already varied, I asked to send this value in mdma and I had no return and I went to look at the site, when I look at the site my btc had returned, and the bitcoin gave a variety when I bought it was 4300 and now it is 3800 and it was returned the same amount of btc.",
+					"is_approved": false,
+					"reporter_uuid": "3882799c054b4cef65a7085ab88d2a00",
+					"created_at": "2018-11-27",
+				}
+			],
+			"rating_reviews": [
+				{
+					"uuid": "015bf0271c4b41eb5bd4e249fd7f3a3c",
+					"user_uuid": "b7f38e6a71414d32435320e6ab80a7fd",
+					"store_uuid": "ba15479bb7c94e0b49b06993e1d72f62",
+					"item_uuid": "3419406be18b46a162a277ff58a15e54",
+					"item_score": 5,
+					"item_review": "",
+					"seller_score": 5,
+					"seller_review": "",
+					"marketplace_score": 5,
+					"marketplace_review": "",
+					"created_at": "2018-06-16"
+				}
+			]
+			"shipping_options": [
+				{
+					"ID": 5149,
+					"CreatedAt": "2018-06-29",
+					"UpdatedAt": "2018-12-06",
+					"DeletedAt": null,
+					"name": "FRANCE - WORLWIDE",
+					"price_usd": 20,
+					"price_rub": 0,
+					"price_gbp": 0,
+					"price_eur": 0,
+					"price_aud": 0,
+					"StoreUuid": "ba15479bb7c94e0b49b06993e1d72f62"
+				}
+			],
+			"last_login_date": "2018-11-26",
+			"registration_date": "2017-08-2"
+			"level": 313
+		},
+		"user": {
+			"username": "xxxx",
+			"registration_date": "2015-06-18",
+			"last_login_date": "2018-12-11T12",
+			"bitmessage": "",
+			"tox": "",
+			"email": "earthling@jabber.otr.im",
+			"pgp": "-----BEGIN PGP PUBLIC KEY BLOCK-----\r\nVersion: GnuPG v2\r\n\r\nmQINBFeXNpgBEADI0XGAKtzoXhkZAMvTxvaYNQUQWWcVmux2I0jwObltw6e9W8md\r\n5vGnvs26BkTjmhh4XSApy0+w5ZLdjH4xq4C6/WjiRm78eWRoGeHTUZCrMPbCYfbg\r\nVci/0VcdxYTiHDIcvzgCI4s8hTpitRDMS3tONMtdQWgNccjAtZ9dbHJ7ln2NjneP\r\n2iUSCfq4lq5Zq1T4TZa/x/H809xGizJ0mdfZzIe/exgX7vMFyIk9lZjUYzRTBwhU\r\n5aWWfPLsN0FLi5NqHK3UFlFKasla6CqClLMy/ykOY2mt4Ar5r505CFEs7oKBPhVX\r\n/jDe+gwbj8BJeXoYO7PvN4rJXup6pE3YvJE85zCaQqNcgzoRDRwpYOu+a701vWsg\r\nNarwIEE/25R9DYXfbKsUm3lvD5PksieIHs+pwHuyGD/PtB+Tnc2NQ2BhuFgKepIo\r\nq+ptXiwRTRx8Iu4SUsS1gBFXTo15SuJ7aQXhF1zIWIiDBW0dBLqpS3qhZVbRHGiR\r\nrbl+j/3c8irvl9IcPMpBH5zPYbRJXqtwTbRzMSbwfiSGfn+BKqdWViKbsDG/S59Z\r\nGwn5bN3ng0p0uK2BZekofz4efePac+BprIqIVT21F9GoB5dMSdgPPHR3mqECgpAu\r\nhHPcaIxk77AK2mEqKCFaERrPxWhJMektcrgSqNprxsSC0TWgZVqiUTRnuQARAQAB\r\ntBlPT29vIE9PbyA8dGVzdEBnbWFpbC5jb20+iQI3BBMBCAAhBQJXlzaYAhsvBQsJ\r\nCAcCBhUICQoLAgQWAgMBAh4BAheAAAoJEJzIKsz2JfykqYsQAKhh1Ccg2lL/zFOM\r\n+XTNpMZdj4+ImC9j5P8iechBv9c16vplaDnekwIZxzB+tE8LIOveEAgezovdTTgt\r\nlxGic+xKSdaPu3nTD34TrfBw3h4edt/EMvCU+LPnlaarNariWHsvHaVvfDtPpgSV\r\nCTTees3WgVrJMzZc3sJ+nfqhk3+l31YowfrYeqBlTuh6Ybnr+IUcNuKUZ4qKfIs+\r\n/HR3rMVp4RBOB7k7giDoQg8HHXkssyWaSXuXNOfPAFxQD+UfizAGAmDxfC9OuyXx\r\naWaOVgMDuFXYSnTcnbnv3NFWN1LUi74iL6edpsWC4xyuF1NbsbIecHsobGEai6i5\r\niKDM285/XONm4A5aaBXkRLxFtdAFG/2/NMm7UglKcdtNasHZvG+vrgyoRUEl+yfl\r\nV14hh2WUhZWuL5veajpAB7qI+pTBbixhM/EJe63/Kgx22m5r6IO+V4c1imU17NAc\r\nTQcHTG7d3m+MdyDxHHZGY67tXl+0J6M7UgG4yWqxtsFNfYq2uVsUM/YuKhkBh7Mq\r\nPsFWhtNMYuguxx+tYJ1tzm0h3i0PApIfEBwogxVygeumKmHvjkUGBKnHo8/YX2Pr\r\nRLY89H1hjVD25mfS6xOV+PpvVT0W6ubEhhqUxUkZ7WtixKZ8VYAcYtv1/OzhsuZI\r\npR8sZ6Xsne+4PB61ZJ0m21JTQy3OuQINBFeXNpgBEAC+atxnVCC4ywZJTZ8itD88\r\nOYIxx+pA6VwNEHjYWfYNxgTXjBMezbm9um/W3IwW1b2knC4iojeppdYoNeBg53/y\r\nfJQa+aHQZlhz+GvSGDv62cKFZar5YJNt3LVx76i8SxNCly7fh9dAL2PjwgHlo/XK\r\nko3xd2UHesIPj0uU0SAo2vLekEGltSkIlKHWD0jzRIUvqO3bNVucjy4QYsEWc0zw\r\nEmQNDLhDX44EH2z/pS1rJlw7+aFUx7VrjACTgzBWkJeilHpCLOTQ1aLtiYkuebD1\r\n/YxdYoytw/jxDLTjse11DlsrRmBWp8VyNUOrSi/dX1fdSDw3yjpYI900tq4r/3gX\r\neTAe+4Y/PLCwvCc1WSLulXbHHP/kZ1Snyg5DzYemnrsUeq7od8jUTGiNnoloOQdq\r\nowWO6+SouSnY+Vnq1AeJgVSe0TmVeyS+1UpBE8RPMuxn91M7rNZNXeZiofRTKqS4\r\nNBFpYGjhgH9fZGu51qTGdeJCUermZQ1nBmJ2qG0bs8kCxDnyf6bfCGuM/D8IWt1R\r\nMkdnPRnyRvFP6rjBmTozln0RngKNEBLe7v8x2fUP9SFilazWnauNvoV1Ha3TUUcx\r\n1NuiDP6MJO/Xk3511ryRi9gok7wu6e9GL+Gj6+PE2UIoYUdpIMnEYjw6v5vx8WKm\r\ncGkeK2+8K+O+w32kqxlQOQARAQABiQQ+BBgBCAAJBQJXlzaYAhsuAikJEJzIKsz2\r\nJfykwV0gBBkBCAAGBQJXlzaYAAoJEKSpoqqAMYv16h4QAL5mpa21m6sXqPqUaipj\r\n52pPrKDBXzjCO23/BcNNMkhlbe/5vv/nOQwdvBzlg/m6sGPfF5zcP0WFCtGZycVE\r\nrh2sn+volx0xyFXpviE4BbC9WZg20R5adt894l7XpEIdNqM16GzNnyWiefUw9HBJ\r\neXNAQW+MsD/GZY2hsIgH2YQj2x8nb4JYVIzxYU7gT0Z5D7AurtKhPmflX1BA3tFK\r\n23P/g4XHHbLDhD4W2/VtMh7adWYFvT6G8qFwE6rT3bgma8H26X5u/pQSCH35fCXO\r\nrQ6uAQU4DRcyrqa2HQ700clpydpLeI72BlSlTeQl7TkWbzybcQH9ElQr8Qi/2rHP\r\nD4DBqp/SFAsTiezyieSCnoLyOyU8dZBuJKn/60K15FGxhEKTIGPG67VrvoNwztzV\r\nVaYOewW4f1Efzj8WR7GfmxDKvaLcY8GUHfqQqrWRQ2qTDFiUwpYI0bEs0HHGRdXi\r\n+5GM0iEYSS4UB6drBiEa7yYsuWYeNfrZ5aL1DezqBg7+oQWmASCRxl8kJfH8p+4+\r\npnQd/x84fu7Kzi5Pp9A+rAMbgFCjjdZ9msxYMTuX0ZHT0QanFqZSBHITuottcFTS\r\nPMDp7dtL5RUH/3g4yjLeIb4TbQUHtF7NpD3A4y722t3lKru/zlxsTn0YEuDi2KC8\r\nuvxXmY4/QlUxxSHWT+lMqhMEULQQAIQ2MKy4bvXOlOwYt42nXIwVz0CuZiz+KeZY\r\nixGypYdF5J36RAoxvWW0J+ULhUMMXmrhPM0QLz13ZwLUXblQcZ4q3I5eGHS8ZJxg\r\nmql+SzPPoWfqswow6YfnUCkYkuYJN6xg8tTIphEQw+TrJtpZr39we+5awQaFe25W\r\n59CDr5MMQLJI4Jo5g6cbbOISzJh3sjEOQMq769ZwhkJiKUVYmaThN+Gh92M6FQdE\r\ncGa2ZVMcO7oaIBx6pu/bbIOyqBzvR/MxlNfNew/brS86Ojmk1dpNj02jeJtdz2qF\r\nSiPZlRZHS7Txvkv+EyjDFWo8KyNK+LPZluw7WA0F4FSjnsAKjlF2Lb7O/v9hIaOP\r\niSNovg6RuV9H5VIRvhfbcx4Lv5qfw/x8uSzK/zD1NjDeiUNkMpkkpYyNuuf93A5a\r\nCAEbajECaAOOP6mr1Qdz/8sUK60VCQMcfJ+aHGRTt1laMm5RN7KYn8OVunslePJX\r\nHVb3w7u4KD1TkUB6qLtOB52O+HnaEs116dambxwa4RBmjc0NU7sqNN57a6J1Y9oY\r\nX9g10Mvu3e3PaBS99n4UJSzG+gGgG/1nRbQdZtE7lDp6TnqxfgXJZUjDO8UkJksR\r\nd3rHzZlz2+ZwJk04GLVQNvCUAqdUVL8Xls7oX1ML0oLoBz5360OOZc2bf81iskbs\r\nKzAc7Ezb\r\n=N3Wu\r\n-----END PGP PUBLIC KEY BLOCK-----\r",
+			"description": "Mere mortal",
+			"long_description": "## Open a ticket for help or support.\r\n\r\n---\r\n\r\nI'm a founder and developer of Tochka and keep it running for almost 4 years.\r\n\r\nI'm interested in scaling team for building a large-scale fintech operation in field of underground economics. \r\n\r\nI'm looking for people who are interested in joining a team, preferably with solid tech background. \r\n\r\nPM me for business opportunities, and if you're interested in our operations and generally if you're on same boat with me on terms of vision.",
+			"is_admin": true,
+			"is_staff": false,
+			"vendor_level": 45,
+			"buyer_level": 0
+		}
+	}
+
+**All subsequent responses will include objects "store", "user" which represent store related to a request and user making request.**
+
+## Item Details
+
+### GET http://tochka3evlj3sxdv.onion/api/store/:storename/item/:item_uuid 
+
+Example 
+
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/store/:storename/item/:item_uuid 
+
+	{
+		"item": {
+			"uuid": "9ce56941e0354dae76b9097b78e3e612",
+			"name": "Maroc Hash AAA+ High Quality ",
+			"description": "AAA+ high quality Maroccan Hash",
+			"category_id": 4,
+			"number_of_sales": 0,
+			"number_of_views": 0,
+			"description_html": "\u003cp\u003eAAA+ high quality Maroccan Hash\u003c/p\u003e\n",
+			"short_description_html": "\u003cp\u003eAAA+ high quality Maroccan Hash\u003c/p\u003e\n",
+			"packages": [
+				{
+					"package_name": "5 g hash aaa+ high quality",
+					"country_shipping_from": "Spain",
+					"country_shipping_to": "Worldwide",
+					"drop_city_id": 0,
+					"drop_city": {
+						"geonameid": 0,
+						"name": "",
+						"country": "",
+						"subcountry": ""
+					},
+					"metro_station": {
+						"uuid": "",
+						"city_id": 0,
+						"name_en": "",
+						"name_ru": ""
+					},
+					"price_aud": "45",
+					"price_btc": "45",
+					"price_bch": "45",
+					"price_eth": "45",
+					"price_eur": "45",
+					"price_gbp": "45",
+					"price_rub": "45",
+					"price_usd": "45",
+					"hash": "265ef8ef54",
+					"score": 0,
+					"type": "mail"
+				}
+			]
+			"rating_reviews": [
+				{
+					"item_score": 5,
+					"item_review": "Very nice hash. \r\nNice stealth. I am outside the EU.",
+					"seller_score": 5,
+					"seller_review": "I liked the stealth.\r\nDone only one order.\r\nI am outside EU. I am pleased.",
+					"marketplace_score": 5,
+					"marketplace_review": "",
+					"created_at": "2018-10-31"
+				}
+			],
+			"item_category": {
+				"id": 4,
+				"parent_id": 2,
+				"icon": "",
+				"price_en": "Hash",
+				"name_ru": "Гашиш",
+				"name_de": "",
+				"name_es": "",
+				"name_fr": "",
+				"name_rs": "",
+				"name_tr": "",
+				"item_count": 0,
+				"user_count": 0,
+				"subcategories": null,
+				"Name": "Hash",
+				"SubViewItemCategories": null
+			},
+			"score": 5
+		}
+	}
+
+## Package Reservation
+
+### POST http://tochka3evlj3sxdv.onion/api/user/:username/item/:item_uuid/package/:hash
+
+Parameters:
+
+* shipping_id
+* quantity
+* type [bitcoin,bitcoin_cash,ethereum]
+* shipping_address
+
+Example 
+
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/user/:username/item/:item_uuid/package/:hash --data "shipping_id=:shipping_id&quantity=:quantity&type=:type&shipping_address=:shipping_address"
+
+## transactions List Reservation
+
+### GET http://tochka3evlj3sxdv.onion/api/transactions
+
+Example 
+
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/transactions
+
+	{
+		"transaction_statuses": [
+			{
+				"amount": 0.3036861982905228,
+				"buyer_username": "xxxx",
+				"created_at": "2018-02-14",
+				"current_shipping_status": "DISPATCH PENDING",
+				"current_status": "FAILED",
+				"description": "xxx :: xxx x 1",
+				"type": "ethereum",
+				"updated_at": "2018-02-15",
+				"uuid": "0xf0971709d0bd2cec450c523d50f4b528802acfda",
+				"vendor_username": "drugs-park",
+				"updated_at_string": "15.02.2018 11:14",
+				"created_at_string": "14.02.2018 23:12"
+			},
+			...
+		]
+	}
+
+## Transaction List
+
+### GET http://tochka3evlj3sxdv.onion/api/transactions/?token=:token
+
+Example
+
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/transactions/?token=:token
+
+	{
+		"number_of_pages": 1,
+		"transaction_statuses": [
+			{
+				"amount": 0.04958546550835019,
+				"buyer_username": "test1230",
+				"created_at": "2018-05-2",
+				"current_shipping_status": "DISPATCH PENDING",
+				"current_status": "FAILED",
+				"description": "â˜…COCAINEâ˜… 90% PURITY UNCUT AAA+ HQ NL/BE/DE SHIPPING :: 0.25 GRAM PREMIUM AAA+ HQ x 1",
+				"number_of_messages": 1,
+				"type": "ethereum",
+				"updated_at": "2018-05-25",
+				"uuid": "0xf7f9b1e0cb45edc2947f7d9a662f278180461557",
+				"vendor_username": "dutch-christiana",
+				"updated_at_string": "25.05.2018 22:23",
+				"created_at_string": "25.05.2018 10:21"
+			}
+		],
+		"api_session": {
+			"token": "8f29a2da0ed948c85b4506162473e4d6",
+			"end_date": "2018-06-10",
+			"is_2fa_session": false,
+			"is_2fa_completed": false
+		}
+	}
+
+## Transaction Details
+
+### GET http://tochka3evlj3sxdv.onion/api/transactions/:uuid?token=:token
+
+Example
+
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/transactions/:uuid?token=:token
+
+	{
+		"captcha_id": "CQN5BvdYr2PL5Zf3Tipa",
+		"thread": {
+			"uuid": "idd",
+			"is_read_by_reciever": false,
+			"section": "",
+			"section_id": 0,
+			"parent_uuid": "",
+			"title": "Transaction thread @txid",
+			"text": "",
+			"type": "transaction",
+			"is_encrypted": false,
+			"has_image": false,
+			"created_at": "2018-05-25",
+			"updated_at": "2018-05-25",
+			"deleted_at": null,
+			"sender": {
+				"username": "test1230",
+				"registration_date": "2018-04-",
+				"last_login_date": "2018-06-13",
+				"bitmessage": "",
+				"tox": "",
+				"email": "",
+				"pgp": "",
+				"description": "",
+				"long_description": "",
+				"is_premium": false,
+				"is_premium_plus": false,
+				"is_possible_scammer": false,
+				"vacation_mode": false,
+				"is_seller": false,
+				"is_trustedseller": false,
+				"is_moderator": false,
+				"is_admin": false,
+				"is_staff": false
+			},
+			"text_html": "",
+			"messages": [
+				{
+					"uuid": "idd",
+					"is_read_by_reciever": false,
+					"section": "",
+					"section_id": 0,
+					"parent_uuid": "",
+					"title": "Transaction thread @txid",
+					"text": "",
+					"type": "transaction",
+					"is_encrypted": false,
+					"has_image": false,
+					"created_at": "2018-05-25",
+					"updated_at": "2018-05-25",
+					"deleted_at": null,
+					"sender": {
+						"username": "test1230",
+						"registration_date": "2018-04-",
+						"last_login_date": "2018-06-13",
+						"bitmessage": "",
+						"tox": "",
+						"email": "",
+						"pgp": "",
+						"description": "",
+						"long_description": "",
+						"is_premium": false,
+						"is_premium_plus": false,
+						"is_possible_scammer": false,
+						"vacation_mode": false,
+						"is_seller": false,
+						"is_trustedseller": false,
+						"is_moderator": false,
+						"is_admin": false,
+						"is_staff": false
+					},
+					"text_html": ""
+				},
+				{
+					"uuid": "idd-eefaa4e003da45a66668f115a7336cc1",
+					"is_read_by_reciever": false,
+					"section": "",
+					"section_id": 0,
+					"parent_uuid": "idd",
+					"title": "",
+					"text": "fghfgh",
+					"type": "transaction",
+					"is_encrypted": false,
+					"has_image": false,
+					"created_at": "2018-05-25",
+					"updated_at": "2018-05-25",
+					"deleted_at": null,
+					"sender": {
+						"username": "test1230",
+						"registration_date": "2018-04-",
+						"last_login_date": "2018-06-13",
+						"bitmessage": "",
+						"tox": "",
+						"email": "",
+						"pgp": "",
+						"description": "",
+						"long_description": "",
+						"is_premium": false,
+						"is_premium_plus": false,
+						"is_possible_scammer": false,
+						"vacation_mode": false,
+						"is_seller": false,
+						"is_trustedseller": false,
+						"is_moderator": false,
+						"is_admin": false,
+						"is_staff": false
+					},
+					"text_html": "\u003cp\u003efghfgh\u003c/p\u003e\n"
+				}
+			],
+			"number_of_messages": 2,
+			"number_of_unread_messages": 0,
+			"is_read": false
+		},
+		"transaction": {
+			"uuid": "txid",
+			"transaction_status": [
+				{
+					"ID": 153508,
+					"CreatedAt": "2018-05-25",
+					"UpdatedAt": "2018-05-25",
+					"DeletedAt": null,
+					"time": "2018-05-2",
+					"amount": 0,
+					"status": "PENDING",
+					"comment": ""
+				},
+				{
+					"ID": 153684,
+					"CreatedAt": "2018-05-25",
+					"UpdatedAt": "2018-05-25",
+					"DeletedAt": null,
+					"time": "2018-05-25",
+					"amount": 0,
+					"status": "FAILED",
+					"comment": "Escrow failed automatically"
+				}
+			],
+			"shipping_status": [],
+			"description": "desc",
+			"type": "ethereum",
+			"ethereum_transcation_uuid": "txid",
+			"dispute_uuid": "",
+			"ethereum_transcation": {
+				"uuid": "txid",
+				"amount": 0.04958546550835019
+			},
+			"vendor": {
+				"username": "dutch-christiana",
+				"registration_date": "2017-08-2",
+				"last_login_date": "2018-06-04",
+				"bitmessage": "",
+				"tox": "",
+				"email": "",
+				"pgp": "fdd",
+				"description": "ddd",
+				"long_description": "dddd",
+				"is_premium": true,
+				"is_premium_plus": true,
+				"is_possible_scammer": false,
+				"vacation_mode": false,
+				"is_seller": true,
+				"is_trustedseller": true,
+				"is_moderator": false,
+				"is_admin": false,
+				"is_staff": false
+			},
+			"buyer": {
+				"username": "test1230",
+				"registration_date": "2018-04-",
+				"last_login_date": "2018-06-13",
+				"bitmessage": "",
+				"tox": "",
+				"email": "",
+				"pgp": "",
+				"description": "",
+				"long_description": "",
+				"is_premium": false,
+				"is_premium_plus": false,
+				"is_possible_scammer": false,
+				"vacation_mode": false,
+				"is_seller": false,
+				"is_trustedseller": false,
+				"is_moderator": false,
+				"is_admin": false,
+				"is_staff": false
+			},
+			"amount": "0.049585",
+			"amount_to_pay": "0.049585",
+			"current_amount_paid": "0",
+			"created_at_string": "25.05.2018 10:21",
+			"current_payment_status": "FAILED",
+			"current_shipping_status": "DISPATCH PENDING",
+			"fe_allowed": true,
+			"is_failed": true,
+			"number_of_messages": 2,
+			"transaction_status_list": [
+				{
+					"time": "2 weeks ago",
+					"amount": 0,
+					"status": "PENDING",
+					"comment": ""
+				},
+				{
+					"time": "2 weeks ago",
+					"amount": 0,
+					"status": "FAILED",
+					"comment": "Escrow failed automatically"
+				}
+			]
+		},
+		"api_session": {
+			"token": "8f29a2da0ed948c85b4506162473e4d6",
+			"end_date": "2018-06-10",
+			"is_2fa_session": false,
+			"is_2fa_completed": false
+		}
+	}
+
+## Transaction Chat
+
+### POST http://tochka3evlj3sxdv.onion/api/transactions/:uuid?token=:token
+
+Parameters:
+
+* text
+
+Example:
+
+> torsocks curl --data "text=hello" http://tochka3evlj3sxdv.onion/api/transactions/:uuid?token=:token
+
+## Release transaction
+
+### POST http://tochka3evlj3sxdv.onion/api/transactions/:uuid/release?token=:token
+
+Example:
+
+> torsocks curl --data "text=hello" http://tochka3evlj3sxdv.onion/api/transactions/:uuid/release?token=:token
+
+## Cancel transaction
+
+### POST http://tochka3evlj3sxdv.onion/api/transactions/:uuid/cancel?token=:token
+
+Example:
+
+> torsocks curl --data "text=hello" http://tochka3evlj3sxdv.onion/api/transactions/:uuid/cancel?token=:token
+
+## Set shipped status
+
+### POST http://tochka3evlj3sxdv.onion/api/transactions/:uuid/shipped?token=:token
+
+Example:
+
+> torsocks curl --data "text=hello" http://tochka3evlj3sxdv.onion/api/transactions/:uuid/shipped?token=:token
+
+## Wallet List & Balances
+
+### GET http://tochka3evlj3sxdv.onion/api/wallet
+
+Example
+
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/wallet
+
+	{
+		"btc_balance": {
+			"balance": 0.00503501,
+			"unconfirmed_balance": 0
+		},
+		"btc_wallet": {
+			"public_key": "xxxx",
+			"created_at": "2016-09-28",
+			"updated_at": "2018-07-10"
+		},
+		"eth_balance": {
+			"balance": 0
+		},
+		"eth_wallet": {
+			"public_key": "xxxx",
+			"updated_at": "2018-07-10"
+		},
+		"bch_balance": {
+			"balance": 0.00114601,
+			"unconfirmed_balance": 0
+		},
+		"bch_wallet": {
+			"public_key": "xxxx",
+			"created_at": "2016-09-28",
+			"updated_at": "2018-07-1"
+		},
+		captcha_id: "xxx"
+	}
+
+## Bitcoin Withdraw 
+
+### GET http://tochka3evlj3sxdv.onion/api/wallet/bitcoin/send
+
+Parameters:
+
+* captcha_id
+* captcha
+* amount
+* address
+
+Example 
+
+	> torsocks curl http://tochka3evlj3sxdv.onion/api/wallet/bitcoin/send?token=:token --data "captcha_id=:captcha_id&captcha=:captcha&amount=:amount&address=:address"
+
+TODO: Add Response (returns transaction receipt)
+
+## Ethereum Withdraw
+
+## User Profile
+
+### POST http://tochka3evlj3sxdv.onion/api/settings
+
+Parameters:
+
+* bitcoin (BTC address)
+* ethereum (ETH address)
+* description (string)
+* long_description (string)
+* 2fa (string 1/0)
+* old_password (string)
+* new_password (string)
+* avatar_image (file png or jpeg)
+
+Scenarios:
+
+* In case if user changes password old_password are required.
+* Description and Long Description represent status and profile description
+* Avatar update: avatar_image
+
+## User PGPKey
+
+**Step 1**
+
+### POST http://tochka3evlj3sxdv.onion/api/settings/pgp/step1
+
+Parameters:
+
+* pgp_public_key (PGP Public Key)
+
+Example
+
+	> torsocks curl -d "pgp_public_key=xxxx" http://tochka3evlj3sxdv.onion/api/settings/pgp/step1
+
+	{
+		"secret_text": "sddasdasda"
+	}
+
+**Step 1**
+
+User should post decrypted secret_text in secret_text field
+
+### POST http://tochka3evlj3sxdv.onion/api/settings/pgp/step2
+
+Parameters:
+
+* pgp_public_key (PGP Public Key)
+* secret_text (Decrypted secret text)
+
+Example
+
+	> torsocks curl -d "pgp_public_key=xxxx&secret_text=ssss" http://tochka3evlj3sxdv.onion/api/settings/pgp/step2
+
+	{
+		"secret_text": "sddasdasda"
+	}

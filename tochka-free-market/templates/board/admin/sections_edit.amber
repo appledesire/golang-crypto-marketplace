@@ -1,0 +1,104 @@
+extends ./../../layout
+
+block left_menu
+  +leftMenu("")
+
+block content
+  $selectedPage = Page
+  div.ui.grid.centered
+    div.twelve.wide.column
+      div.ui.segment
+        h2.ui.dividing.header Edit Messageboard Section
+        form.ui.segment.form
+          [method="POST"]
+          [class="error"] ? Error
+          div.ui.error.message
+            div.header #{Localization.Items.Error}
+            p #{Error}
+
+          div.field.required
+            label Name (En)
+            div.ui.input
+              input[type="text"][name="name_en"][placeholder="Name (En)"][value=MessageboardSection.NameEn][required]
+          div.field.required
+            label Name (Ru)
+            div.ui.input
+              input[type="text"][name="name_ru"][placeholder="Name (Ru)"][value=MessageboardSection.NameRu][required]
+          div.field.required
+            label Name (De)
+            div.ui.input
+              input[type="text"][name="name_de"][placeholder="Name (De)"][value=MessageboardSection.NameDe][required]
+          div.field.required
+            label Name (Fr)
+            div.ui.input
+              input[type="text"][name="name_fr"][placeholder="Name (Fr)"][value=MessageboardSection.NameFr][required]
+          div.field.required
+            label Name (Es)
+            div.ui.input
+              input[type="text"][name="name_es"][placeholder="Name (Es)"][value=MessageboardSection.NameEs][required]
+          div.ui.section.divider
+          div.field
+            label Description (En)
+            div.ui.input
+              input[type="text"][name="description_en"][placeholder="Description (En)"][value=MessageboardSection.DescriptionEn]
+          div.field
+            label Description (Ru)
+            div.ui.input
+              input[type="text"][name="description_ru"][placeholder="Description (Ru)"][value=MessageboardSection.DescriptionRu]
+          div.field
+            label Description (De)
+            div.ui.input
+              input[type="text"][name="description_de"][placeholder="Description (De)"][value=MessageboardSection.DescriptionDe]
+          div.field
+            label Description (Fr)
+            div.ui.input
+              input[type="text"][name="description_fr"][placeholder="Description (Fr)"][value=MessageboardSection.DescriptionFr]
+          div.field
+            label Description (Es)
+            div.ui.input
+              input[type="text"][name="description_es"][placeholder="Description (Es)"][value=MessageboardSection.DescriptionEs]
+          div.ui.section.divider
+          div.field
+            label Flag
+            div.ui.input
+              input[type="text"][name="flag"][placeholder="Flag"][value=MessageboardSection.Flag]
+          div.field
+            label Icon
+            div.ui.input
+              input[type="text"][name="icon"][placeholder="Icon"][value=MessageboardSection.Icon]
+          div.ui.section.divider
+          div.field
+            label Priority
+            div.ui.input
+              input[type="text"][name="priority"][placeholder="Priority"][value=MessageboardSection.Priority]
+          div.ui.section.divider
+          div.field.required
+            label Parent Category
+            div.ui.input
+              select[name="parent_id"]
+                $selectedCategory = MessageboardSection.ParentID
+                each $cat in MessageboardSections
+                  option[name="category"][value=$cat.ID] 
+                    [selected] ? $cat.ID == $selectedCategory
+                    |  #{$cat.NameEn}
+          div.ui.section.divider
+          div.field
+            label Heading Section
+            div.field
+              div.ui.radio.checkbox
+                input[name="heading_section"][id="hs2"][type="radio"][value="0"]
+                  [checked] ? !MessageboardSection.HeadingSection
+                label[for="hs2"] #{Localization.Settings.Off}       
+            div.field
+              div.ui.radio.checkbox
+                input[name="heading_section"][id="hs1"][type="radio"][value="1"]
+                  [checked] ? MessageboardSection.HeadingSection
+                label[for="hs1"] #{Localization.Settings.On}
+          div.ui.section.divider
+          button.ui.teal.submit.button[type="submit"] #{Localization.Items.Save}
+        if MessageboardSection.ID != 0
+          form.ui.segment.form[method="POST"][action=MessageboardSection.ID+"/delete"]    
+            button.ui.red.submit.button[type="submit"] Delete
+    div.four.wide.column.t-left-menu-items
+      h5.ui.dividing.header Actions
+      a.ui.button.fluid[href="/messageboard_sections/admin/"] All Messageboard Sections

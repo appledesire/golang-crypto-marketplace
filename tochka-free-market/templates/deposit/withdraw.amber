@@ -1,0 +1,22 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("deposit")
+
+block content
+  form.ui.form.segment[method="POST"]
+    [class="error"] ? Error
+    h3.ui.dividing.header Withdraw Deposit
+    if Error
+      div.ui.error.message
+        div.header #{Localization.Auth.Error}
+        p #{Error}
+      div.ui.section.divider
+    div.field
+      label Amount
+      input[type="text"][name="amount"][readonly][value=Deposit.CryptoValue]
+    div.field
+      label Amount
+      input[type="text"][name="amount"][readonly][value=Deposit.Crypto]
+    div.ui.section.divider
+    button.ui.dark-green.submit.button[type="submit"] Withdraw

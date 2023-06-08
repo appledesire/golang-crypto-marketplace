@@ -1,0 +1,11 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("sellers")
+
+block content
+  $l = Localization
+  $v = ViewStore
+  import ./../store/mixin_store_header
+  +storeHeader($v, $l, "")
+  import ./../transaction/partial_list.amber

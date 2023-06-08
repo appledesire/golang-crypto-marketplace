@@ -1,0 +1,29 @@
+if len(ViewItemCategories) > 0
+  $selectedCategory = Category
+  $selectedSubcategory = SubCategory
+  $selectedCity = CityID
+  $selectedShippingTo = ShippingTo
+  $selectedShippingFrom = ShippingFrom
+  $user = ViewUser
+  each $cat in ViewItemCategories
+    if $cat.ItemCount > 0
+      div.item.t-cat-item
+        span.header
+          a.cat[href="/marketplace?city-id="+$selectedCity + "&category="+$cat.ID + "&shipping-to="+$selectedShippingTo + "&shipping-from="+$selectedShippingFrom]
+            [class="active"] ? $cat.NameEn==$selectedCategory
+            [class="active"] ? $selectedCategory == "all"
+            span #{$cat.Name}
+        if len($cat.SubViewItemCategories) > 0 
+          div.menu
+            [class="hidden"] ? $cat.NameEn!=$selectedCategory && ($selectedCategory != "all")
+            each $subcat in $cat.SubViewItemCategories
+              if $subcat.ItemCount > 0
+                a.item[href="/marketplace?city-id="+$selectedCity + "&category="+$subcat.ID + "&shipping-to="+$selectedShippingTo + "&shipping-from="+$selectedShippingFrom]
+                  [class="active"] ? $subcat.NameEn==$selectedSubcategory
+                  span #{$subcat.Name}
+                  if len($subcat.SubViewItemCategories) > 0
+                    each $subsubcat in $subcat.SubViewItemCategories
+                      if $subsubcat.ItemCount > 0
+                        a.item.subsubcat[href="/marketplace?city-id="+$selectedCity + "&category="+$subsubcat.ID + "&shipping-to="+$selectedShippingTo + "&shipping-from="+$selectedShippingFrom]
+                          [class="active"] ? $subsubcat.NameEn==$selectedSubcategory
+                          span #{$subsubcat.Name}

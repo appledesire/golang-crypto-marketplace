@@ -1,0 +1,67 @@
+extends ./../layout
+
+block menu
+  +topMenu("messageboard")
+
+block left_menu
+  +leftMenu("messageboard")
+
+block content
+  div.ui.grid.centered.divided
+    div.twelve.wide.column
+      table.ui.table
+        thead
+          th.th-64
+          th 
+            strong Thread
+          th.th-64
+            strong Posts
+          th
+            strong Last Updated
+          $counter = 1
+          $l = Localization
+        tbody
+          tr.main-category
+            td
+              h3
+                if ViewMessageboardSection.Icon != ""
+                  i.large[class=ViewMessageboardSection.Icon]
+                if ViewMessageboardSection.Flag != ""
+                  i.large[class=ViewMessageboardSection.Flag]
+            td[colspan="3"]
+              h4 #{ViewMessageboardSection.Name}
+          each $ViewThread in ViewMessageboardThreads
+            tr
+              td
+                img.ui.image.circular.right.floated[src="/user-avatar/"+$ViewThread.SenderUsername+"?size=small"]
+              td
+                strong
+                  a[href="/board/thread/" + $ViewThread.Uuid] 
+                    .is_read ? $ViewThread.IsRead
+                    | #{$ViewThread.Title}
+                div.author
+                  a[href="/user/"+$ViewThread.SenderUsername] @#{$ViewThread.SenderUsername}
+                  if $ViewThread.SenderIsAdmin
+                    span.ui.mini.label.red Admin
+                  else if $ViewThread.SenderIsStaff
+                    span.ui.mini.label.violet Staff
+                  span #{$ViewThread.CreatedAtStr}     
+                if len($ViewThread.Pages) > 1
+                  div
+                    span.ui.label.tiny
+                      each $page in $ViewThread.Pages
+                        a.item
+                          a[href="/board/thread/" + $ViewThread.Uuid + "?page="+$page] #{$page}   
+              td #{$ViewThread.NumberOfMessages}
+              td #{$ViewThread.LastUpdatedAtStr}          
+      if len(Pages) > 1
+        div.ui.section.divider
+        div.ui.pagination.menu
+          $section = SelectedSectionID
+          $selectedPage = Page
+          each $page in Pages
+            div.item 
+              .active ? $page == $selectedPage
+              a[href="?section="+$section + "&page="+$page] #{$page}
+    div.four.wide.column.t-left-menu-items
+      a.ui.button.teal.fluid[href="/board/thread/new?section="+ViewMessageboardSection.ID] #{Localization.Messageboard.CreateNewThread}

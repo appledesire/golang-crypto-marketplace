@@ -1,0 +1,46 @@
+{
+	"debug": true,
+	"bot_check": false,
+	"cooloff_period": 60,
+	"items_per_page": 24,
+	"feed_size": 50,
+	"single_mode": false,
+
+	"pending_duration": "24h",
+	"online_duration": "60m",
+	"completed_duration": "240h",
+
+	"bronze_account_commission": 0.1,
+	"bronze_account_referral_percent": 0.1,
+	"free_account_commission": 0.2,
+	"free_account_referral_percent": 0.05,
+	"gold_account_commission": 0.02,
+	"gold_account_referral_percent": 0.5,
+	"silver_account_commission": 0.05,
+	"silver_account_referral_percent": 0.25,
+
+	"ethereum_commission_wallet": "",
+
+	"siteurl": "",
+	"sitename": "Tochka Free Market",
+	"postgres_connection_string": "host=localhost user=postgres dbname=go_t sslmode=disable password=",
+	"cookie_encryption_salt": "",
+	"csrf_encryption": "",
+	"insured_categories": [105, 114, 30],
+	
+	"mattermost_incoming_hook_support": "",
+	"mattermost_incoming_hook_authentication": "",
+	"mattermost_incoming_hook_messageboard": "",
+	"mattermost_incoming_hook_trusted_vendors": "",
+	"mattermost_incoming_hook_transactions": "",
+	"mattermost_incoming_hook_items": "",
+	"mattermost_incoming_hook_disputes": "",
+	"mattermost_incoming_hook_shoutbox": "",
+	"mattermost_incoming_hook_disputes": "",
+	"mattermost_incoming_hook_stats_daily": "",
+	"mattermost_incoming_hook_stats_hourly": "",
+	"mattermost_incoming_hook_stats_weekly": "",
+	"mattermost_incoming_hook_subscriptions": "",
+	"mattermost_incoming_hook_warnings": "",
+	"mattermost_incoming_hook_staff_actions": ""
+}

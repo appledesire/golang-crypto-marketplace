@@ -1,0 +1,10 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("messageboard")
+
+block content
+  div.ui.grid.centered.divided
+    div.sixteen.wide.column
+      div.segment.ui
+        import ./../board/partial_thread.amber

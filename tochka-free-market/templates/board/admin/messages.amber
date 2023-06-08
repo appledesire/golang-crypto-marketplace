@@ -1,0 +1,28 @@
+extends ./../../layout
+
+block left_menu
+  +leftMenu("")
+
+block content
+  div.ui.segment
+    h2.ui.dividing.header #{Localization.LeftMenu.PMs}
+    table.ui.table
+      thead
+        th id
+        th Sender
+        th Reciever
+        th NumberOfMessages
+        th Created
+        th Last updated
+      tbody
+        each $thread in ViewThreads
+          tr
+            td 
+              a[href="/messages/admin/"+$thread.Uuid] #{$thread.Uuid}
+            td #{$thread.SenderUser.Username}
+            td #{$thread.RecieverUser.Username}
+            td #{$thread.NumberOfMessages}
+            td #{$thread.CreatedAtStr}
+            td #{$thread.LastUpdatedAtStr}
+                  
+                  

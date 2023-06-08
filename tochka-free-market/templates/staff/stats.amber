@@ -1,0 +1,89 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("stats")
+
+block content
+  $viewUser = ViewUser
+  $localization = Localization
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      $localization = Localization
+      +staffMenu($localization, "stats")
+    div.thirteen.wide.column
+      div.segment.static.ui
+        h2.ui.dividing.header.capitalize #{Localization.Staff.Statistics}
+        div.ui.statistics
+          div.statistic
+            div.value
+              span #{NumberOfUsers}
+            div.label Users
+          div.statistic
+            div.value
+              span #{NumberOfItems}
+            div.label Items
+        div.ui.mini.statistics
+          div.statistic
+            div.value
+              span #{NumberOfVendors}
+            div.label All vendors
+          div.statistic
+            div.value
+              span #{NumberOfFreeVendors}
+            div.label Free 
+          div.statistic
+            div.value
+              span #{NumberOfGoldVendors}
+            div.label Gold
+          div.statistic
+            div.value
+              span #{NumberOfSilverVendors}
+            div.label Silver
+          div.statistic
+            div.value
+              span #{NumberOfBronzeVendors}
+            div.label Bronze
+        div.ui.section.divider
+        table.ui.table.compact-text
+          thead
+            tr
+              th Year
+              th Week
+              th Date
+              th users
+              th vendors
+              th BTC tx
+              th BTC ta 
+              th BCH tx
+              th BCH ta
+              th ETH tx  
+              th ETH ta
+          each $item in StatsItems
+            tr
+              td #{$item.Year}
+              td #{$item.WeekNumber}
+              td #{$item.DateStr}
+              td #{$item.NumberOfUsers}
+              td #{$item.NumberOfVendors}
+              td #{$item.NumberOfBTCTransactionsCreated}
+              td #{$item.BTCTradeAmount}
+              td #{$item.NumberOfBCHTransactionsCreated}
+              td #{$item.BCHTradeAmount}
+              td #{$item.NumberOfETHTransactionsCreated}
+              td #{$item.ETHTradeAmount}
+      div.segment.static.ui
+        h3.ui.dividing.header.capitalize Number of Users Graph
+        img.ui.image.bordered.fluid[src="/staff/stats/users.png"]
+      div.segment.static.ui
+        h3.ui.dividing.header.capitalize Trade amount BTC
+        img.ui.image.bordered.fluid[src="/staff/stats/trade-amount-btc.png"]
+      div.segment.static.ui
+        h3.ui.dividing.header.capitalize Trade amount BCH
+        img.ui.image.bordered.fluid[src="/staff/stats/trade-amount-bch.png"]
+      div.segment.static.ui
+        h3.ui.dividing.header.capitalize Trade amount ETH
+        img.ui.image.bordered.fluid[src="/staff/stats/trade-amount-eth.png"]
+      div.segment.static.ui
+        h3.ui.dividing.header.capitalize Trade amount (number of transactions)
+        img.ui.image.bordered.fluid[src="/staff/stats/transactions.png"]

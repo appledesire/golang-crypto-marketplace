@@ -1,0 +1,18 @@
+extends layout
+
+block menu
+  +topMenu("help")
+
+block left_menu
+  +leftMenu("help")
+
+block content
+  div.ui.grid.divided
+    div.three.wide.column.t-left-menu-items
+      div.ui.vertical.fluid.menu.tiny.basic.secondary
+        each $page in StaticPages 
+          a.item.capitalize[href="/help/"+$page.Filename] #{$page.Title}
+    div.thirteen.wide.column
+      div.segment.static.ui
+        h3.ui.dividing.header.capitalize #{StaticPage.Title}
+        div #{StaticPage.Body}

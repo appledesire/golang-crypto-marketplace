@@ -1,0 +1,52 @@
+extends ./../layout
+block left_menu
+  +leftMenu("sellers")
+
+block content
+  $l = Localization
+  $viewStore = ViewStore
+  $viewUser = ViewUser
+  $item = ViewItem
+  form.ui.segment.form
+    [method="POST"]
+    [enctype="multipart/form-data"]
+    [class="error"] ? Error
+    if ViewItem.Uuid != ""
+      h3.ui.dividing.header #{Localization.Items.EditItem}
+    else
+      h3.ui.dividing.header #{Localization.Items.AddItem}
+    div.ui.error.message
+      div.header #{Localization.Items.Error}
+      p #{Error}
+    div.field.required
+      label #{Localization.Items.Name}
+      div.ui.input
+        input[type="text"][name="name"][placeholder="Name"][value=ViewItem.Name][required]
+    div.field.required
+      label #{Localization.Items.Description}
+      div.ui.input
+        textarea[type="text"][name="description"][placeholder="Description"][required]
+          #{ViewItem.Description}
+    div.field.required
+      label #{Localization.Items.Category}
+      div.ui.input
+        select[name="category"]
+          $selectedCategory = CategoryID
+          each $cat in ViewItemCategories
+            option[name="category"][value=$cat.ID] 
+              [selected] ? $cat.ID == $selectedCategory
+              |  #{$cat.Name}
+              each $subcat in $cat.SubViewItemCategories
+                option[name="category"][value=$subcat.ID] 
+                  [selected] ? $subcat.ID == $selectedCategory
+                  |  --- #{$subcat.Name}
+                each $subsubcat in $subcat.SubViewItemCategories
+                  option[name="category"][value=$subsubcat.ID] 
+                    [selected] ? $subsubcat.ID == $selectedCategory
+                    |  --- --- #{$subsubcat.Name}
+    div.field.required
+      label #{Localization.Items.Image}
+      div.ui.input
+        input[type="file"][name="image"][size="40"]
+    div.ui.section.divider
+    button.ui.teal.submit.button[type="submit"] #{Localization.Items.Save}

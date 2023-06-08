@@ -1,0 +1,61 @@
+extends ./../layout
+
+block content
+  div.ui.divided.grid
+    div.twelve.wide.column
+      div.segment.ui
+        h3.ui.dividing.header #{Localization.LeftMenu.Referrals}
+        div.ui.form
+          div.field
+            label #{Localization.Referrals.ReferralLink}
+            div.ui.icon.input
+              input[type="text"][readonly][value="http://tochka3evlj3sxdv.onion/auth/register/"+ViewUser.InviteCode]
+          div.field
+            label #{Localization.Referrals.NumberOfInvitedUsers}
+            input[type="text"][readonly][value=NumberOfInvitedUsers]
+        if SelectedSection == "users"
+          if len(ExtendedUsers) > 0
+            div.ui.section.divider
+            table.ui.table.basic
+              tbody
+                each $user in ExtendedUsers
+                  tr
+                    td.right.aligned.ui
+                      
+                    td 
+                      a[href="/user/"+$user.Username] @#{$user.Username}
+                    td
+                      p #{$user.RegistrationDate}
+            div.ui.section.divider   
+            div.ui.pagination.menu
+              $selected = SelectedPage
+              each $page in Pages
+                div.item 
+                  .active ? $page == $selected
+                  a[href="?page="+$page] #{$page}
+        if SelectedSection == "payments"
+          if len(ReferralPayments) > 0
+            div.ui.section.divider
+            table.ui.table.basic
+              tbody
+                each $payment in ReferralPayments
+                  tr
+                    td
+                      i.icon.calendar
+                      | #{$payment.CreatedAt}
+                    td #{$payment.ReferralPercent*100} %
+                    td #{$payment.ReferralPaymentUSD} USD
+                    td #{$payment.ReferralPaymentBTC} BTC
+    div.four.wide.column.t-left-menu-items
+      div.ui.vertical.menu.secondary.basic.tiny.fluid
+        a.item[href="?section=users"] 
+          i.icon.users
+          | Users
+          [class="active"] ? SelectedSection == "users"
+        a.item[href="?section=payments"] 
+          i.ui.icon.bitcoin
+          | #{Localization.Settings.Payments}
+          [class="active"] ? SelectedSection == "payments"
+
+block left_menu
+  +leftMenu("referrals")

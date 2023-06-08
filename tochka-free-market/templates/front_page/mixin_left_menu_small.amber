@@ -1,0 +1,32 @@
+mixin leftMenuSmall($section)
+  div.menu-small-container
+    div.wide.column.tochka-left.menu.menu-small
+      div.ui.menu.tiny.vertical.secondary.fluid
+        a.item[href="/marketplace"]
+          [class="active"] ? $section == "items"
+          i.ui.icon.shop
+          p #{Localization.Layout.Marketplace}
+        a.item[href="/vendors"]
+          [class="active"] ? $section == "sellers"
+          i.ui.icon.users
+          p #{Localization.Layout.Vendors}
+        a.item[href="/shoutbox"]
+          [class="active"] ? $section == "shoutbox"
+          i.icon.comments.outline
+          p #{Localization.LeftMenu.News}
+        a.item[href="/feed"]
+          [class="active"] ? $section == "feed"
+          i.icon.feed
+          p #{Localization.LeftMenu.Feed}
+        a.item[href="/board"]
+          [class="active"] ? $section == "messageboard"
+          i.icon.users
+          p #{Localization.LeftMenu.Board}
+        a.item[href="/help"]
+          [class="active"] ? $section == "help"
+          i.ui.icon.info
+          p #{Localization.Layout.Help}
+        if ViewUser.IsStaff || ViewUser.IsAdmin
+           a.ui.item[href="/staff/users"]
+            i.ui.icon.users
+            p #{Localization.Staff.Staff}

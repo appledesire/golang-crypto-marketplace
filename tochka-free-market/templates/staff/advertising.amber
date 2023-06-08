@@ -1,0 +1,36 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  $ViewUser = ViewUser
+  $localization = Localization
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      $localization = Localization
+      +staffMenu($localization, "advertising")
+    div.thirteen.wide.column
+      div.segment.ui
+        h3.ui.dividing.header Advertisings      
+        each $ad in Advertisings
+          table.ui.table.striped.celled    
+            tbody  
+              tr
+                td 
+                  a[href="/store/"+$ad.Item.Store.Storename] @#{$ad.Item.Store.Storename}
+                td.ui.word-break 
+                  #{$ad.Comment}
+                td 
+                  #{$ad.CountImpressions} / #{$ad.CurrentCountImpressions}
+                td
+                  if $ad.Status
+                    p Active
+                  else
+                    p Stop
+              tr
+                td[colspan="3"]
+                  a[href="/store/"+$ad.Item.Store.Storename+"/item/"+$ad.Item.Uuid] #{$ad.Item.Name}
+                td[colspan="1"] 
+                  #{$ad.DateStart}

@@ -1,0 +1,123 @@
+extends ./../layout
+
+block menu
+  +topMenu("messageboard")
+
+block left_menu
+  +leftMenu("messageboard")
+
+block content
+  div.ui.grid.centered.divided
+    div.twelve.wide.column
+      table.ui.table
+        thead
+          th 
+          th Section
+          th Threads
+          th Posts
+          th Last Post
+        tbody
+          $l = Localization
+          each $section in ViewMessageboardSections
+            tr.main-category
+              td
+                h3
+                  if $section.Icon != ""
+                    i.large[class=$section.Icon]
+                  if $section.Flag != ""
+                    i.large[class=$section.Flag]
+              td[colspan="4"]
+                h4 #{$section.Name}
+            if !$section.HeadingSection
+              tr
+                td
+                    if $section.Icon != ""
+                      i.large[class=$section.Icon]
+                    if $section.Flag != ""
+                      i.large[class=$section.Flag]
+                td 
+                  strong
+                    a[href="/board/" + $section.ID] #{$section.Name}
+                  p #{$section.Description}
+                td.th-16
+                  span.ui.label.circular #{$section.NumberOfThreads}
+                td.th-16
+                  span.ui.label.circular #{$section.NumberOfMessages}
+                td
+                  if $section.LastThreadUuid
+                    a[href="/board/thread/" + $section.LastThreadUuid]
+                      | #{$section.LastThreadTitle}
+                    div.sub.header
+                      div
+                        span 
+                          a[href="/user/"+$section.LastMessageByUsername] @#{$section.LastMessageByUsername}
+                        span •
+                        span #{$section.LastUpdatedStr}
+                        span •
+                        span #{$l.Messageboard.NumberOfMessages}: #{$section.LastThreadNumberOfMessages}
+            each $subsection in $section.SubViewsections
+              tr
+                td
+                    if $subsection.Icon != ""
+                      i.large[class=$subsection.Icon]
+                    if $subsection.Flag != ""
+                      i.large[class=$subsection.Flag]
+                td 
+                  strong
+                    a[href="/board/" + $subsection.ID] #{$subsection.Name}
+                  p #{$subsection.Description}
+                td.th-16
+                  span.ui.label.circular #{$subsection.NumberOfThreads}
+                td.th-16
+                  span.ui.label.circular #{$subsection.NumberOfMessages}
+                td
+                  if $subsection.LastThreadUuid
+                    a[href="/board/thread/" + $subsection.LastThreadUuid]
+                      | #{$subsection.LastThreadTitle}
+                    div.sub.header
+                      div
+                        span
+                          a[href="/user/"+$subsection.LastMessageByUsername] @#{$subsection.LastMessageByUsername}
+                        span •
+                        span #{$subsection.LastUpdatedStr}
+                        span •
+                        span #{$l.Messageboard.NumberOfMessages}: #{$subsection.LastThreadNumberOfMessages}
+    div.four.wide.column.t-left-menu-items
+      h4.ui.header.dividing Messageboard Statistics
+      div.ui.horizontal.statistics.mini
+        div.statistic
+          div.value #{MessageboardSummaryStats.NumberOfThreads}
+          div.label Threads
+        div.statistic
+          div.value #{MessageboardSummaryStats.NumberOfMessages}
+          div.label Messages
+      h4.ui.header.dividing Today
+      div.ui.horizontal.statistics.mini
+        div.statistic
+          div.value #{MessageboardDailyStats.NumberOfThreads}
+          div.label Threads
+        div.statistic
+          div.value #{MessageboardDailyStats.NumberOfMessages}
+          div.label Messages
+      h4.ui.header.dividing New Threads
+      table.ui.table
+        tbody
+          each $ViewThread in ViewMessageboardThreads
+            tr
+              td
+                img.ui.image.circular.right.floated[src="/user-avatar/"+$ViewThread.SenderUsername+"?size=small"]
+              td
+                strong
+                  a[href="/board/thread/" + $ViewThread.Uuid] 
+                    .is_read ? $ViewThread.IsRead
+                    | #{$ViewThread.Title}
+                div.author
+                  a[href="/user/"+$ViewThread.SenderUsername] @#{$ViewThread.SenderUsername}
+                  div
+                    span #{$ViewThread.CreatedAtStr}     
+                if len($ViewThread.Pages) > 1
+                  div
+                    span.ui.label.tiny
+                      each $page in $ViewThread.Pages
+                        a.item
+                          a[href="/board/thread/" + $ViewThread.Uuid + "?page="+$page] #{$page}   

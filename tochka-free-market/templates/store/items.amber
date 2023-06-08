@@ -1,0 +1,43 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("sellers")
+
+block content
+  $l = Localization
+  $viewUser = ViewUser
+  $selectedPage = Page
+  $selectedCity = CityID
+  $selectedCategory = CategoryID
+  $selectedShippingTo = ShippingTo
+  $sortby = SortBy
+  $account = Account
+  $l = Localization
+  $v = ViewStore
+  $vs = ViewUserStore
+  div.ui.grid.divided.top-aligned
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_store_card
+        div.user.info
+          +storeCard($v, $l)
+    div.thirteen.wide.column
+      import ./mixin_store_menu
+      +storeMenu($v, $l, "items")
+      if len(ViewItems) > 0 
+        each $itm in ViewItems
+          import ./../item/mixin_item_row
+          $i = $itm
+          $u = $viewUser
+          +itemRow($i, $u, $vs, $l)
+      else
+        div.ui.icon.message
+          i.icon.cart
+          div.content
+            div.header #{Localization.Items.NoItems}
+      if len(Pages) > 1
+        div.ui.section.divider
+        div.ui.pagination.menu
+          each $page in Pages
+            div.item 
+              .active ? $page == $selectedPage
+              a[href="?page="+$page + "&city="+$selectedCity + "&category="+$selectedCategory + "&sortby="+$sortby + "&account=" + $account] #{$page}

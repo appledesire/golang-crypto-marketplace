@@ -1,0 +1,12 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+  div.ui.grid.divided
+    div.three.wide.column.t-left-menu-items
+    	import ./partial_list_ticket.amber
+    div.thirteen.wide.column
+      div.segment.ui
+        import ./../board/partial_thread.amber

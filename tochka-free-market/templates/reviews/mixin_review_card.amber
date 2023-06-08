@@ -1,0 +1,39 @@
+mixin reviewCard($review, $viewUser, $vendorCard, $itemCard)
+  $itm = $review.ViewItem
+  $u = ViewUser
+  $l = Localization
+  div.ui.segment
+    div.ui.three.column.grid
+      div.ui.column
+        h4 Item
+        div.ui.label 
+          .dark-green ? $review.ItemScore >= 4
+          .red ? $review.ItemScore < 3.5
+          .blue ? $review.ItemScore >= 3.5 && $review.ItemScore < 4
+          i.icon.thumbs
+            .up ? $review.ItemScore >= 3.5
+            .down ? $review.ItemScore < 3.5
+          span #{$review.ItemScore}
+        pre.text #{$review.ItemReview}
+      div.ui.column
+        h4 Seller
+        div.ui.label 
+          .dark-green ? $review.SellerScore >= 4
+          .red ? $review.SellerScore < 3.5
+          .blue ? $review.SellerScore >= 3.5 && $review.SellerScore < 4
+          i.icon.thumbs
+            .up ? $review.SellerScore >= 3.5
+            .down ? $review.SellerScore < 3.5
+          span #{$review.SellerScore}
+        pre.text #{$review.SellerReview}
+      div.ui.column
+        h4 Marketplace
+        div.ui.label 
+          .dark-green ? $review.MarketplaceScore >= 4
+          .red ? $review.MarketplaceScore < 3.5
+          .blue ? $review.MarketplaceScore >= 3.5 && $review.MarketplaceScore < 4
+          i.icon.thumbs
+            .up ? $review.MarketplaceScore >= 3.5
+            .down ? $review.MarketplaceScore < 3.5
+          span #{$review.MarketplaceScore}
+        pre.text #{$review.MarketplaceReview}

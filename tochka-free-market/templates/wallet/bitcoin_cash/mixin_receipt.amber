@@ -1,0 +1,27 @@
+mixin paymentReceipt($a)
+  div.ui.message
+    div.ui.form
+      div.field
+        label Tx Hash
+        span.label.ui.bitcoin.id.tiny #{$a.Hash}
+      div.ui.section.divider
+      div.field
+        label Fee
+        span #{$a.Fee} 
+        span Satoshis
+      div.ui.section.divider
+      div.field
+        label Fee Description
+        span #{$a.Description}
+      div.ui.section.divider
+      div.field
+        label Raw TX
+        pre.word-break #{$a.RawTransaction}                          
+      div.ui.section.divider
+      div.field
+        label Outputs
+        each $output in $a.Outputs
+          div
+            span.label.ui.bitcoin.id.tiny #{$output.PublicKey}
+            span #{$output.Satoshis} 
+            span Satoshis

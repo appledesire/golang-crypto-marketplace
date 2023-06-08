@@ -1,0 +1,22 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+  $localization = Localization
+  $seller = ViewMarketplaceUser
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      $l = Localization
+      $v = ViewMarketplaceUser
+      import ./../user/mixin_user_menu
+      +userMenu($v, $l, "staff")
+    div.thirteen.wide.column
+      div.segment.ui
+        h3.ui.dividing.header Admin Actions
+        form.ui.form.fluid[action="/staff/users/"+ViewMarketplaceUser.Username+"/ban"][method="POST"]
+          button.ui.mini.button.fluid.secondary[type="submit"] Ban User
+        div.ui.section.divider
+        form.ui.form.fluid[action="/staff/users/"+ViewMarketplaceUser.Username+"/seller"][method="POST"]
+          button.ui.mini.button.fluid.secondary[type="submit"] Grant Seller Status

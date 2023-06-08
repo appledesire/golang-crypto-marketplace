@@ -1,0 +1,131 @@
+extends ./../layout
+
+block menu
+  +topMenu("items")
+
+block left_menu
+  +leftMenu("items")
+
+block content
+  $selectedPage = Page
+  $selectedCity = CityID
+  $selectedCategory = CategoryID
+  $selectedShippingTo = ShippingTo
+  $viewUser = ViewUser
+  $sortby = SortBy
+  $viewUserStore = ViewUserStore
+  $account = Account
+  $l = Localization
+  div.ui.grid
+    div.eleven.wide.column
+      if len(ViewItems) > 0
+        each $item in ViewItems
+          import ./mixin_item_row
+          $i = $item
+          $u = $viewUser
+          +itemRow($i, $u, $viewUserStore, $l)
+      if len(ViewItems) == 0
+        div.ui.icon.message
+          i.icon.cart
+          div.content
+            div.header #{Localization.Items.NoItems}
+            p :(
+      if len(Pages) > 1
+        div.ui.section.divider
+        div.ui.pagination.menu
+          each $page in Pages
+            div.item 
+              .active ? $page == $selectedPage
+              a[href="?page="+$page + "&city="+$selectedCity + "&category="+$selectedCategory + "&sortby="+$sortby + "&account=" + $account] #{$page}
+    div.five.wide.column
+      form.ui.input.icon.fluid[method="GET"]
+        input[type="hidden"][name="category"][value=Category]
+        input[type="hidden"][name="subcategory"][value=SubCategory]
+        input[type="text"][name="query"][placeholder=Localization.Items.Search][value=Query]
+        i.icon.search
+      label.ui.button.fluid.menu.show-filters-label[for="show-filters"] 
+        i.ui.icon.ellipsis.vertical 
+        | #{Localization.Items.Filters}
+      h5.ui.header #{Localization.Items.DeliveryType}
+      div.ui.buttons.basic.vertical.tiny.fluid 
+        a.ui.button.tiny.basic[href="/marketplace/"] 
+          [class="active"] ? SelectedPackageType == "" || SelectedPackageType == "all"
+          | #{Localization.Items.AllTypes}
+        a.ui.button.tiny.basic[href="/marketplace/mail/"] 
+          [class="active"] ? SelectedPackageType == "mail"
+          | #{Localization.Items.Mail}
+        a.ui.button.tiny.basic[href="/marketplace/drop/"] 
+          [class="active"] ? SelectedPackageType == "drop"
+          | #{Localization.Items.Drop}
+        a.ui.button.tiny.basic[href="/marketplace/drop preorder/"] 
+          [class="active"] ? SelectedPackageType == "drop preorder"
+          | #{Localization.Items.DropPreorder}
+        a.ui.button.tiny.basic[href="/marketplace/digital/"] 
+          [class="active"] ? SelectedPackageType == "digital"
+          | #{Localization.Items.Digital}
+      if SelectedPackageType == "drop" || SelectedPackageType == "drop preorder"
+        h5.ui.header #{Localization.Items.ShippingTo}
+        div.ui.compact.menu.fluid.tiny
+          div.ui.simple.dropdown.item.fluid
+            i.icon.globe
+            if ShippingTo != ""
+              | #{ShippingTo}
+            else
+              | #{Localization.Items.AllCountries}
+            div.menu.fluid.fluid
+              a.item.fluid[href="?category=" + $selectedCategory + "&sortby=" + $sortby + "&account=" + $account] #{Localization.Items.AllCountries}
+              each $loc in ShippingToList
+                if $loc != ""
+                  a.item.fluid[href="?category="+$selectedCategory + "&shipping-to="+$loc + "&sortby="+$sortby + "&account=" + $account] #{$loc}   
+      if SelectedPackageType == "drop" || SelectedPackageType == "drop preorder" && len(GeoCities) > 0
+        h5.ui.header #{Localization.Items.City}
+        div.ui.compact.menu.fluid.tiny
+          div.ui.simple.dropdown.item.fluid
+            i.icon.globe
+            | #{City}
+            div.menu.fluid.fluid
+              a.item.fluid[href="?city-id="+ 0 + "&shipping-to=" + $selectedShippingTo + "&category=" + $selectedCategory + "&sortby=" + $sortby + "&account=" + $account] #{$l.Items.AllCountries}
+              each $loc in GeoCities
+                a.item.fluid[href="?category="+$selectedCategory + "&city-id="+$loc.ID + "&sortby="+$sortby + "&account=" + $account] #{$loc.NameEn}  
+      h5.ui.header #{Localization.Items.Categories}
+      div.ui.vertical.fluid.menu.categories.tiny
+        import ./partial_categories.amber
+      h5.ui.header Account
+      div.ui.fluid.buttons.basic.vertical.tiny
+        a.ui.button.tiny.basic[href="?city-id="+$selectedCity + "&category="+$selectedCategory + "&sortby=" + $sortby + "&account=all"] 
+          | #{$l.Feed.All}
+          [class="active"] ? Account == "all"
+        a.ui.button.tiny.basic[href="?city-id="+$selectedCity + "&category="+$selectedCategory + "&sortby=" + $sortby + "&account=gold"]
+          | GOLD
+          [class="active"] ? Account == "gold"
+        a.ui.button.tiny.basic[href="?city-id="+$selectedCity + "&category="+$selectedCategory + "&sortby=" + $sortby + "&account=silver"]
+          | SILVER
+          [class="active"] ? Account == "silver"
+        a.ui.button.tiny.basic[href="?city-id="+$selectedCity + "&category="+$selectedCategory + "&sortby=" + $sortby + "&account=bronze"]
+          | BRONZE
+          [class="active"] ? Account == "free"
+        a.ui.button.tiny.basic[href="?city-id="+$selectedCity + "&category="+$selectedCategory + "&sortby=" + $sortby + "&account=free"]
+          | FREE
+          [class="active"] ? Account == "free"
+      h5.ui.header #{Localization.Items.SortBy}
+      div.ui.fluid.buttons.basic.vertical.tiny
+        a.ui.button.tiny.basic[href="?city-id=" + $selectedCity + "&category=" + $selectedCategory + "&sortby=date_logged_in" + "&account=" + $account] 
+          i.icon.dark-green.circle
+          | Online
+          [class="active"] ? SortBy == "date_logged_in"
+        a.ui.button.tiny.basic[href="?city-id=" + $selectedCity + "&category=" + $selectedCategory + "&sortby=price" + "&account=" + $account] 
+          i.icon.bitcoin
+          | #{Localization.Items.Price}
+          [class="active"] ? SortBy == "price"
+        a.ui.button.tiny.basic[href="?city-id=" + $selectedCity + "&category=" + $selectedCategory + "&sortby=popularity" + "&account=" + $account] 
+          i.icon.area.chart
+          | #{Localization.Items.Popularity}
+          [class="active"] ? SortBy == "popularity"
+        a.ui.button.tiny.basic[href="?city-id=" + $selectedCity + "&category=" + $selectedCategory + "&sortby=date_added" + "&account=" + $account] 
+          i.icon.calendar
+          | #{Localization.Items.DateAdded}
+          [class="active"] ? SortBy == "date_added"
+        a.ui.button.tiny.basic[href="?city-id=" + $selectedCity + "&category=" + $selectedCategory + "&sortby=rating" + "&account=" + $account] 
+          i.icon.star
+          | #{Localization.Items.Rating}
+          [class="active"] ? SortBy == "rating"

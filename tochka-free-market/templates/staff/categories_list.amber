@@ -1,0 +1,49 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  $selectedPage = Page
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      $localization = Localization
+      +staffMenu($localization, "item_categories")
+      h5.ui.dividing.header Actions
+      a.ui.button.fluid[href="/staff/item_categories/new"] Add new category
+    div.thirteen.wide.column
+      div.ui.segment
+        h3.ui.dividing.header Item Categories
+        table.ui.table.striped
+          thead
+            th Icon
+            th Name (En)
+            th
+            th
+            th
+          tbody
+            each $category in ViewItemCategories
+              tr
+                td #{$category.Icon}
+                td #{$category.NameEn}
+                td
+                td
+                td
+                  a.ui.button.teal.mini[href=$category] edit
+              each $subCategory in $category.Subcategories
+                tr
+                  td #{$subCategory.Icon}
+                  td
+                  td #{$subCategory.NameEn}
+                  td
+                  td
+                    a.ui.button.teal.mini[href=$subCategory] edit
+                each $subSubCategory in $subCategory.Subcategories
+                  tr
+                    td #{$subSubCategory.Icon}
+                    td
+                    td
+                    td #{$subSubCategory.NameEn}
+                    td
+                      a.ui.button.teal.mini[href=$subSubCategory] edit

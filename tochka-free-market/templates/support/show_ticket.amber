@@ -1,0 +1,42 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+  $st = ViewSupportTicket
+  $ViewUser = ViewUser
+  $ViewThread = ViewThread
+  $localization = Localization
+  div.ui.grid.divided
+    div.sixteen.wide.column
+      div.ui.form.segment
+        h3.ui.dividing.header #{$st.Title}
+        div.ui.fields.two
+          div.ui.field
+            label Status
+            span.ui.label #{$st.CurrentStatus}
+          div.ui.field
+            label Category
+            span.ui.label #{$st.Category}
+        div.ui.section.divider
+        div.ui.field
+          label Status History
+          table.ui.table.fluid
+            each $status in $st.SupportTicketStatuses
+              tr
+                td #{$status.Status}
+                td #{$status.CreatedAt}
+                td @#{$status.User.Username}
+        div.ui.section.divider
+        div.ui.field
+          if $st.CurrentStatus != "close"
+            form.ui.reply.form
+              [method="POST"]
+              [action="/support/" + $st.Uuid + "/status"]
+              [enctype="multipart/form-data"]
+                button.ui.red.labeled.submit.icon.button[type="submit"][value="CLOSED"][name="ticketstatus"]
+                  i.icon.cross.close
+                  | Close ticket
+      div.ui.segment
+        import ./../board/partial_thread

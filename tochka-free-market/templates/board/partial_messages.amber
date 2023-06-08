@@ -1,0 +1,20 @@
+$user = ViewUser
+$selected = SelectedSection
+if len(ViewPrivateThreads) == 0
+  div.ui.message.fluid
+    p Your PMs will be listed here
+div.ui.comments
+  $ViewUser = ViewUser
+  each $ViewThread in ViewPrivateThreads
+    div.comment
+      [class="active"] ? $ViewThread.Uuid == $selected
+      div.content
+        span.ui.label.right.floated.tiny.circular
+          [class="dark-green"] ? !$ViewThread.IsRead
+          | #{$ViewThread.NumberOfMessages}
+        a.author[href="/messages/"+$ViewThread.DisplayUsername] 
+          span @#{$ViewThread.DisplayUsername}
+        div.metadata
+        div
+          span.date #{$ViewThread.LastUpdatedStr}
+

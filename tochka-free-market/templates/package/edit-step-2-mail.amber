@@ -1,0 +1,45 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("sellers")
+
+block content
+  $l = Localization
+  $viewStore = ViewStore
+  $viewUser = ViewUser
+  $item = ViewItem
+  form.ui.form.segment[method="POST"][enctype="multipart/form-data"]
+    [class="error"] ? Error
+    h3.ui.dividing.header #{Localization.Items.EditPackages}
+    div.ui.error.message
+      div.header #{Localization.Items.Error} 
+      p #{Error}
+    div.field.required
+      label #{Localization.Items.ShippingFrom}
+      div.ui.input
+        select[name="country_name_en_from"]
+          $selectedLocation = ViewPackage.CountryNameEnShippingFrom
+          each $loc in Countries
+            option[name="country_name_en_from"][value=$loc.NameEn] 
+              [selected] ? $loc.NameEn == $selectedLocation
+              |  #{$loc.NameEn}
+    div.ui.section.divider
+    div.field.required
+      label #{Localization.Items.ShippingTo}
+      div.ui.input
+        select[name="country_name_en_to"]
+          $selectedLocation = ViewPackage.CountryNameEnShippingTo
+          each $loc in Countries
+            option[name="country_name_en_to"][value=$loc.NameEn] 
+              [selected] ? $loc.NameEn == $selectedLocation
+              |  #{$loc.NameEn}
+    div.ui.section.divider
+    input[type="hidden"][name="type"][value=ViewPackage.Type]
+    input[type="hidden"][name="item_uuid"][value=ViewItem.Uuid]
+    input[type="hidden"][name="name"][value=ViewPackage.Name]
+    input[type="hidden"][name="step"][value="2"]
+    input[type="hidden"][name="currency"][value=PackageCurrency]
+    input[type="hidden"][name="price"][value=PackagePrice]
+    input[type="hidden"][name="quantity"][value=Quantity]
+    input[type="hidden"][name="step"][value="2"]
+    button.ui.blue.submit.button[type="submit"] #{Localization.Items.Save}

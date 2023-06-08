@@ -1,0 +1,41 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  $viewUser = ViewUser
+  $localization = Localization
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      +staffMenu($localization, "vendors")
+      
+    div.thirteen.wide.column
+      table.ui.table
+        thead
+          tr
+            th Storename
+            th Registration
+            th Last Login
+            th Verification Request
+        tbody
+          each $store in ViewStores
+            tr
+              td 
+                a[href="/store/"+$store.Storename] @#{$store.Storename}
+                br
+                if $store.IsGoldAccount 
+                  span.ui.label.tiny.dark-green Gold Account
+                if $store.IsSilverAccount 
+                  span.ui.label.tiny.dark-green Silver Account
+                if $store.IsBronzeAccount 
+                  span.ui.label.tiny.dark-green Bronze Account
+                if $store.IsFreeAccount 
+                  span.ui.label.tiny.dark-green Free Account
+                if $store.IsAllowedToSell
+                  span.ui.label.tiny Is Allowed to Sell
+              td #{$store.RegistrationDateStr}
+              td #{$store.LastLoginDateStr}
+              td
+                a.ui.button.mini.fluid.dark-green[href="/staff/vendors/"+$store.Storename] Verify

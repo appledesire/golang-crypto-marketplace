@@ -1,0 +1,40 @@
+table.ui.table.basic
+  if ViewTransaction.CurrentPaymentStatus == "PENDING"
+    div.ui.message
+      div.header 
+        i.icon.attention
+        span PENDING Transaction
+      p Please fund this transaction within 12 hours after initiation or it will be cancelled. Please note that vendor will see this transaction only after it has been funded. Transaction is considered funded after 1 confirmation on the blockchain.
+  tbody
+    tr
+      td
+        strong #{Localization.Orders.Vendor}
+        br
+        a[href="/store/"+ViewTransaction.Store.Storename] @#{ViewTransaction.Store.Storename} 
+    tr
+      td
+        strong #{Localization.Orders.Buyer}
+        br
+        a[href="/user/"+ViewTransaction.Buyer.Username] @#{ViewTransaction.Buyer.Username}
+    tr
+      td
+        strong #{Localization.Orders.Amount}
+        br
+        | #{ViewTransaction.Amount}
+    tr
+      td
+        strong #{Localization.Orders.CreatedAt}
+        br
+        | #{ViewTransaction.CreatedAt}
+    tr
+      td
+        strong #{Localization.Orders.Status}
+        br
+        a.ui.label.tiny[href="/payments/"+ViewTransaction.Uuid] 
+          [class="completed"] ? ViewTransaction.IsCompleted
+          [class="pending"] ? ViewTransaction.IsPending
+          [class="failed"] ? ViewTransaction.IsFailed
+          [class="cancelled"] ? ViewTransaction.IsCancelled
+          [class="released"] ? ViewTransaction.IsReleased
+          [class="frozen"] ? ViewTransaction.IsFrozen
+          | #{ViewTransaction.CurrentPaymentStatus}

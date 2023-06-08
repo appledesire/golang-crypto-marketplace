@@ -1,0 +1,40 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("deposit")
+
+block content
+  form.ui.form.segment[method="POST"]
+    [class="error"] ? Error
+    h3.ui.dividing.header Add Deposit
+    if Error
+      div.ui.error.message
+        div.header #{Localization.Auth.Error}
+        p #{Error}
+      div.ui.section.divider
+    div.fields
+      div.required.field.five.wide
+        label Amount
+        input[type="text"][name="amount"][required]
+      div.required.field.six.wide
+        label Fiat Currency
+        div.ui.simple.dropdown.item.fluid
+        select[name="currency"]
+          each $fiatCurreny, $rates in CurrencyRates
+            option[value=$fiatCurreny] #{$fiatCurreny}
+      div.required.field.five.wide
+        label Crypto-Currency
+        select[name="crypto"]
+          option[value="BTC"] BTC
+          option[value="BCH"] BCH
+          option[value="ETH"] ETH
+    div.ui.section.divider
+    input[type="hidden"][name="captcha_id"][value=CaptchaId]
+    div.required.field
+      label #{Localization.Auth.Captcha}
+      div.ui.input
+        input[type="text"][name="captcha"][placeholder="captcha"][required]
+      div
+        img.ui.medium.image.captcha[width=300][height=100][src="/captcha/"+CaptchaId]
+    div.ui.section.divider
+    button.ui.dark-green.submit.button[type="submit"] Add Deposit

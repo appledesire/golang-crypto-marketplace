@@ -1,0 +1,59 @@
+block footer
+  div.sixteen.wide.column.footer-v2
+    div.ui.grid.first
+      div.three-and-a-half.wide.column
+        h3 Learn How to Buy
+        ul
+          a[href="/help/04_how_to_buy"]
+            li How to Buy
+          a[href="/help/04_how_to_buy#buy-bitcoins"]
+            li Buying Bitcoins
+          a[href="/help/04_how_to_buy#bitcoin-wallet"]
+            li Transfer Bitcoins to Your Wallet
+      div.three-and-a-half.wide.column
+        h3 Make Money with Us
+        ul
+          a[href="/help/03_how_to_sell"]
+            li How to Sell at Tochka
+          a[href="/referrals"]
+            li Commissions
+      div.three-and-a-half.wide.column
+        h3 Let us Help You
+        ul
+          a[href="/support/new"]
+            li Help & Contact
+          a[href="/help/10_how_to_stay_safe"]
+            li Staying Safe
+          a[href="/support/new"]
+            li Make a Dispute
+      div.three-and-a-half.wide.column
+        h3 Get to Know us
+        ul
+          a[href="/help/05_about_marketplace"]
+            li About Tochka
+          a[href="/help/06_quality_control"]
+            li Vendor Quality Control
+          a[href="http://qxklmrhx7qkzais6.onion/Tochka/tochka-free-market"]
+            li Tochka Source Code
+          a[href="http://qxklmrhx7qkzais6.onion/Tochka/tochka-mobile-app-android"]
+            li Tochka Android App Source Code
+          a[href="/help/09_REST_API"]
+            li REST API
+    div.ui.grid
+      div.thirteen.wide.column.second
+        div.ui.menu.tiny.horizontal.secondary.fluid
+          a.item[href="http://34n4am6fxu4dnv66.onion/blog"]
+            i.ui.icon.feed
+            | Blog
+          a.item[href="http://34n4am6fxu4dnv66.onion/wiki"]
+            i.ui.icon.info
+            | Wiki
+          a.item[href="http://34n4am6fxu4dnv66.onion/ico"]
+            i.ui.selected.radio.icon
+            | ICO
+          a.item[href="http://qxklmrhx7qkzais6.onion/"]
+            i.ui.github.icon
+            | Source Code
+          a.item[href="http://qxklmrhx7qkzais6.onion/Tochka/tochka-free-market"] Tochka is Open-Source Software subject to the MIT License
+          span.item
+            i Page rendered in #{PageRenderTime} ms

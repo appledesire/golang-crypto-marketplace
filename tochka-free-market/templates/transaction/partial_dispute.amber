@@ -1,0 +1,17 @@
+form.ui.form[method="POST"][action="/dispute/start/" + ViewTransaction.Uuid]
+  [class="error"] ? Error
+  h3.ui.dividing.header #{Localization.Dispute.Dispute}
+  
+  if Error
+    div.ui.error.message
+      div.header #{Localization.Rating.Error}
+      p #{Error}
+    div.ui.section.divider
+  div.field
+    label #{Localization.Dispute.Claim}
+    div.ui.left.input.icon
+      textarea[name="dispute_claim"][required]
+  div.ui.section.divider
+  button.ui.red.labeled.submit.icon.button[type="sumbit"]
+    i.icon.edit
+    | #{Localization.Dispute.AddClaim}

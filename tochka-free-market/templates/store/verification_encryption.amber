@@ -1,0 +1,20 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+  import ./mixin_verification_menu.amber
+  $store = ViewUserStore
+  $localization = Localization
+  $section = "encryption"
+  +verificationMenu($store, $localization, $section)
+  div.segment.ui
+    h3.ui.dividing.header #{$localization.Verification.Encryption}
+    form
+      div.field
+        label #{Localization.Settings.PGPPublicKey}
+        pre #{$store.PGP}
+      div.ui.section.divider
+      div.field
+        a.ui.button[href="/settings/user/pgp/step1?redirect=verification"] #{Localization.Settings.SetupPGPKey}

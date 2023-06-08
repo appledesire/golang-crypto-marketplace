@@ -1,0 +1,36 @@
+mixin storeCard($store, $localization)
+  div.ui.card
+    div.content.card-header
+      a.header[href="/store/"+$store.Storename] @#{$store.Storename}
+    div.image
+      img[src="/user-avatar/" + $store.Storename]
+    div.content
+      if $store.IsGoldAccount
+        span.ui.small.label.orange Gold Account
+      if $store.IsSilverAccount
+        span.ui.small.label.grey Silver Account
+      if $store.IsBronzeAccount
+        span.ui.small.label.brown Bronze Account
+      if $store.IsFreeAccount
+        span.ui.small.label Free Account
+      if $store.IsTrusted
+        span.ui.small.label Trusted  
+      span.ui.label.teal.dark-green.small
+        i.icon.level.up
+        | #{$store.Level} lvl
+      if $store.Score > 0
+        div.ui.label.dark-green
+          i.icon.thumbs.up
+          span #{$store.Score}
+      if $store.HasDeposits
+        span.ui.small.teal.label Insured
+    if $store.ShortDescription != ""
+      div.content
+        div.description #{$store.ShortDescription}
+    div.extra.content
+      div.date 
+        i.icon.wait
+        span #{$localization.UserCard.Registred} #{$store.RegistrationDateStr}
+      div.date 
+        i.icon.wait
+        span #{$localization.UserCard.LastSeen} #{$store.LastLoginDateStr}

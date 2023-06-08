@@ -1,0 +1,188 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("sellers")
+
+block content
+  $viewUser = ViewUser
+  $l = Localization
+  $v = ViewStore
+  div.ui.grid.divided.top-aligned
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_store_card
+        div.user.info
+          +storeCard($v, $l)
+      div.ui.fluid.menu.vertical.secondary
+        a.item[href="?section=info"] 
+          [class="active"] ? SelectedSection=="info"
+          | #{Localization.AboutStore.About}
+        a.item[href="?section=contacts"] 
+          [class="active"] ? SelectedSection=="contacts"
+          | #{Localization.AboutStore.ContactInformation}
+        a.item[href="?section=vendor_statistics"]
+          [class="active"] ? SelectedSection=="vendor_statistics" 
+          | #{Localization.AboutStore.Statistics}
+        a.item[href="?section=staff"]
+          [class="active"] ? SelectedSection=="staff"
+          | #{Localization.Staff.Staff}
+        a.item[href="?section=agreement"] 
+          [class="active"] ? SelectedSection=="agreement"
+          | #{Localization.AboutStore.Agreement}
+        if len(ViewStore.ShippingOptions) > 0
+          a.item[href="?section=shipping_options"] 
+            [class="active"] ? SelectedSection=="shipping_options"
+            | #{Localization.AboutStore.ShippingOptions}
+    div.thirteen.wide.column
+      import ./mixin_store_menu
+      +storeMenu($v, $l, "about")
+      if SelectedSection=="info"   
+          div.segment.ui
+            h3.ui.dividing.header #{Localization.AboutStore.About}
+            if SelectedSection=="info"
+              if ViewStore.DescriptionHTML != ""
+                div.ui.container #{ViewStore.DescriptionHTML}
+              else
+                div.ui.icon.message
+                  i.icon.info
+                  div.content
+                    div.header #{Localization.AboutStore.AboutEmpty}
+                    p #{Localization.AboutStore.AboutEmptyDescription}
+      if SelectedSection=="contacts"
+        div.ui.form.segment.contacts
+          h3.ui.dividing.header #{Localization.AboutStore.ContactInformation}
+          if ViewStore.PGP != ""
+            div.field
+              label PGP
+              pre #{ViewStore.PGP}
+      if SelectedSection=="vendor_statistics"
+        div.ui.segment
+          h3.ui.dividing.header Vendor Statistics
+          div.ui.statistics
+            div.statistic
+              div.value
+                span #{ViewStore.Stats.NumberOfReleasedTransactions}
+              div.label Transactions
+          div.ui.section.divider
+          div.ui.statistics
+            div.statistic
+              div.value
+                span #{ViewStore.Stats.NumberOfDisputes}
+              div.label Disputes
+            div.statistic.red
+              div.value
+                span #{ViewStore.Stats.NumberOfLostDisputes}
+              div.label Lost
+            div.statistic.green
+              div.value
+                span #{ViewStore.Stats.NumberOfWonDisputes}
+              div.label Won
+          div.ui.section.divider
+          div.ui.statistics
+            div.statistic
+              div.value
+                span #{ViewStore.Stats.NumberOfReviews}
+              div.label Reviews
+            div.statistic.red
+              div.value
+                span #{ViewStore.Stats.NumberOfNegativeReviews}
+              div.label Negative
+            div.statistic.yellow
+              div.value
+                span #{ViewStore.Stats.NumberOfNeutralReviews}
+              div.label Neutral
+            div.statistic.green
+              div.value
+                span #{ViewStore.Stats.NumberOfPositiveReviews}
+              div.label Positive
+          div.ui.section.divider
+          div.ui.statistics
+            div.statistic
+              div.value
+                span #{ViewStore.Stats.NumberOfActiveWarnings}
+              div.label Warnings
+            div.statistic.red
+              div.value
+                span #{ViewStore.Stats.NumberOfRedWarnings}
+              div.label Red
+            div.statistic.yellow
+              div.value
+                span #{ViewStore.Stats.NumberOfYellowWarnings}
+              div.label Yellow
+            div.statistic.green
+              div.value
+                span #{ViewStore.Stats.NumberOfGreenWarnings}
+              div.label Green
+            div.statistic.grey
+              div.value
+                span #{ViewStore.Stats.NumberOfExpiredWarnings}
+              div.label Expired
+          div.ui.section.divider
+          div.ui.statistics
+            div.statistic.green
+              div.value
+                span #{ViewStore.Level}
+              div.label Vendor Level
+      if SelectedSection=="agreement"
+        div.ui.segment
+          h3.ui.dividing.header Vendorship Agreement
+          pre #{ViewStore.VendorshipAgreementText}
+      if SelectedSection=="trusted_seller"
+        div.ui.segment
+          h3.ui.dividing.header
+            | #{Localization.UserCard.TrustedSeller}
+          div.ui.comments
+            $ViewThread = ViewThread
+            each $message in ViewThread.Messages
+              if $message.Text != ""
+                div.comment
+                  if $message.SenderUser.Uuid != ""
+                    a.avatar
+                      img[src="/user-avatar/" + $message.SenderUser.Username]
+                  else
+                    span.avatar
+                  div.content
+                    if $message.SenderUser.Uuid != ""
+                      a.author[href="/user/"+$message.SenderUser.Username] 
+                        span @#{$message.SenderUser.Username}
+                        if $message.SenderUser.IsAdmin
+                          div.ui.tiny.label.red Admin
+                        if $message.SenderUser.IsStaff
+                          div.ui.tiny.label.violet Staff
+                        if $message.SenderUser.IsGoldAccount
+                          div.ui.tiny.label.teal Gold Account
+                        if $message.SenderUser.IsSilverAccount
+                          div.ui.tiny.label.teal Silver Account
+                        if $message.SenderUser.IsBronzeAccount
+                          div.ui.tiny.label.teal Bronze Account
+                        if $message.SenderUser.IsFreeAccount
+                          div.ui.tiny.label.teal Free Account
+                    else
+                      span.author.admin T•chka
+                    div.metadata
+                      span.date #{$message.CreatedAtStr}
+                    pre #{$message.Text}
+                    if $message.HasImage
+                      img.ui.large.image[src="/board/message/" + $message.Uuid + "/image"]
+      if SelectedSection=="shipping_options"
+        div.ui.segment
+          h3.ui.dividing.header #{Localization.AboutStore.ShippingOptions}
+          table.ui.table.striped.three.columns
+            thead
+              th #{Localization.AboutStore.Name}
+              th #{Localization.AboutStore.PriceUSD}
+            tbody
+              each $option in ViewStore.ShippingOptions
+                tr
+                  td #{$option.Name}
+                  td #{$option.PriceUSD}
+      if SelectedSection=="staff"
+        div.ui.segment
+          h3.ui.dividing.header #{Localization.Staff.Staff} 
+          table.ui.table
+            tbody
+              each $su in ViewStore.StoreUsers
+                tr
+                  td 
+                    a[href="/user/"+$su.User.Username]@#{$su.User.Username}
+                  td 
+                    span.ui.label #{$su.Role}

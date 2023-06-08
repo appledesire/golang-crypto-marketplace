@@ -1,0 +1,30 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+  $localization = Localization
+  $seller = ViewMarketplaceUser
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      $l = Localization
+      $v = ViewMarketplaceUser
+      import ./../user/mixin_user_menu
+      +userMenu($v, $l, "staff")
+    div.thirteen.wide.column
+      if len(ViewSupportTickets) > 0
+        table.ui.table
+          thead
+            th title
+            th status
+            th priority
+            th date
+          each $supportticket in ViewSupportTickets
+            tr
+              td
+                a.item[href="/support/"+$supportticket.Uuid] #{$supportticket.Title}
+              td
+                span.ui.label.tiny #{$supportticket.CurrentStatus}
+              td #{$supportticket.Priority}
+              td #{$supportticket.CreatedAtStr}

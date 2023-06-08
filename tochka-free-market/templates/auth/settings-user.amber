@@ -1,0 +1,228 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("settings")
+
+block content
+  div.ui.divided.grid.centered
+    div.twelve.wide.column
+      div.ui.form.segment[method="POST"][enctype="multipart/form-data"]
+        [class="error"] ? Error
+        
+        if SelectedSection == "profile"
+          h3.ui.dividing.header #{Localization.Settings.Profile}
+        if SelectedSection == "contacts"
+          h3.ui.dividing.header #{Localization.Settings.Contacts}
+        if SelectedSection == "payments"
+          h3.ui.dividing.header #{Localization.Settings.Payments}
+        if SelectedSection == "system"
+          h3.ui.dividing.header #{Localization.Settings.Encryption}
+        if SelectedSection == "advertising"
+          h3.ui.dividing.header Advertising
+        if SelectedSection == "vendor"
+          h3.ui.dividing.header #{Localization.Settings.VendorSettings}
+        if SelectedSection == "password"
+          h3.ui.dividing.header #{Localization.Settings.Password}
+        
+        if Error
+          div.ui.error.message
+            div.header #{Localization.Settings.Error}
+            p #{Error}
+          div.ui.section.divider
+        
+        if SelectedSection == "profile"
+          form[method="POST"][enctype="multipart/form-data"]
+            div.field
+              label Username
+              input[type="text"][readonly][value=ViewUser.Username]
+            div.ui.section.divider
+            div.field
+              label #{Localization.Settings.ShortDescription}
+              p #{Localization.Settings.ShortDescriptionDescription}
+              div.ui.icon.input
+                input[type="text"][name="description"][value=ViewUser.Description] 
+            div.ui.section.divider
+            div.field
+              label #{Localization.Settings.About}
+              p #{Localization.Settings.AboutDescription}
+              div.ui.icon.input
+                textarea[type="text"][name="long_description"] #{ViewUser.LongDescription}
+            div.ui.section.divider
+            div.field
+              label #{Localization.Settings.Avatar}
+              p #{Localization.Settings.AvatarDescription}
+              div.ui.icon.input
+                input[type="file"][name="avatar_image"][size="40"]
+            div.ui.section.divider
+            button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}          
+        if SelectedSection == "contacts"
+          form[method="POST"][enctype="multipart/form-data"]      
+            div.field
+              label bitmessage
+              div.ui.input
+                input[type="text"][name="bitmessage"][value=ViewUser.Bitmessage]
+            div.ui.section.divider
+            div.field
+              label Tox
+              div.ui.input
+                input[type="text"][name="tox"][value=ViewUser.Tox]
+            div.ui.section.divider
+            div.field
+              label XMPP
+              div.ui.icon.input
+                i.icon.mail
+                input[type="text"][name="email"][value=ViewUser.Email]
+            div.ui.section.divider
+            button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}       
+        if SelectedSection == "system"
+          form.ui.form[method="POST"][enctype="multipart/form-data"] 
+            div.field
+              label #{Localization.Settings.PGPPublicKey}
+              pre #{ViewUser.Pgp}
+            div.ui.section.divider
+            div.field
+              a.ui.button[href="/settings/user/pgp/step1"] #{Localization.Settings.SetupPGPKey}
+            div.ui.section.divider
+            div.field
+              label #{Localization.Settings.TwoFactorAuthentication}
+              p #{Localization.Settings.TwoFactorAuthenticationDescription}
+              div.grouped.inline.fields
+                div.field
+                  div.ui.radio.checkbox
+                    input[name="2fa"][id="2fa1"][type="radio"][value="1"]
+                      [checked] ? ViewUser.TwoFactorAuthentication
+                    label[for="2fa1"] #{Localization.Settings.On}
+                div.field
+                  div.ui.radio.checkbox
+                    input[name="2fa"][id="2fa2"][type="radio"][value="0"]
+                      [checked] ? !ViewUser.TwoFactorAuthentication
+                    label[for="2fa2"] #{Localization.Settings.Off}
+            div.ui.section.divider
+            button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}
+        if SelectedSection == "password"
+          form[method="POST"][enctype="multipart/form-data"]
+            div.field
+              label #{Localization.Settings.OldPassword}
+              p #{Localization.Settings.ChangePassword}
+              div.ui.icon.privacy
+                input[type="password"][name="old_password"] 
+            div.ui.section.divider
+            div.field
+              label #{Localization.Settings.NewPassword}
+              div.ui.icon.privacy
+                input[type="password"][name="new_password"] 
+            div.ui.section.divider
+            div.field
+              label #{Localization.Settings.RepeatNewPassword}
+              div.ui.icon.privacy
+                input[type="password"][name="repeat_new_password"] 
+            div.ui.section.divider
+            button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}
+        if SelectedSection == "vendor"
+          div.field
+            label #{Localization.AboutStore.ShippingOptions}
+            table.ui.table.striped.three.columns.mini
+              thead
+                th #{Localization.Settings.Name}
+                th #{Localization.Settings.Price} (USD)
+                th
+              tbody
+                $l = Localization
+                each $option in ViewUser.ShippingOptions
+                  tr
+                    td #{$option.Name}
+                    td #{$option.PriceUSD}
+                    td
+                      form[method="post"][action="/shipping/delete"]
+                        input[type="hidden"][name="id"][value=$option.ID]
+                        button.ui.button.red.mini.fluid[type="submit"]
+                          i.edit.remove.icon 
+                          | #{$l.Items.DeleteItem}
+            div.ui.section.divider
+            form.ui.form[method="post"][action="/shipping"]
+              div.field
+                label #{Localization.Settings.Name}
+                input[type="text"][name="name"]
+              div.field
+                label #{Localization.Settings.Price} (USD)
+                input[type="text"][name="price"]
+              div.field
+                button.ui.button.tiny.dark-green.mini[type="submit"]
+                  i.icon.plus
+                  | #{Localization.Settings.Add}
+          div.ui.section.divider
+          div.field
+            form.ui.form.segment[method="POST"][enctype="multipart/form-data"]
+              div.field
+                label #{Localization.Settings.VacationMode}
+                p #{Localization.Settings.VacationModeDescription}
+                div.field
+                  div.ui.radio.checkbox
+                    input[name="vm"][id="vm1"][type="radio"][value="1"]
+                      [checked] ? ViewUser.VacationMode
+                    label[for="vm1"] #{Localization.Settings.On}
+                div.field
+                  div.ui.radio.checkbox
+                    input[name="vm"][id="vm2"][type="radio"][value="0"]
+                      [checked] ? !ViewUser.VacationMode
+                    label[for="vm2"] #{Localization.Settings.Off}
+              div.ui.section.divider
+              button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}
+        if SelectedSection == "payments"
+          form[method="POST"][enctype="multipart/form-data"]
+            div.field
+              label Bitcoin #{Localization.Settings.BTCWallet} 
+              p #{Localization.Settings.BTCWalletDescription}
+              div.ui.input
+                input[type="text"][name="bitcoin"][value=ViewUser.Bitcoin]
+            div.field
+              label Bitcoin Cash #{Localization.Settings.BTCWallet} 
+              p #{Localization.Settings.BTCWalletDescription}
+              div.ui.input
+                input[type="text"][name="bitcoin_cash"][value=ViewUser.BitcoinCash]
+            div.field
+              label Ethereum #{Localization.Settings.BTCWallet} 
+              p #{Localization.Settings.BTCWalletDescription}
+              div.ui.input
+                input[type="text"][name="ethereum"][value=ViewUser.Ethereum]
+            if len(UserSettingsHistory) > 0
+              div.ui.section.divider
+              div.field
+                label #{Localization.Settings.BTCAddressChangeHistory}
+                table.ui.table.striped.two.columns
+                  tbody
+                    each $option in UserSettingsHistory
+                      tr
+                        td #{$option.Datetime}
+                        td #{$option.Action}
+            div.ui.section.divider
+            div.field
+              label #{Localization.Settings.BTCMultisigPublicKey}
+              p #{Localization.Settings.BTCMultisigPublicKeyDescription}
+              div.ui.icon.input
+                i.icon.bitcoin
+                input[type="text"][name="bitcoin_multisig"][value=ViewUser.BitcoinMultisigPublicKey]
+            button.ui.dark-green.submit.button[type="submit"] #{Localization.Settings.Save}
+    div.four.wide.column.t-left-menu-items
+      img.ui.image.fluid[src="/auth/mobile_auth"]
+      div.ui.vertical.fluid.menu.tiny.secondary
+        a.item[href="/settings/user?section=profile"] 
+          [class="active"] ? SelectedSection == "profile"
+          i.icon.user
+          | #{Localization.Settings.Profile}
+        a.item[href="/settings/user?section=contacts"]
+          [class="active"] ? SelectedSection == "contacts"
+          i.icon.mail.square
+          | #{Localization.Settings.Contacts}
+        a.item[href="/settings/user?section=payments"]
+          [class="active"] ? SelectedSection == "payments"
+          i.icon.bitcoin
+          | #{Localization.Settings.Payments}
+        a.item[href="/settings/user?section=system"]
+          [class="active"] ? SelectedSection == "system"
+          i.icon.settings
+          | #{Localization.Settings.Encryption}
+        a.item[href="/settings/user?section=password"]
+          [class="active"] ? SelectedSection == "password"
+          i.icon.privacy
+          | #{Localization.Settings.Password}

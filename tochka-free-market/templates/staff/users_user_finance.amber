@@ -1,0 +1,113 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+  $localization = Localization
+  $seller = ViewMarketplaceUser
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      $l = Localization
+      $v = ViewMarketplaceUser
+      import ./../user/mixin_user_menu
+      +userMenu($v, $l, "staff")
+    div.thirteen.wide.column
+      div.ui.segment
+        h3.ui.dividing.header Bitcoin
+        div.ui.form
+          div.fields
+            div.field
+              label #{Localization.Wallet.Balance}
+              div.ui.left.input.icon
+                span.label.ui.icon.large.bitcoin.teal
+                  i.icon.bitcoin
+                  | #{$seller.BitcoinBalance.Balance}
+            div.field
+              label #{Localization.Wallet.UnconfirmedBalance}
+              div.ui.left.input.icon
+                span.label.ui.icon.large.bitcoin
+                  i.icon.bitcoin
+                  | #{$seller.BitcoinBalance.UnconfirmedBalance}
+          div.ui.section.divider
+          div.field
+            label #{Localization.Wallet.BTCAddress}
+            div.ui.left.input.icon
+              a.label.ui.icon.large.teal.bitcoin
+                i.icon.bitcoin
+                [href="https://search.bitaccess.co/address/"+$seller.BitcoinWallet.PublicKey]
+                | #{$seller.BitcoinWallet.PublicKey}
+          if $seller.Bitcoin != ""
+            div.ui.section.divider
+            div.field
+              label Auth-withdraw address
+              div.ui.left.input.icon
+                a.label.ui.icon.large.teal.bitcoin
+                  [href="https://search.bitaccess.co/address/"+$seller.Bitcoin]
+                  i.icon.bitcoin
+                  | #{$seller.Bitcoin}
+      div.ui.segment
+        h3.ui.dividing.header Bitcoin Cash
+        div.ui.form
+          div.fields
+            div.field
+              label #{Localization.Wallet.Balance}
+              div.ui.left.input.icon
+                span.label.ui.icon.large.bitcoin.teal
+                  i.icon.bitcoin
+                  | #{$seller.BitcoinCashBalance.Balance}
+            div.field
+              label #{Localization.Wallet.UnconfirmedBalance}
+              div.ui.left.input.icon
+                span.label.ui.icon.large.bitcoin
+                  i.icon.bitcoin
+                  | #{$seller.BitcoinCashBalance.UnconfirmedBalance}
+          div.ui.section.divider
+          div.field
+            label #{Localization.Wallet.BTCAddress}
+            div.ui.left.input.icon
+              a.label.ui.icon.large.teal.bitcoin
+                i.icon.bitcoin
+                [href="https://blockdozer.com/insight/address/"+$seller.BitcoinCashWallet.PublicKey]
+                | #{$seller.BitcoinCashWallet.PublicKey}
+          if $seller.BitcoinCash != ""
+            div.ui.section.divider
+            div.field
+              label Auth-withdraw address
+              div.ui.left.input.icon
+                a.label.ui.icon.large.teal.bitcoin
+                  [href="https://blockdozer.com/insight/address/"+$seller.BitcoinCash]
+                  i.icon.bitcoin
+                  | #{$seller.BitcoinCash}
+      div.ui.segment
+        h3.ui.dividing.header Ethereum
+        div.ui.form
+          div.field
+            label #{Localization.Wallet.Balance}
+            div.ui.left.input.icon
+              span.label.ui.icon.large.bitcoin.teal
+                | #{$seller.EthereumBalance.Balance}
+          div.ui.section.divider
+          div.field
+            label #{Localization.Wallet.BTCAddress}
+            div.ui.left.input.icon
+              a.label.ui.icon.large.teal.bitcoin
+                [href="https://etherscan.io/address/" + $seller.EthereumWallet.PublicKey]
+                | #{$seller.EthereumWallet.PublicKey}
+          if $seller.Ethereum != ""
+            div.ui.section.divider
+            div.field
+              label Auth-withdraw address
+              div.ui.left.input.icon
+                a.label.ui.icon.large.teal.bitcoin
+                  [href="https://etherscan.io/address/" + $seller.Ethereum]
+                  | #{$seller.Ethereum}
+      if len(UserSettingsHistory) > 0
+        div.ui.segment
+          h3.ui.dividing.header #{Localization.Settings.BTCAddressChangeHistory}
+          table.ui.table.striped.two.columns
+            tbody
+              each $option in UserSettingsHistory
+                tr
+                  td #{$option.Datetime}
+                  td #{$option.Action}

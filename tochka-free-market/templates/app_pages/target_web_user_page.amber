@@ -1,0 +1,99 @@
+extends ../layout
+
+block landingpage_content
+  div.ui.landing-page-web-user
+    div.ui.grid
+      div.thirteen.wide.column
+        div.container.ui
+          div.four.centered.wide.column
+            +logo()
+      div.fold-1.sixteen.wide.column
+        div.ui.grid.container.equal.width 
+          div.row
+            div.eight.wide.column.text
+              h1 Get Tochka Android App
+              h1 Android Application to Reliably Purchase Drugs Online
+              h2.first-h2 It’s Tochka that your used to, but as an app. 
+              h2.last-h2 The first global DarkNet Market app.
+              a[href="/app/download"]
+                button.ui.primary.button DOWNLOAD NOW
+            div.five.wide.column
+              img.ui[src="/img/landing-page-target-web-user/landing_screen1_v3.png"]
+
+      div.fold-2.ui.grid.sixteen.wide.column
+        div.ui.grid.container.equal.width 
+          div.row
+            div.twelve.wide.column
+              h1 In-app: 
+                span.underline Drugs only 
+                | with the 
+                span.underline Most trustable vendors
+                | from Tochka market
+              h2 
+                | Now you can safely recommend Tochka to your less tech-savy friends, that probably don’t 
+                span.underline have the same knowledge to:
+
+            div.eight.wide.column
+              p > Open Source so that you can verify that app is 100% safe
+              p > Install Tor and keep identities separate
+              p > Setup local bitcoin wallet
+              p.last Everything is included in the app.
+            div.six.wide.column.centered
+              img.ui[src="/img/landing-page-target-web-user/landing_screen2_v2.png"]
+      div.fold-4.ui.grid.sixteen.wide.column
+        div.ui.grid.container.equal.width 
+          div.row
+            div.twelve.wide.column.centered
+              h1 Important: Allow install of app outside Google Play Store 
+              h3 To allow install app outside of Google Play store 
+                span.underline follow this guide
+          div.row
+            //- Guide taken from 
+            //- https://www.expressvpn.com/support/vpn-setup/enable-apk-installs-android/
+            div.three.wide.column.centered
+              a.underline[href="/img/landing-page-target-web-user/android-settings-1.png"] Larger image
+              img.ui[src="/img/landing-page-target-web-user/android-settings-1.png"]
+              p 
+                span.underline 1. 
+                | Go to your phone’s Settings screen.
+            div.three.wide.column.centered
+              a.underline[href="/img/landing-page-target-web-user/android-settings-2.png"] Larger image
+              img.ui[src="/img/landing-page-target-web-user/android-settings-2.png"]
+              p 
+                span.underline 2.
+                | In Settings, tap on Security or (for earlier versions of Android - Applications). Your device may have a slightly different name for this.
+            div.three.wide.column.centered
+              a.underline[href="/img/landing-page-target-web-user/android-settings-3.png"] Larger image
+              img.ui[src="/img/landing-page-target-web-user/android-settings-3.png"]
+              p 
+                span.underline 3. 
+                | Under Security (or Applications), go to Unknown sources and check the box or toggle the switch to allow app installs outside of the Google Play Store.
+            div.three.wide.column.centered
+              a.underline[href="/img/landing-page-target-web-user/android-settings-4.png"] Larger image
+              img.ui[src="/img/landing-page-target-web-user/android-settings-4.png"]
+              p 
+                span.underline 4. 
+                | You will be warned that installing from unknown sources can result in harmful applications being downloaded to your device. Tap OK to proceed
+          div.row
+            div.eight.wide.column.centered
+              h3 Now we're ready to download app
+          div.row
+            div.eight.wide.column.centered
+              a[href="/app/download"]
+                button.ui.primary.button DOWNLOAD NOW
+
+      block footer
+        div.footer-bg.sixteen.wide.column
+          div.container.ui
+            import ./../footer
+
+//-div.fold-3.ui.grid
+//-div.ten.wide.column
+//-h1 Now, make a good deed – 
+//-h1 Bring a few friends into the DarkNet Market world
+//-h1 by installing Tocha Android App on their phone.
+//-h3 Just send this link to their phone and install through regular browser
+//-input[placeholder="http://tochka3evlj3sxdv.onion.to"]
+//-p.tor2webd-esc The link uses offical tor2web - https://www.tor2web.org/
+//-div.six.wide.column
+//-img.ui[src="/img/landing-page-target-web-user/landing_screen3.png"]

@@ -1,0 +1,118 @@
+extends ./../layout
+  
+block menu
+  +topMenu("items")
+  
+block top_search
+  div.twelve.wide.column.top-search
+    form.ui.input.icon.fluid[method="GET"][action="/marketplace"]
+      input[type="hidden"][name="category"][value=0]
+      input[type="hidden"][name="subcategory"][value=0]
+      input[type="text"][name="query"][placeholder=Localization.Items.LookingFor][value=Query]
+      i.icon.search
+
+block front_page_content
+  $selectedPage = Page
+  $selectedCity = CityID
+  $selectedCategory = CategoryID
+  $selectedShippingTo = ShippingTo
+  $selectedShippingFrom = ShippingFrom
+  $viewUser = ViewUser
+  $sortby = SortBy
+  $account = Account
+  $l = Localization
+  div.sixteen.wide.column.front-page
+    div.tochka-container.ui.grid.divided
+      import ./mixin_left_menu_small
+        +leftMenuSmall("items")
+      div.sixteen.wide.column
+        div.ui.grid.divided
+          div.sixteen.wide.column.main-content
+            div.first-fold.branch-bg.ui.grid
+              div.sixteen.wide.column.header
+                h1 
+                  | Tochka: One of the oldest DarkNet Markets
+                  span – live since 2014
+                h2 
+                  | Trusted by 
+                  span #{CountVendors}
+                  | vendors with 
+                  span #{CountItems}
+                  | offers, right now
+              if len(OfferItemsFold1) > 0
+                div.thirteen.wide.column.offer-header
+                  h3 Top Deals
+                each $item in OfferItemsFold1
+                  import ./mixin_item_rows
+                    $i = $item
+                    $u = $viewUser
+                    +itemRowDefault($i, $u, $l, "four-and-a-half", "regular")
+              if len(OfferItemsFold1) == 0
+                h3.empty-placeholder No deals available
+            div.fourth-fold.ui.grid
+              if len(OfferItemsFold4) > 0
+                div.sixteen.wide.column.offer-header
+                  h3 
+                    | Top Sellers in Drugs
+                    span 
+                      a[href="/marketplace?city-id=0&category=1&shipping-to=&shipping-from="] See more
+                each $item in OfferItemsFold4
+                  import ./mixin_item_rows
+                    $i = $item
+                    $u = $viewUser
+                    +itemRowDefault($i, $u, $l, "two-and-a-half", "center")
+              if len(OfferItemsFold4) == 0
+                div.ui.icon.message
+                  i.icon.cart
+                  div.content
+                    div.header #{Localization.Items.NoItems}
+
+            div.ui.grid.vendor-fold
+              div.thirteen.wide.column.offer-header
+                  h3 Top Vendors
+              if len(OfferTopVendors) > 0
+                each $vendor in OfferTopVendors
+                  import ./mixin_vendor_row
+                    $v = $vendor
+                    +vendorRow($v, $l, "false")
+            div.second-fold.ui.grid
+              if len(OfferItemsFold2) > 0
+                div.thirteen.wide.column.offer-header
+                  h3 
+                    | New Arrivals
+                    span
+                     a[href="/marketplace?city-id=0&category=0&sortby=date_added&account=all&shipping-from=&shipping-to="] See more
+                each $item in OfferItemsFold2
+                  import ./mixin_item_rows
+                    $i = $item
+                    $u = $viewUser
+                    +itemRowDefault($i, $u, $l, "three-and-a-half", "")
+              if len(OfferItemsFold2) == 0
+                div.ui.icon.message
+                  i.icon.cart
+                  div.content
+                    div.header #{Localization.Items.NoItems}            
+            div.fifth-fold.branch-bg.ui.grid
+              if len(OfferItemsFold5) > 0
+                div.thirteen.wide.column.offer-header
+                  h3 Top Sellers - Other categories
+                    | 
+                    a[href="/marketplace?city-id=0&category=105,17,23,34,114,30,26,154,130,,181,158,135&"] See more
+                each $item in OfferItemsFold5
+                  import ./mixin_item_rows
+                    $i = $item
+                    $u = $viewUser
+                    +itemRowDefault($i, $u, $l, "three-and-a-half", "")
+              if len(OfferItemsFold5) == 0
+                div.ui.icon.message
+                  i.icon.cart
+                  div.content
+                    div.header #{Localization.Items.NoItems}                  
+            div.ui.grid.vendor-fold
+              div.thirteen.wide.column.offer-header
+                  h3 New Vendors
+              if len(OfferNewVendors) > 0
+                each $vendor in OfferNewVendors
+                  import ./mixin_vendor_row
+                    $v = $vendor
+                    +vendorRow($v, $l, "true")

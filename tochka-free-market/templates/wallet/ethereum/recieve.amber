@@ -1,0 +1,42 @@
+extends ./../../layout
+
+block left_menu
+  +leftMenu("wallet")
+
+block content
+  div.ui.grid.centered.divided
+    div.thirteen.wide.column
+      div.ui.horizontal.fluid.menu.tiny.secondary
+        a.item.active[href="receive"]
+          i.icon.arrow.down
+          | #{Localization.Wallet.RecieveBitcoins}
+        a.item[href="send"]
+          i.icon.arrow.up
+          | #{Localization.Wallet.SendBitcoins}
+        a.item[href="actions"]
+          i.icon.arrow.feed
+          | #{Localization.Wallet.Actions}
+      div.ui.form.segment
+        h3.ui.dividing.header #{Localization.Wallet.RecieveBitcoins}
+        if UserEthereumWallet
+          div.fields
+            div.field
+              label #{Localization.Wallet.BTCAddress}
+              div.ui.left.input.icon
+                span.label.ui.icon.large.teal.bitcoin
+                  i.icon.bitcoin
+                  | #{UserEthereumWallet.PublicKey}
+            div.field
+              label #{Localization.Wallet.Balance}
+              div.ui.left.input.icon
+                span.label.ui.icon.large.bitcoin.teal
+                  i.icon.bitcoin
+                  | #{UserEthereumBalance.Balance}
+          div.ui.section.divider
+          div.field.centered
+            label #{Localization.Wallet.QRCode}
+            img.ui.image.centered[src="/wallet/bitcoin/"+UserEthereumWallet.PublicKey+"/image"]
+    div.three.wide.column.t-left-menu-items
+      import ./../mixin_wallet_menu
+      $localization = Localization
+      +walletMenu($localization, "ethereum")

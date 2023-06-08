@@ -1,0 +1,23 @@
+extends ./../../layout
+
+block left_menu
+  +leftMenu("")
+
+block content
+  div.ui.grid.centered
+    div.sixteen.wide.column
+      div.ui.segment
+        h2.ui.dividing.header Referral Payments
+        table.ui.table.basic
+          tbody
+            each $payment in ReferralPayments
+              tr
+                td 
+                  a[href="/user/"+$payment.User.Username] @#{$payment.User.Username}
+                td
+                  i.icon.calendar
+                  | #{$payment.CreatedAt}
+                td #{$payment.ReferralPercent*100} %
+                td #{$payment.ReferralPaymentUSD} USD
+                td #{$payment.ReferralPaymentBTC} BTC
+    div.four.wide.column.t-left-menu-items

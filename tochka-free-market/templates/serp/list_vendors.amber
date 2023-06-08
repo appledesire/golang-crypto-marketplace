@@ -1,0 +1,114 @@
+extends ./../layout
+
+block menu
+  +topMenu("sellers")
+
+block left_menu
+  +leftMenu("sellers")
+  
+block top_search
+  div.twelve.wide.column.top-search.top-search-marketplace
+    form.ui.input.icon.fluid[method="GET"][action="/marketplace"]
+      input[type="hidden"][name="category"][value=0]
+      input[type="hidden"][name="subcategory"][value=0]
+      input[type="text"][name="query"][placeholder=Localization.Items.LookingFor][value=Query]
+      i.icon.search
+      
+block content
+  $selectedPage = Page
+  $selectedCity = CityID
+  $selectedCategory = CategoryID
+  $selectedShippingTo = ShippingTo
+  $selectedShippingFrom = ShippingFrom
+  $viewUser = ViewUser
+  $sortby = SortBy
+  $account = Account
+  $l = Localization
+  div.ui.grid.divided
+    div.three.wide.column.t-left-menu-items
+      if SelectedPackageType == "mail" 
+        h5.ui.header #{Localization.Items.ShippingFrom}
+        div.ui.compact.menu.fluid.tiny
+          div.ui.simple.dropdown.item.fluid
+            i.icon.globe
+            if ShippingFrom != ""
+              | #{ShippingFrom}
+            else
+              | #{Localization.Items.AllCountries}
+            div.menu.fluid.fluid
+              a.item.fluid[href="?category=" + $selectedCategory + "&sortby=" + $sortby + "&shipping-to=" + $selectedShippingTo + "&account=" + $account] #{Localization.Items.AllCountries}
+              each $loc in ShippingFromList
+                if $loc != ""
+                  a.item.fluid[href="?category="+$selectedCategory + "&shipping-from=" + $loc + "&shipping-to=" + $selectedShippingTo + "&sortby="+$sortby + "&account=" + $account] #{$loc}                     
+        h5.ui.header #{Localization.Items.ShippingTo}
+        div.ui.compact.menu.fluid.tiny
+          div.ui.simple.dropdown.item.fluid
+            i.icon.globe
+            if ShippingTo != ""
+              | #{ShippingTo}
+            else
+              | #{Localization.Items.AllCountries}
+            div.menu.fluid.fluid
+              a.item.fluid[href="?category=" + $selectedCategory + "&sortby=" + $sortby + "&shipping-from=" + $selectedShippingFrom + "&account=" + $account] #{Localization.Items.AllCountries}
+              each $loc in ShippingToList
+                if $loc != ""
+                  a.item.fluid[href="?category="+$selectedCategory + "&shipping-to=" + $loc + "&shipping-from=" + $selectedShippingFrom + "&sortby="+$sortby + "&account=" + $account] #{$loc}  
+      if SelectedPackageType == "drop" || SelectedPackageType == "drop preorder" || SelectedPackageType == ""
+        h5.ui.header #{Localization.Items.ShippingTo}
+        div.ui.compact.menu.fluid.tiny
+          div.ui.simple.dropdown.item.fluid
+            i.icon.globe
+            if ShippingTo != ""
+              | #{ShippingTo}
+            else
+              | #{Localization.Items.AllCountries}
+            div.menu.fluid.fluid
+              a.item.fluid[href="?category=" + $selectedCategory + "&sortby=" + $sortby + "&account=" + $account] #{Localization.Items.AllCountries}
+              each $loc in ShippingToList
+                if $loc != ""
+                  a.item.fluid[href="?category="+$selectedCategory + "&shipping-to="+$loc + "&sortby="+$sortby + "&account=" + $account] #{$loc}   
+      if SelectedPackageType == "drop" || SelectedPackageType == "drop preorder" && len(GeoCities) > 0
+        h5.ui.header #{Localization.Items.City}
+        div.ui.compact.menu.fluid.tiny
+          div.ui.simple.dropdown.item.fluid
+            i.icon.globe
+            | #{City}
+            div.menu.fluid.fluid
+              a.item.fluid[href="?city-id="+ 0 + "&shipping-to=" + $selectedShippingTo + "&category=" + $selectedCategory + "&sortby=" + $sortby + "&account=" + $account] #{$l.Items.AllCountries}
+              each $loc in GeoCities
+                a.item.fluid[href="?category="+$selectedCategory + "&city-id="+$loc.ID + "&sortby="+$sortby + "&account=" + $account] #{$loc.NameEn}  
+      h5.ui.header #{Localization.Items.Categories}
+      div.ui.vertical.fluid.menu.categories.tiny
+        import ./../item/partial_categories.amber
+    div.thirteen.wide.column
+      div.ui.four.item.menu.secondary.pointing
+        a.item[href="/vendors/"]
+          [class="active"] ? (SelectedPackageType == "all" || SelectedPackageType == "")
+          i.icon.filter
+          | #{Localization.Items.AllTypes}
+        a.item[href="/vendors/mail/"] 
+          [class="active"] ? SelectedPackageType == "mail"
+          i.icon.envelope.open.outline
+          | #{Localization.Items.Mail}
+        a.item[href="/vendors/drop/"]
+          [class="active"] ? SelectedPackageType == "drop"
+          i.icon.sticky.note.outline
+          | #{Localization.Items.Drop}
+        a.item[href="/vendors/drop preorder/"]
+          [class="active"] ? SelectedPackageType == "drop preorder"
+          i.icon.warehouse
+          | #{Localization.Items.DropPreorder}
+      if len(ViewSerpStores) > 0
+        div.ui.grid.center.aligned
+          each $vendor in ViewSerpStores
+            div.four.wide.column
+              import ./mixin_vendor_row
+              $v = $vendor
+              +vendorRow($v, $l)
+      if len(Pages) > 1
+        div.ui.section.divider
+        div.ui.pagination.menu
+          each $page in Pages
+            div.item 
+              .active ? $page == $selectedPage
+              a[href="?page="+$page + "&city="+$selectedCity + "&category="+$selectedCategory + "&sortby="+$sortby + "&account=" + $account +  + "&shipping-to=" + $selectedShippingTo + "&shipping-from=" + $selectedShippingFrom] #{$page}

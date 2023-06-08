@@ -1,0 +1,115 @@
+extends ./../layout
+
+
+block left_menu
+  +leftMenu("disputes")
+
+block meta
+  meta[http-equiv="refresh"][content="720"]
+
+block content
+  $transaction = ViewTransaction
+  $localization = Localization
+  $dispute = Dispute
+  div.ui.grid
+    div.ten.wide.column
+      div.ui.segment
+        h2.ui.dividing.header 
+          span.ui.right.floated.label #{Dispute.Status}
+          | #{Localization.Dispute.Dispute}
+        strong #{Localization.Dispute.Claim}
+        pre #{DisputeClaim.Claim}
+        div.ui.section.divider
+        import ./../board/partial_thread.amber
+    div.six.wide.column
+      div.ui.segment
+        h3.ui.dividing.header Purchase Details
+        table.ui.table.basic
+          tbody
+            tr
+              td
+                a.ui.tiny.label.bitcoin.id[href="/payments/"+$transaction.Uuid] 
+                  | #{$transaction.Uuid}
+                  i.icon.bitcoin
+              tr
+                td
+                  pre #{$transaction.Description}
+            tr
+              td
+                strong #{$localization.Orders.Vendor}
+                br
+                a[href="/user/"+$transaction.Store.Storename] @#{$transaction.Store.Storename} 
+            tr
+              td
+                strong #{$localization.Orders.Buyer}
+                br
+                a[href="/user/"+$transaction.Buyer.Username] @#{$transaction.Buyer.Username}
+            tr
+              td
+                strong Resolver
+                br
+                if $dispute.ResolverUser.Uuid != ""
+                  a[href="/user/" + $dispute.ResolverUser.Username] @#{$dispute.ResolverUser.Username}
+                else
+                  span.author.admin T•chka
+            tr
+              td
+                strong #{$localization.Orders.Amount}
+                br
+                | #{$transaction.Amount}
+            tr
+              td
+                strong #{$localization.Orders.CreatedAt}
+                br
+                | #{$transaction.CreatedAt}
+            tr
+              td
+                strong #{$localization.Orders.Status}
+                br
+                a.ui.label.tiny[href="/payments/"+$transaction.Uuid] 
+                  [class="completed"] ? $transaction.IsCompleted
+                  [class="pending"] ? $transaction.IsPending
+                  [class="failed"] ? $transaction.IsFailed
+                  [class="cancelled"] ? $transaction.IsCancelled
+                  [class="released"] ? $transaction.IsReleased
+                  [class="frozen"] ? $transaction.IsFrozen
+                  | #{$transaction.CurrentPaymentStatus}
+      div.ui.segment
+        h3.ui.dividing.header #{Localization.Dispute.Claims}
+        div.ui.list
+          $dispute = Dispute
+          each $disputeClaim in Dispute.DisputeClaims
+            a.item[href=$disputeClaim]
+              i.right.triangle.icon
+              div.content
+                div.header #{$disputeClaim.Claim}
+      if ViewUser.IsAdmin || ViewUser.IsStaff 
+        div.ui.segment
+          h3.ui.dividing.header Dispute Status
+          form.ui.form.fluid[action="/dispute/"+Dispute.Uuid+"/status"][method="POST"]
+            input[type="hidden"][name="resolution_status"][value="open"]
+            button.ui.mini.button.fluid[type="submit"] OPEN
+          div.ui.section.divider
+          form.ui.form.fluid[action="/dispute/"+Dispute.Uuid+"/status"][method="POST"]
+            input[type="hidden"][name="resolution_status"][value="closed"]
+            button.ui.mini.button.fluid[type="submit"] CLOSED
+          div.ui.section.divider
+          form.ui.form.fluid[action="/dispute/"+Dispute.Uuid+"/status"][method="POST"]
+            input[type="hidden"][name="resolution_status"][value="vendor"]
+            button.ui.mini.button.fluid[type="submit"] RESOLVED TO VENDOR
+          div.ui.section.divider
+          form.ui.form.fluid[action="/dispute/"+Dispute.Uuid+"/status"][method="POST"]
+            input[type="hidden"][name="resolution_status"][value="buyer"]
+            button.ui.mini.button.fluid[type="submit"] RESOLVED TO BUYER
+        if ViewUser.IsAdmin || ViewUser.IsStaff 
+          div.ui.segment
+            h3.ui.dividing.header #{Localization.Dispute.AddClaim}
+            form.ui.form[action="/dispute/"+Dispute.Uuid+"/claim"][method="POST"]
+              div.required.field
+                label #{Localization.Dispute.Claim}
+                div.ui.input
+                  input[type="text"][name="claim"][required]
+              div.ui.section.divider
+              button.ui.dark-green.labeled.submit.icon.button[type="sumbit"]
+                i.icon.edit
+                | #{Localization.Messageboard.Reply}

@@ -1,0 +1,26 @@
+mixin storeMenu($store, $localization, $menu_section)
+  div.ui.menu.pointing.secondary.four.item
+    a.item[href="/store/"+$store.Storename] 
+      [class="active"] ? "about" == $menu_section
+      i.icon.info
+      | #{$localization.AboutStore.About}
+    a.item[href="/store/"+$store.Storename + "/reviews"]
+      [class="active"] ? "reviews" == $menu_section
+      i.icon.thumbs.up
+      | #{$localization.LeftMenu.Reviews}
+      span.ui.label.circular.tiny #{len($store.RatingReviews)}
+    a.item[href="/store/"+$store.Storename + "/items"] 
+      [class="active"] ? "items" == $menu_section
+      i.icon.cart
+      | #{$localization.LeftMenu.Items}
+      span.ui.label.circular.tiny #{len($store.Items)}
+    a.item[href="/store/"+$store.Storename+"/warnings"] 
+      [class="active"] ? "warnings" == $menu_section
+      i.icon.exclamation
+      | #{$localization.LeftMenu.Warnings}
+      if $store.Stats.NumberOfRedWarnings > 0
+        span.ui.label.circular.tiny.red #{$store.Stats.NumberOfRedWarnings}
+      if $store.Stats.NumberOfYellowWarnings > 0
+        span.ui.label.circular.tiny.yellow #{$store.Stats.NumberOfYellowWarnings}
+      if $store.Stats.NumberOfGreenWarnings > 0
+        span.ui.label.circular.tiny.green #{$store.Stats.NumberOfGreenWarnings}

@@ -1,0 +1,42 @@
+mixin itemRow($viewItem, $viewUser, $viewUserStore, $l)
+  div.ui.segment
+    h3.ui.header.dividing[href="/store/"+$viewItem.Store.Storename+"/item/"+$viewItem.Uuid]
+      if $viewItem.Score > 0.0
+        div.ui.label.floated.right.tiny
+          i.icon.thumbs.up
+          span #{$viewItem.Score}
+      $ic = $viewItem.ViewItemCategory
+      span.ui.teal.tiny.label.tag.right.floated #{$ic.Name}
+      if $viewItem.ReviewerUser.Uuid == ""
+        span.ui.red.tiny.label.right.floated Approval Pending
+      | #{$viewItem.Name}
+    div.ui.two.column.grid
+      div.ui.column.center.aligned
+        div.ui.image
+          a[href="/store/"+$viewItem.Store.Storename+"/item/"+$viewItem.Uuid]
+            img.ui.image.x300.rounded[src="/item-image/"+$viewItem.Uuid+"?size=300x300"]
+      div.ui.column
+        if len($viewItem.GroupPackages) > 0
+          each $group in $viewItem.GroupPackages
+            a.ui.labeled.button.tiny.fluid[href="/store/"+$viewItem.Store.Storename+"/item/"+$viewItem.Uuid]
+              div.ui.dark-green.basic.tiny.button.fluid.left.aligned
+                | #{$group.PackageName}
+              div.ui.basic.left.pointing.label.price
+                if $viewUser.Currency == "USD"
+                  #{$group.PriceUSDStr} USD
+                if $viewUser.Currency == "BTC"
+                  #{$group.PriceBTCStr} BTC
+                if $viewUser.Currency == "ETH"
+                  #{$group.PriceETHStr} ETH
+                if $viewUser.Currency == "RUB"
+                  #{$group.PriceRUBStr} RUB
+                if $viewUser.Currency == "AUD"
+                  #{$group.PriceAUDStr} AUD
+                if $viewUser.Currency == "GBP"
+                  #{$group.PriceGBPStr} GBP
+                if $viewUser.Currency == "EUR"
+                  #{$group.PriceEURStr} EUR
+            div.spacer
+    div.ui.section.divider
+    div
+      div.h50 #{$viewItem.ShortDescriptionHTML}

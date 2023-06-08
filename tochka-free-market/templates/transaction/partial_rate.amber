@@ -1,0 +1,135 @@
+form.ui.form[method="POST"][action="/payments/" + ViewTransaction.Uuid + "/complete"]
+  [class="error"] ? Error
+  h3.ui.dividing.header #{Localization.Rating.Review}
+  
+  if Error
+    div.ui.error.message
+      div.header #{Localization.Rating.Error}
+      p #{Error}
+    div.ui.section.divider
+  
+  h4.ui.header #{Localization.Rating.Header}
+  div.field
+    label #{Localization.Rating.ItemRating}
+    div.grouped.inline.fields
+      div.field
+        div.ui.radio.checkbox
+          input[name="item_quality"][id="item_quality_1"][type="radio"][value="1"]
+            [checked] ? RatingReview.ItemScore == 1
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="item_quality_1"] ★
+      div.field
+        div.ui.radio.checkbox
+          input[name="item_quality"][id="item_quality_2"][type="radio"][value="2"]
+            [checked] ? RatingReview.ItemScore == 2
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="item_quality_2"] ★★
+      div.field
+        div.ui.radio.checkbox
+          input[name="item_quality"][id="item_quality_3"][type="radio"][value="3"]
+            [checked] ? RatingReview.ItemScore == 3
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="item_quality_3"] ★★★
+      div.field
+        div.ui.radio.checkbox
+          input[name="item_quality"][id="item_quality_4"][type="radio"][value="4"]
+            [checked] ? RatingReview.ItemScore == 4
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="item_quality_4"] ★★★★
+      div.field
+        div.ui.radio.checkbox
+          input[name="item_quality"][id="item_quality_5"][type="radio"][value="5"]
+            [checked] ? RatingReview.ItemScore == 5
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="item_quality_4"] ★★★★★
+  div.field
+    label #{Localization.Rating.ItemReview}
+    div.ui.left.input.icon
+      textarea[name="item_review"] 
+        [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+        | #{RatingReview.ItemReview}
+  div.ui.section.divider
+  div.field
+    label #{Localization.Rating.MarketplaceRating}
+    div.grouped.inline.fields
+      div.field
+        div.ui.radio.checkbox
+          input[name="marketplace_quality"][id="marketplace_quality_1"][type="radio"][value="1"]
+            [checked] ? RatingReview.MarketplaceScore == 1
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="marketplace_quality_1"] ★
+      div.field
+        div.ui.radio.checkbox
+          input[name="marketplace_quality"][id="marketplace_quality_2"][type="radio"][value="2"]
+            [checked] ? RatingReview.MarketplaceScore == 2
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="marketplace_quality_2"] ★★
+      div.field
+        div.ui.radio.checkbox
+          input[name="marketplace_quality"][id="marketplace_quality_3"][type="radio"][value="3"]
+            [checked] ? RatingReview.MarketplaceScore == 3
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="marketplace_quality_3"] ★★★
+      div.field
+        div.ui.radio.checkbox
+          input[name="marketplace_quality"][id="marketplace_quality_4"][type="radio"][value="4"]
+            [checked] ? RatingReview.MarketplaceScore == 4
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="marketplace_quality_4"] ★★★★
+      div.field
+        div.ui.radio.checkbox
+          input[name="marketplace_quality"][id="marketplace_quality_5"][type="radio"][value="5"]
+            [checked] ? RatingReview.MarketplaceScore == 5
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="marketplace_quality_5"] ★★★★★
+  div.field
+    label #{Localization.Rating.MarketplaceReview}
+    div.ui.left.input.icon
+      textarea[name="marketplace_review"]
+        [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+        | #{RatingReview.MarketplaceReview}
+  div.ui.section.divider
+  div.field
+    label #{Localization.Rating.SellerRating}
+    div.grouped.inline.fields
+      div.field
+        div.ui.radio.checkbox
+          input[name="seller_quality"][id="seller_quality_1"][type="radio"][value="1"]
+            [checked] ? RatingReview.SellerScore == 1
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="seller_quality_1"] ★
+      div.field
+        div.ui.radio.checkbox
+          input[name="seller_quality"][id="seller_quality_2"][type="radio"][value="2"]
+            [checked] ? RatingReview.SellerScore == 2
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="seller_quality_2"] ★★
+      div.field
+        div.ui.radio.checkbox
+          input[name="seller_quality"][id="seller_quality_3"][type="radio"][value="3"]
+            [checked] ? RatingReview.SellerScore == 3
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="seller_quality_3"] ★★★
+      div.field
+        div.ui.radio.checkbox
+          input[name="seller_quality"][id="seller_quality_4"][type="radio"][value="4"]
+            [checked] ? RatingReview.SellerScore == 4
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="seller_quality_4"] ★★★★
+      div.field
+        div.ui.radio.checkbox
+          input[name="seller_quality"][id="seller_quality_5"][type="radio"][value="5"]
+            [checked] ? RatingReview.SellerScore == 5
+            [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+          label[for="seller_quality_5"] ★★★★★
+  div.field
+    label #{Localization.Rating.SellerReview}
+    div.ui.left.input.icon
+      textarea[name="seller_review"] 
+        [readonly] ? ViewUser.Uuid != ViewTransaction.BuyerUuid
+        | #{RatingReview.SellerReview}
+  if ViewUser.Uuid == ViewTransaction.BuyerUuid
+    div.ui.section.divider
+    button.ui.dark-green.labeled.submit.icon.button[type="sumbit"]
+      i.icon.edit
+      | #{Localization.Rating.Save}

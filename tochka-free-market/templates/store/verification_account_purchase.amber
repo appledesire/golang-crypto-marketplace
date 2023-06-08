@@ -1,0 +1,35 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+    import ./mixin_verification_menu.amber
+    $store = ViewUserStore
+    $localization = Localization
+    +verificationMenu($store, $localization, "plans")
+    form.ui.segment.form.segment[method="POST"]
+      [class="error"] ? Error
+      h3.ui.dividing.header Purchase #{Account} account
+      if Error != ""
+        div.ui.error.message
+          div.header #{Localization.Auth.Error}
+          p #{Error}
+      p To purchase an account please deposit need amount on your onsite wallet
+      div.grouped.fields
+        div.field
+          div.ui.radio.checkbox
+            input[type="radio"][name="currency"][value="eth"][id="pay_via_ethereum"]
+              [checked] ? Currency == "eth"
+            label[for="pay_via_ethereum"] #{PriceETH} ETH
+        div.field
+          div.ui.radio.checkbox
+            input[type="radio"][name="currency"][value="btc"][id="pay_via_bitcoin"]
+              [checked] ? Currency == "btc"
+            label[for="pay_via_bitcoin"] #{PriceBTC} BTC
+      div.ui.section.divider
+      div.field
+        button.ui.large.button.dark-green.submit[type="submit"] 
+          i.icon.cart
+          span #{Localization.Items.Purchase}
+

@@ -1,0 +1,12 @@
+extends ./layout
+
+block menu
+  +topMenu("")
+
+block content
+  div.ui.one.column.page.grid.relaxed
+    div.sixteen.wide.column
+      div.ui.icon.yellow.message
+        i.icon.cart
+        div.content Please consider purchasing Paid account
+        p You can't add more than 5 items on free account.

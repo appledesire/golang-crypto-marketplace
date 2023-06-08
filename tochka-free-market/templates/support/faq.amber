@@ -1,0 +1,22 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("support")
+
+block content
+  div.ui.grid.divided
+    div.three.wide.column.t-left-menu-items
+      import ./partial_list_ticket.amber
+    div.thirteen.wide.column
+      $l = Localization
+      if SelectedSection=="staff"
+        div.ui.cards.centered
+          each $user in ViewExtendedUsers
+            import ./mixin_staff_card
+            $u = $user
+            +staffCard($u, $l)
+      if SelectedSection=="faq"
+        div.segment.ui
+          h3.ui.dividing.header FAQ
+          pre #{Localization.Greeting} 
+

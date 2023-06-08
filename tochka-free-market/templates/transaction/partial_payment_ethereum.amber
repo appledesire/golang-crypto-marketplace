@@ -1,0 +1,84 @@
+h3.ui.dividing.header #{Localization.Orders.PaymentDetails}
+if ViewTransaction.IsFailed
+  div.ui.error.message.icon
+    i.icon.payment
+    div.content
+      div.header #{Localization.Orders.TransactionIsCancelled}
+div.ui.form
+  div.field
+    label #{Localization.Orders.BTCAddress}
+    div.ui.left.input.icon
+      input[type="text"][readonly][value=ViewTransaction.Uuid]
+      i.icon.bitcoin
+  div.field
+    label #{Localization.Orders.Amount}
+    div.ui.left.input.icon
+      input[type="text"][readonly][value=ViewTransaction.Amount]
+      i.icon.bitcoin
+  div.ui.section.divider
+  div.field.centered
+    label #{Localization.Orders.QRCode}
+    img.ui.image.centered[src="/payments/"+ViewTransaction.Uuid+"/image"]
+  div.ui.section.divider
+  div.field
+    label #{Localization.Orders.CurrentStatus}
+    div.ui.label
+      [class="completed"] ? ViewTransaction.IsCompleted 
+      [class="pending"]   ? ViewTransaction.IsPending
+      [class="failed"]    ? ViewTransaction.IsFailed
+      [class="cancelled"] ? ViewTransaction.IsCancelled
+      [class="released"]  ? ViewTransaction.IsReleased
+      [class="frozen"]    ? ViewTransaction.IsFrozen
+      | #{ViewTransaction.CurrentPaymentStatus}
+  div.ui.section.divider
+  div.field
+    label #{Localization.Orders.StatusHistory}
+    table.ui.table.segment.secondary
+      thead
+        tr
+          th #{Localization.Orders.Date}
+          th #{Localization.Orders.Status}
+          th #{Localization.Orders.Amount}
+          th #{Localization.Orders.Comment}
+      tbody
+        each $status in ViewTransaction.ViewTransactionStatus
+          tr
+            td #{$status.Time}
+            td
+              div.ui.label.fluid.mini
+                [class="completed"] ? $status.Status == "COMPLETED" 
+                [class="pending"]   ? $status.Status == "PENDING"
+                [class="failed"]    ? $status.Status == "FAILED"
+                [class="cancelled"] ? $status.Status == "CANCELLED"
+                [class="released"]  ? $status.Status == "RELEASED"
+                [class="frozen"]    ? $status.Status == "FROZEN"
+                | #{$status.Status}
+            td #{$status.Amount}
+            td #{$status.Comment}
+          if $status.ETHPaymentResult
+            tr
+              td[colspan=4]
+                import ./../wallet/ethereum/mixin_receipt
+                +paymentReceipt($status.ETHPaymentResult)
+  if ViewTransaction.IsCompleted
+    div.ui.section.divider
+    div.field
+      label #{Localization.Orders.FundsWillBeReleased} #{ViewTransaction.NextStatusTime}.
+    div.progress-holder
+      div.progress
+    if ViewTransaction.FEAllowed && (ViewUser.Uuid == ViewTransaction.BuyerUuid || ViewUser.IsStaff || ViewUser.IsAdmin) 
+      div.ui.section.divider
+      div.field
+        label #{Localization.Orders.FEDescription}.
+      form[action="/payments/"+ViewTransaction.Uuid+"/release"][method="post"]
+        button.ui.dark-green.labeled.submit.icon.button[type="sumbit"]
+          i.icon.bitcoin
+          | #{Localization.Orders.Finalize}
+    if ViewTransaction.CancelAllowed
+      div.ui.section.divider
+      div.field
+        label #{Localization.Orders.CancelDescription}
+        form[action="/payments/"+ViewTransaction.Uuid+"/cancel"][method="post"]
+          button.ui.red.labeled.submit.icon.button[type="sumbit"]
+            i.icon.bitcoin
+            | #{Localization.Orders.Cancel}

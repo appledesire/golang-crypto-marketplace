@@ -1,0 +1,29 @@
+extends ./../../layout
+
+block left_menu
+  +leftMenu("")
+
+block content
+  $selectedPage = Page
+  div.ui.grid.centered
+    div.twelve.wide.column
+      div.ui.segment
+        h2.ui.dividing.header Messageboard Sections
+        table.ui.table
+          thead
+            th Name (En)
+            th
+          tbody
+            each $section in MessageboardSections
+              tr
+                td 
+                  a[href="/messageboard_sections/admin/"+$section.ID] #{$section.NameEn}
+                td
+              each $subSection in $section.Subsections
+                tr
+                  td
+                  td 
+                    a[href="/messageboard_sections/admin/"+$subSection.ID] #{$subSection.NameEn}
+    div.four.wide.column.t-left-menu-items
+      h5.ui.dividing.header Actions
+      a.ui.button.fluid[href="/messageboard_sections/admin/new"] Add New Section

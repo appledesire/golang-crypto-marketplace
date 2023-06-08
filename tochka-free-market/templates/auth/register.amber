@@ -1,0 +1,53 @@
+extends ./../layout_basic
+
+block left_menu
+  +leftMenu("register")
+
+block content
+  form.ui.form.segment[method="POST"]
+    [class="error"] ? Error
+    h3.ui.dividing.header #{Localization.Auth.Register}
+    if Error
+      div.ui.error.message
+        div.header #{Localization.Auth.Error}
+        p #{Error}
+      div.ui.section.divider
+    div.required.field
+      label #{Localization.Auth.Username}
+      p #{Localization.Auth.UsernameDescription}
+      div.ui.icon.input
+        input[type="text"][name="username"][placeholder="username"][required]
+        i.user.icon
+    div.ui.section.divider
+    div.required.field
+      label #{Localization.Auth.Passphrase}
+      p #{Localization.Auth.PassphraseDescription}
+      input[type="password"][name="passphrase"][required]
+    div.required.field
+      label #{Localization.Auth.RepeatPassphrase}
+      input[type="password"][name="passphrase_2"][required]
+    div.ui.section.divider
+    div.field
+      label #{Localization.Auth.InviteCode}
+      p #{Localization.Auth.InviteCodeDescription}
+      input[type="text"][name="invite_code"][value=InviteCode]
+    input[type="hidden"][name="captcha_id"][value=CaptchaId]
+    div.ui.section.divider
+    div.field
+      div.grouped.inline.fields
+        div.field
+          div.ui.radio.checkbox
+            input[name="role"][id="role_1"][type="radio"][value="buyer"][checked]
+            label[for="role_1"] #{Localization.Auth.Buyer}
+        div.field
+          div.ui.radio.checkbox
+            input[name="role"][id="role_2"][type="radio"][value="seller"]
+            label[for="role_2"] #{Localization.Auth.Vendor}
+    div.required.field
+      label #{Localization.Auth.Captcha}
+      div.ui.input
+        input[type="text"][name="captcha"][placeholder="captcha"][required]
+      div
+        img.ui.medium.image.captcha[width=300][height=100][src="/captcha/"+CaptchaId]
+    div.ui.section.divider
+    button.ui.dark-green.submit.button[type="submit"] #{Localization.Auth.Register}

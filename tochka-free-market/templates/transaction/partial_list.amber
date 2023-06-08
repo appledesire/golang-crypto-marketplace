@@ -1,0 +1,46 @@
+$localization = Localization
+each $transaction in ViewCurrentTransactionStatuses
+  table.ui.table.striped
+    tbody
+      tr
+        td[colspan=6]
+          span.ui.label.tiny.dark-green #{$transaction.Type}
+          a.ui.tiny.label.bitcoin.id[href="/payments/"+$transaction.Uuid] 
+            | #{$transaction.Uuid}
+            i.icon.info
+          span.ui.label.tiny #{$transaction.Amount}
+      tr
+        td[colspan=6]
+          pre #{$transaction.Description}
+      tr
+        td[width="16%"]
+          strong #{$localization.Orders.Vendor}
+        td[width="16%"]
+          strong #{$localization.Orders.Buyer}
+        td[width="16%"]
+          strong #{$localization.Orders.CreatedAt}
+        td[width="16%"]
+          strong #{$localization.Orders.Status}
+        td[width="16%"]
+          strong Shipping Status
+        td[width="16%"]
+          strong #{$localization.Orders.NumberOfMessages}
+      tr
+        td[width="16%"]
+          a[href="/store/"+$transaction.Storename] @#{$transaction.Storename} 
+        td[width="16%"]
+          a[href="/user/"+$transaction.BuyerUsername] @#{$transaction.BuyerUsername}
+        td[width="16%"] #{$transaction.CreatedAtStr}
+        td[width="16%"]
+          a.ui.label.tiny[href="/payments/"+$transaction.Uuid] 
+            [class="completed"] ? $transaction.CurrentStatus == "COMPLETED"
+            [class="pending"] ? $transaction.CurrentStatus == "PENDING"
+            [class="failed"] ? $transaction.CurrentStatus == "FAILED"
+            [class="cancelled"] ? $transaction.CurrentStatus == "CANCELLED"
+            [class="released"] ? $transaction.CurrentStatus == "RELEASED"
+            [class="frozen"] ? $transaction.CurrentStatus == "FROZEN"
+            | #{$transaction.CurrentStatus}
+        td
+          span.ui.label.tiny #{$transaction.CurrentShippingStatus}
+        td[width="16%"]
+          span.ui.label.tiny.circular #{$transaction.NumberOfMessages}

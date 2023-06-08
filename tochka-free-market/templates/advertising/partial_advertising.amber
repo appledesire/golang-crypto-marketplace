@@ -1,0 +1,10 @@
+each $ad in Advertisings
+  div.segment.secondary.ui.ui.word-break
+    h3.ui.dividing.header #{$ad.Item.Name}
+    a[href="/store/"+$ad.Item.Store.Storename+"/item/"+$ad.ItemUuid] #{$ad.Comment}
+    div.ui.section.divider
+    img.ui.image.rounded[src="/item-image/"+$ad.ItemUuid+"?size=200x200"]
+    div.ui.section.divider
+    strong 
+      a[href="/store/"+$ad.Item.Store.Storename] @#{$ad.Item.Store.Storename}
+  div.ui.section.divider.left-menu

@@ -1,0 +1,11 @@
+mixin walletMenu($localization, $currency)
+  div.ui.vertical.menu.tiny.fluid.secondary
+    a.item[href="/wallet/bitcoin/receive"]
+      [class="active"] ? $currency == "bitcoin"
+      | Bitcoin
+    a.item[href="/wallet/bitcoin_cash/receive"]
+      [class="active"] ? $currency == "bitcoin_cash"
+      | Bitcoin Cash
+    a.item[href="/wallet/ethereum/receive"]
+      [class="active"] ? $currency == "ethereum"
+      | Ethereum

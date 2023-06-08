@@ -1,0 +1,38 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("sellers")
+
+block content
+  $l = Localization
+  $viewStore = ViewStore
+  $viewUser = ViewUser
+  $item = ViewItem
+  form.ui.form.segment[method="POST"][enctype="multipart/form-data"]
+    [class="error"] ? Error
+    h3.ui.dividing.header #{Localization.Items.EditPackages}
+    div.ui.error.message
+      div.header #{Localization.Items.Error} 
+      p #{Error}
+    div.field.required
+      label Metro
+      div.ui.input
+        select[name="city_metro_station_uuid"]
+          $selectedStation = ViewPackage.CityMetroStationUuid
+          each $loc in CityMetroStations
+            option[name="city_metro_station_id"][value=$loc.Uuid] 
+              [selected] ? $loc.Uuid == $selectedStation
+              |  #{$loc.NameEn}
+    div.ui.section.divider
+    input[type="hidden"][name="coordinates"][value=ViewPackage.Longitude+", "+ViewPackage.Latitude]
+    input[type="hidden"][name="country_name_en_to"][value=ViewPackage.CountryNameEnShippingTo]
+    input[type="hidden"][name="description"][value=ViewPackage.Description]
+    input[type="hidden"][name="type"][value=ViewPackage.Type]
+    input[type="hidden"][name="item_uuid"][value=ViewItem.Uuid]
+    input[type="hidden"][name="name"][value=ViewPackage.Name]
+    input[type="hidden"][name="currency"][value=PackageCurrency]
+    input[type="hidden"][name="price"][value=PackagePrice]
+    input[type="hidden"][name="quantity"][value=Quantity]
+    input[type="hidden"][name="city_id"][value=ViewPackage.DropCityId]
+    input[type="hidden"][name="step"][value="4"]
+    button.ui.blue.submit.button[type="submit"] #{Localization.Items.Save}

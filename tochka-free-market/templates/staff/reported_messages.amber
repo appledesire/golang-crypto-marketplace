@@ -1,0 +1,26 @@
+extends ./../layout
+
+block left_menu
+  +leftMenu("staff")
+
+block content
+  div.ui.divided.grid
+    div.three.wide.column.t-left-menu-items
+      import ./mixin_staff_menu
+      $localization = Localization
+      +staffMenu($localization, "messages")
+    div.thirteen.wide.column
+        table.ui.table
+            thead
+                th Date
+                th Sender
+                th Receiver
+            tbody
+                each $message in ViewMessages
+                    tr
+                        td 
+                            a[href="/staff/messages/"+$message.Uuid] #{$message.CreatedAtStr}
+                        td 
+                            a[href="/user/" + $message.SenderUser.Username] @#{$message.SenderUser.Username}
+                        td
+                            a[href="/user/" + $message.RecieverUser.Username] @#{$message.RecieverUser.Username}

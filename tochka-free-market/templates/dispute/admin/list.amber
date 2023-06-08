@@ -1,0 +1,43 @@
+extends ./../../layout
+
+block left_menu
+  +leftMenu("")
+
+block content
+  $selectedPage = Page
+  div.ui.grid.centered.divided
+    div.twelve.wide.column
+      div.ui.segment
+        h2.ui.dividing.header Payments
+        import ./../partial_list.amber
+        div.ui.section.divider
+        div.ui.pagination.menu
+          $selected = SelectedPage
+          $status = SelectedStatus
+          each $page in Pages
+            div.item 
+              .active ? $page == $selected
+              a[href="?page="+$page+"&status="+$status] #{$page}
+    div.four.wide.column.t-left-menu-items
+      h5.ui.dividing.header Actions
+      form.ui.form[action="/payments/admin/sync"][method="post"]
+        button.ui.button.small.fluid[type="submit"] Refresh All
+      br
+      form.ui.form[action="/payments/admin/release"][method="post"]
+        button.ui.button.small.fluid[type="submit"] Re-Release All
+      h5.ui.dividing.header Filter by status
+      div.ui.buttons.vertical.fluid.small
+        a.ui.button[href="?status="]                    ALL
+        a.ui.button.pending[href="?status=PENDING"]     PENDING
+        a.ui.button.failed[href="?status=FAILED"]       FAILED
+        a.ui.button.completed[href="?status=COMPLETED"] COMPLETED
+        a.ui.button.released[href="?status=RELEASED"]   RELEASED
+        a.ui.button.frozen[href="?status=FROZEN"]       FROZEN
+        a.ui.button.cancelled[href="?status=CANCELLED"] CANCELLED
+      h5.ui.dividing.header Stats
+      table.ui.table
+        thead
+          th Total number of payments
+        tbody
+          tr
+            td #{NumberOfTransactions}
